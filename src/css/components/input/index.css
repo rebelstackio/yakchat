@@ -1,0 +1,58 @@
+yak-input {
+    grid-area: 3 / 1;
+    border-radius: 1.5em;
+    display: grid;
+    grid-template-rows: 100%;
+    background-color: rgba(0,0,0,.1);
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+yak-input[class^="focus"] .yak-input-content{
+    /*border: 2px solid rgba(24,144,255,0.6);
+    border-radius: 1.6em;*/
+    border-radius: 1.6em;
+    box-shadow: 0px 0px 3px 2px rgba(24,144,255,0.6);
+    background-color: #fff;
+}
+.yak-input-content{
+    display: grid;
+    grid-template-columns: 78% 22%;
+    height: 100%;
+}
+.main-input {
+    background-color: rgba(0,0,0,0);
+    border: none;
+    border-radius: 2.5em;
+    padding: 0.8em;
+    color: #666;
+    height: 2em;
+}
+input {
+    border: none;
+}
+textarea:focus, input:focus{
+    outline: none;
+    border: none;
+}
+div[class^="yak-send"] {
+    border-left: 1px solid #d3d3d3;
+    display: grid;
+    color: #666;
+    border-radius: 0em 1.6em 1.6em 0em;
+}
+
+div[class^="yak-send"] p{
+    place-self:center;
+}
+
+.yak-send-disable{
+    cursor: default;
+    background-color: #d3d3d3;
+}
+
+.yak-send-enable{
+    cursor: pointer;
+    background-color: rgba(24,144,255,0.7);
+    border-left: 1px solid #1890ff;
+    color: #fff !important;
+}
