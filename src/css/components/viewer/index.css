@@ -1,0 +1,45 @@
+yak-viewer {
+    display: grid;
+    overflow: auto;
+    padding: 0.5em;
+    grid-area: 2 / 1;
+    background-color: #fff;
+    border-radius: 0.5em;
+}
+.yak-viewer-list {
+    place-self: end center;
+    width: 100%;
+    display: grid;
+    grid-template-rows: auto;
+    grid-row-gap: 0.5em;
+    margin: 0.5em;
+}
+div[class^="yak-view-item"] {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: auto;
+    width: 60%;
+    padding: 1em;
+    color: #666;
+    max-width: 15em;
+}
+.yak-view-item-right{
+    background-color: rgba(24,144,255,0.7);
+    place-self: center end;
+    color: #fff !important;
+    border-radius: 1em 0em 1em 1em;
+}
+
+.yak-view-item-left{
+    background-color: rgba(0,0,0,.1);
+    place-self: center start;
+    border-radius: 0em 1em 1em 1em;
+}
+
+.yak-view-from{
+    font-size: .8em;
+    padding-top: 0.2em;
+}
+.yak-view-msg {
+    word-break: break-word;
+}
