@@ -1,5 +1,4 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
-import '../../handlers';
 
 class yakInput extends MetaComponent {
 	/**

@@ -1,5 +1,4 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
-import '../../handlers';
 
 class Header extends MetaComponent {
 	/**
@@ -18,7 +17,7 @@ class Header extends MetaComponent {
 	 * create the header structure
 	 */
 	createHeaderContent () {
-		this.hederContent.className = 'yak-header-itemes'
+		this.hederContent.className = 'yak-header-items'
 		const title = document.createElement('span');
 		title.textContent = 'Yak Chat';
 		this.hederContent.appendChild(title);
