@@ -2,13 +2,13 @@ yak-header{
 	display: grid;
 	color:#666;
 }
-.yak-header-itemes {
+.yak-header-items {
 	place-self: center;
 	display: grid;
 	grid-template-columns: 1fr 6em 2em;
 	width: 100%;
 }
-.yak-header-itemes span{
+.yak-header-items span{
 	place-self: center;
 }
  
