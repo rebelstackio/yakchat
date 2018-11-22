@@ -7,21 +7,21 @@ class Viewer extends MetaComponent {
 	 */
 	constructor () {
 		super(global.storage);
-		this.getMsgList = this.getMsgList.bind(this)
+		this.createMsgList = this.createMsgList.bind(this)
 	}
 	// eslint-disable-next-line class-method-use-this
 	render () {
 		this.msgList = this.storage.getState().Main.list;
 		this.listContent = document.createElement('div');
-		this.listContent.className = 'yak-viewer-list';
-		this.getMsgList(this.msgList);
+		this.createMsgList(this.msgList);
+		global.storage.on('TOGGLE-CHAT', this.handleTogge.bind(this))
 		return this.listContent;
 	}
 	/**
-	 * set the messages list
+	 * create the messages list
 	 */
-	getMsgList (list) {
-		this.listContent.innerHTML = '';
+	createMsgList (list) {
+		this.listContent.className = 'yak-viewer-list';
 		list.map((l) => {
 			const listItem = document.createElement('div');
 			const msg = document.createElement('span');
@@ -37,13 +37,21 @@ class Viewer extends MetaComponent {
 		this.scrollTop = this.scrollHeight;
 	}
 	/**
+	 * handle the toggle action to scroll down
+	 */
+	handleTogge () {
+		if (this.storage.getState().Main.isOpen) {
+			this.scrollTop = this.scrollHeight;
+		}
+	}
+	/**
 	 * Handle Events in a organized way.
 	 */
 	handleStoreEvents () {
 		return {
-			'SEND-MESSAGE': action => {
+			'SEND-MESSAGE': () => {
 				this.msgList = this.storage.getState().Main.list;
-				this.getMsgList(this.msgList);
+				this.createMsgList(this.msgList);
 			}
 		};
 	}

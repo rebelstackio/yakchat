@@ -11,19 +11,23 @@ class Header extends MetaComponent {
 	// eslint-disable-next-line class-method-use-this
 	render () {
 		this.hederContent = document.createElement('div');
-		this.setHeaderContent();
+		this.createHeaderContent();
 		return this.hederContent;
 	}
-
-	setHeaderContent () {
+	/**
+	 * create the header structure
+	 */
+	createHeaderContent () {
 		this.hederContent.className = 'yak-header-itemes'
 		const title = document.createElement('span');
 		title.textContent = 'Yak Chat';
 		this.hederContent.appendChild(title);
-		this.getCloseButton();
+		this.createCloseButton();
 	}
-
-	getCloseButton () {
+	/**
+	 * create the toggle chat
+	 */
+	createCloseButton () {
 		this.closeButton = document.createElement('div')
 		this.closeButton.className = 'yak-min-open';
 		this.closeButton.addEventListener('click', () => {

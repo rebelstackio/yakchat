@@ -14,11 +14,13 @@ class YakMainContainer extends MetaContainer {
 		this.input = document.createElement('yak-input');
 		this.viewer = document.createElement('yak-viewer');
 		const header = document.createElement('yak-header');
-		console.log(global.storage.getState().Main.isOpen)
 		global.storage.on('TOGGLE-CHAT', this.handleStoreEvent.bind(this))
 		this.content.append(header, this.input, this.viewer);
 		return this.content;
 	}
+	/**
+	 * hadle the toggle chat action
+	 */
 	handleStoreEvent () {
 		const isOpen = global.storage.getState().Main.isOpen;
 		this.viewer.className = !isOpen ? 'hide' : 'show';
