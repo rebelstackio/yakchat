@@ -4,7 +4,7 @@
   "description": "Project Boilerplate for metaflux",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/.bin/webpack-dev-server  --mode development",
+    "start": "./node_modules/.bin/webpack-dev-server  --mode development --host 0.0.0.0",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "contributors": [
@@ -53,6 +53,8 @@
   },
   "dependencies": {
     "@rebelstack-io/metaflux": "^1.1.2",
-    "jsonpath": "^1.0.0"
+    "firebase": "^5.7.2",
+    "jsonpath": "^1.0.0",
+    "md5": "^2.2.1"
   }
 }
