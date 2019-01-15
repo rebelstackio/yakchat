@@ -4,6 +4,7 @@ import '../../handlers';
 import '../../components/input';
 import '../../components/viewer';
 import '../../components/header';
+import { signInAnonymous } from '../../controllers/firebase';
 
 class YakMainContainer extends MetaContainer {
 	// eslint-disable-next-line class-method-use-this
@@ -13,7 +14,8 @@ class YakMainContainer extends MetaContainer {
 		this.input = document.createElement('yak-input');
 		this.viewer = document.createElement('yak-viewer');
 		const header = document.createElement('yak-header');
-		global.storage.on('TOGGLE-CHAT', this.handleStoreEvent.bind(this))
+		global.storage.on('TOGGLE-CHAT', this.handleStoreEvent.bind(this));
+		signInAnonymous();
 		this.content.append(header, this.input, this.viewer);
 		return this.content;
 	}

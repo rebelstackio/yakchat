@@ -3,36 +3,25 @@
 */
 
 const MainDefaultState = {
-	list: [
-		{
-			type: 'text',
-			from: {
-				name: 'otto-roboto'
-			},
-			msg: 'Welcome to Yak Chat',
-			date: 'a minute ago'
-		},
-		{
-			type: 'text',
-			from: {
-				name: 'you'
-			},
-			msg: 'Hi Otto Roboto',
-			date: 'a sec ago'
-		}
-	],
-	isOpen: true
+	list: [],
+	isOpen: true,
+	thread: undefined
 };
 
 export default {
 	MainDefaultState,
 	MainHandler: {
-		'SEND-MESSAGE': (action, state) => {
+		'MSG-ARRIVE': (action, state) => {
+			//console.log(state.Main.list);
 			state.Main.list.push(action.msg)
 			return { newState: state };
 		},
 		'TOGGLE-CHAT': (action, state) => {
 			state.Main.isOpen = !state.Main.isOpen;
+			return { newState: state }
+		},
+		'FB-CONNECT': (action, state) => {
+			state.Main.list = action.msgList;
 			return { newState: state }
 		}
 	}

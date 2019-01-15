@@ -51,6 +51,11 @@ class Viewer extends MetaComponent {
 			'SEND-MESSAGE': () => {
 				this.msgList = this.storage.getState().Main.list;
 				this.createMsgList(this.msgList);
+			},
+			'FB-CONNECT': (state) => {
+				console.log(state)
+				this.msgList = this.storage.getState().Main.list;
+				this.createMsgList(this.msgList);
 			}
 		};
 	}
