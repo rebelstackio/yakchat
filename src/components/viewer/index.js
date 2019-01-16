@@ -20,6 +20,7 @@ class Viewer extends MetaComponent {
 	 * create the messages list
 	 */
 	createMsgList (list) {
+		this.listContent.innerHTML = '';
 		this.listContent.className = 'yak-viewer-list';
 		list.map((l) => {
 			const listItem = document.createElement('div');
@@ -48,12 +49,11 @@ class Viewer extends MetaComponent {
 	 */
 	handleStoreEvents () {
 		return {
-			'SEND-MESSAGE': () => {
+			'MSG-ARRIVE': () => {
 				this.msgList = this.storage.getState().Main.list;
 				this.createMsgList(this.msgList);
 			},
 			'FB-CONNECT': (state) => {
-				console.log(state)
 				this.msgList = this.storage.getState().Main.list;
 				this.createMsgList(this.msgList);
 			}

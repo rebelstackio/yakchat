@@ -12,8 +12,10 @@ export default {
 	MainDefaultState,
 	MainHandler: {
 		'MSG-ARRIVE': (action, state) => {
-			//console.log(state.Main.list);
-			state.Main.list.push(action.msg)
+			let tmp = state.Main.list;
+			if (JSON.stringify(tmp[tmp.length - 1]) !== JSON.stringify(action.msg)) {
+				state.Main.list.push(action.msg)
+			}
 			return { newState: state };
 		},
 		'TOGGLE-CHAT': (action, state) => {

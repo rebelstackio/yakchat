@@ -1,6 +1,15 @@
 import * as firebase from 'firebase';
 import { getClientInfo } from '../../utils';
 
+/**
+ * for testing and string size comparations
+ */
+String.prototype.lengthInUtf8Bytes = function() {
+	// Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
+	var m = encodeURIComponent(this).match(/%[89ABab]/g);
+	return this.length + (m ? m.length : 0);
+}
+
 let app = firebase.initializeApp({ 
 	apiKey: "AIzaSyD5lLizDWKXMKd5LYs8mMbB_0hvYVIKQ1w",
 	authDomain: "testing-chat-2af19.firebaseapp.com",
@@ -13,53 +22,63 @@ let app = firebase.initializeApp({
 let threadRoute = '';
 
 app.auth().onAuthStateChanged(function(user) {
-	console.log('Connected',user.uid);
-	// ...
+	try {
+		console.log('Connected',user.uid);
+	} catch (er) {
+		// ...
+	}
 });
 
 /**
  * set the anonymous connection
  */
 export async function signInAnonymous () {
-	await app.auth().signInAnonymously();
-	let hash = '';
-	if (lsTest() && localStorage.getItem('yak-hash')) {
-		hash = localStorage.getItem('yak-hash');
-	} else {
-		hash = await getClientInfo();
-		localStorage.setItem('yak-hash', hash);
+	try {
+		await app.auth().signInAnonymously();
+		let hash = '';
+		if (lsTest() && localStorage.getItem('yak-hash')) {
+			hash = localStorage.getItem('yak-hash');
+		} else {
+			hash = await getClientInfo();
+			localStorage.setItem('yak-hash', hash);
+		}
+		getMessages('anonymous/messages/', hash);
+	} catch {
+
 	}
-	getMessages('Anonymous/messages/', hash);
-	
 }
 /**
  * @description get the messages and dispatch it
  * @param {String} route 
  */
 function getMessages (route, hash) {
-	app.database().ref(route).once('value').then(res => {
-		let b = true
-		res.forEach(chld => {
-			const keys = Buffer.from(chld.key, 'base64').toString('ascii').split(':');
-			if (keys[0] === hash) {
-				const mssgs = chld.child('2');
-				threadRoute = route + chld.key;
+	try {
+		app.database().ref(route).once('value').then(res => {
+			let b = true
+			res.forEach(chld => {
+				const keys = atob(chld.key).split(':');
+				if (keys[0] === hash) {
+					const mssgs = chld.child('2');
+					threadRoute = route + chld.key;
+					global.storage.dispatch({
+						type: 'FB-CONNECT',
+						msgList: getMsgArray(mssgs)
+					})
+					console.log('has-threads');
+					b = false;
+					listenRow(threadRoute);
+				}
+			})
+			if (b) {
 				global.storage.dispatch({
-					type: 'FB-CONNECT',
-					msgList: getMsgArray(mssgs)
+					type: 'CREATE-ANN-THREAD',
+					hash: hash
 				})
-				console.log('has-threads');
-				b = false;
-				listenRow(threadRoute);
 			}
 		})
-		if (b) {
-			global.storage.dispatch({
-				type: 'CREATE-ANN-THREAD',
-				hash: hash
-			})
-		}
-	})
+	} catch {
+		///
+	}
 }
 /**
  * @description listen to changes in database with the current thread
@@ -69,7 +88,7 @@ function listenRow (route) {
 	app.database().ref(route + '/2').limitToLast(1).on('child_added', function(snapshot) {
 		global.storage.dispatch({
 			type: 'MSG-ARRIVE',
-			msg: snapshot.val()
+			msg: objectDecompress(snapshot.val())
 		})
 	 });
 }
@@ -82,7 +101,7 @@ function getMsgArray (msg) {
 	const val = msg.val();
 	if (val!== null) {
 		Object.keys(val).forEach(key => {
-			retorno.push(val[key]);
+			retorno.push(objectDecompress(val[key]));
 		})
 	}
 	return retorno
@@ -92,16 +111,55 @@ function getMsgArray (msg) {
  */
 global.storage.on('SEND-MESSAGE', (action) => {
 	if (threadRoute !== '') {
-		app.database().ref(threadRoute).child('2').push().set(action.msg);
+		const t = objectCompress(action.msg);
+		app.database().ref(threadRoute).child('2').push().set(t);
 	}
 })
+/**
+ * turn Object into an formated plain text, Only support one child
+ * @returns String
+ * @param {Object} t 
+ */
+function objectCompress (t) {
+	const resp = []
+	Object.keys(t).forEach(key => {
+		let pairs = "";
+		if (typeof t[key] === 'object') {
+			pairs = [key, objectCompress(t[key])].join(':');
+		} else {
+			pairs = [key, t[key]].join(':');
+		}
+		resp.push(pairs);
+	})
+	return resp.join(';');
+}
+/**
+ * turn plain formated text into an object, Only support one child
+ * @returns Object
+ * @param {String} s 
+ */
+function objectDecompress (s) {
+	let resp = {};
+	s.split(';').forEach(prop => {
+		const keyValue = prop.split(':');
+		if (keyValue.length > 2) {
+			resp[keyValue[0]] = {};
+			for (let i = 2; i < keyValue.length; i = i + 2) {
+				resp[keyValue[0]][keyValue[i - 1]] = keyValue[i];
+			}
+		} else {
+			resp[keyValue[0]] = keyValue[1];
+		}
+	})
+	return resp;
+}
 /**
  * use the storage to create new anonymous thread if there is no one with the browser hash
  */
 global.storage.on('CREATE-ANN-THREAD', (action) => {
 	const {hash} = action;
-	app.database().ref("Anonymous/messages/")
-		.child(Buffer.from(hash + ':null').toString('base64'))
+	app.database().ref("anonymous/messages/")
+		.child(btoa(hash + ':null'))
 		.set({
 			1: hash
 		});
