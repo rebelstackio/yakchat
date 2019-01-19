@@ -6,8 +6,6 @@ class yakInput extends MetaComponent {
 	 */
 	constructor () {
 		super();
-		this.msg = '';
-		this.handleInput = this.handleInput.bind(this);
 		this.createInput = this.createInput.bind(this);
 		this.createButton = this.createButton.bind(this);
 		this.handleSend = this.handleSend.bind(this);
@@ -32,7 +30,6 @@ class yakInput extends MetaComponent {
 		this.input.addEventListener('click', () => {
 			this.className = 'focus';
 		});
-		this.input.addEventListener('input', this.handleInput);
 		this.input.addEventListener('focusout', () => {
 			this.className = '';
 		});
@@ -57,31 +54,16 @@ class yakInput extends MetaComponent {
 	 * function handle, dispatch send message action
 	 */
 	handleSend () {
-		if (this.msg !== '') {
-			const msg = {type: 'text', from: {name: 'you'}, msg: this.msg, date: 'a sec ago'}
+		if (this.input.value !== '') {
+			const msg = {type: 'text', from: {name: 'you'}, msg: this.input.value, date: 'a sec ago'}
 			global.storage.dispatch({
 				type: 'SEND-MESSAGE',
 				msg: msg
 			})
 		}
-		this.msg = '';
 		this.input.value = '';
 		this.send.className = 'yak-send-disable';
 	}
-	/**
-	 * handle the main input content & enable send button
-	 */
-	handleInput (e) {
-		if (e.inputType === 'insertText') {
-			this.msg = this.msg ? this.msg + e.data : e.data;
-			this.send.className = 'yak-send-enable';
-		} else {
-			const splited = this.msg.split('');
-			this.msg = splited.splice(0, splited.length - 1).join('');
-			this.send.className = this.msg !== '' ? 'yak-send-enable' : 'yak-send-disable';
-		}
-	}
-
 }
 
 window.customElements.define('yak-input', yakInput);

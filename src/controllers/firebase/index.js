@@ -9,7 +9,9 @@ String.prototype.lengthInUtf8Bytes = function() {
 	var m = encodeURIComponent(this).match(/%[89ABab]/g);
 	return this.length + (m ? m.length : 0);
 }
-
+/**
+ * initialize the firebase
+ */
 let app = firebase.initializeApp({ 
 	apiKey: "AIzaSyD5lLizDWKXMKd5LYs8mMbB_0hvYVIKQ1w",
 	authDomain: "testing-chat-2af19.firebaseapp.com",
@@ -18,7 +20,12 @@ let app = firebase.initializeApp({
 	storageBucket: "testing-chat-2af19.appspot.com",
 	messagingSenderId: "535251093263"
 });
-
+/**
+ * the reason of this is to map the message into an object,
+ * to avoid repeat al over again the keys of the object,
+ * SEE: objectCompress(), objectDecompress()
+ */
+const msgPreset = ['type', {from: ['name']}, 'msg', 'date'];
 let threadRoute = '';
 
 app.auth().onAuthStateChanged(function(user) {
@@ -28,9 +35,15 @@ app.auth().onAuthStateChanged(function(user) {
 		// ...
 	}
 });
-
 /**
- * set the anonymous connection
+ * TODO: stablish an user email connection
+ * @description function that stablish an user email connection with firebase
+ */
+export function signInWithEmail () {
+
+}
+/**
+ * @description function that stablish an anonymous connection with firebase
  */
 export async function signInAnonymous () {
 	try {
@@ -44,12 +57,13 @@ export async function signInAnonymous () {
 		}
 		getMessages('anonymous/messages/', hash);
 	} catch {
-
+		//
 	}
 }
 /**
  * @description get the messages and dispatch it
- * @param {String} route 
+ * @param {String} route the firebase message route
+ * @param {String} hash MD5 hash 
  */
 function getMessages (route, hash) {
 	try {
@@ -60,24 +74,40 @@ function getMessages (route, hash) {
 				if (keys[0] === hash) {
 					const mssgs = chld.child('2');
 					threadRoute = route + chld.key;
+					listenRow(threadRoute);
 					global.storage.dispatch({
 						type: 'FB-CONNECT',
 						msgList: getMsgArray(mssgs)
 					})
 					console.log('has-threads');
 					b = false;
-					listenRow(threadRoute);
 				}
 			})
 			if (b) {
-				global.storage.dispatch({
-					type: 'CREATE-ANN-THREAD',
-					hash: hash
-				})
+				createThread('anonymous', hash);
 			}
 		})
 	} catch {
 		///
+	}
+}
+/**
+ * @description create a thread if it's the first time in the plataform
+ * @param {String} type anonymous or singup
+ * @param {String} id 
+ */
+function createThread (type, id) {
+	if (type === 'anonymous') {
+		app.database().ref('anonymous/messages/')
+		.child(btoa(id + ':null'))
+		.set({
+			1: id
+		}).then(() => {
+			threadRoute = 'anonymous/messages/' + btoa(id + ':null');
+			listenRow(threadRoute);
+		})
+	} else {
+		// TODO: create first thread for a email user register
 	}
 }
 /**
@@ -88,7 +118,7 @@ function listenRow (route) {
 	app.database().ref(route + '/2').limitToLast(1).on('child_added', function(snapshot) {
 		global.storage.dispatch({
 			type: 'MSG-ARRIVE',
-			msg: objectDecompress(snapshot.val())
+			msg: objectDecompress(snapshot.val(), msgPreset)
 		})
 	 });
 }
@@ -97,14 +127,14 @@ function listenRow (route) {
  * @param {Object} msg 
  */
 function getMsgArray (msg) {
-	const retorno = [];
+	const resp = [];
 	const val = msg.val();
 	if (val!== null) {
 		Object.keys(val).forEach(key => {
-			retorno.push(objectDecompress(val[key]));
+			resp.push(objectDecompress(val[key]));
 		})
 	}
-	return retorno
+	return resp
 }
 /**
  * on sending message event create the new msage
@@ -112,7 +142,13 @@ function getMsgArray (msg) {
 global.storage.on('SEND-MESSAGE', (action) => {
 	if (threadRoute !== '') {
 		const t = objectCompress(action.msg);
-		app.database().ref(threadRoute).child('2').push().set(t);
+		app.database().ref(threadRoute)
+		.child('2')
+		.push()
+		.set(t)
+		.catch(err => {
+			console.log(err);
+		});
 	}
 })
 /**
@@ -125,45 +161,35 @@ function objectCompress (t) {
 	Object.keys(t).forEach(key => {
 		let pairs = "";
 		if (typeof t[key] === 'object') {
-			pairs = [key, objectCompress(t[key])].join(':');
+			pairs = objectCompress(t[key]).split(',').join(':');
 		} else {
-			pairs = [key, t[key]].join(':');
+			pairs = t[key];
 		}
 		resp.push(pairs);
 	})
-	return resp.join(';');
+	return resp.join(',');
 }
 /**
  * turn plain formated text into an object, Only support one child
  * @returns Object
  * @param {String} s 
  */
-function objectDecompress (s) {
+function objectDecompress (s, preset) {
 	let resp = {};
-	s.split(';').forEach(prop => {
-		const keyValue = prop.split(':');
-		if (keyValue.length > 2) {
-			resp[keyValue[0]] = {};
-			for (let i = 2; i < keyValue.length; i = i + 2) {
-				resp[keyValue[0]][keyValue[i - 1]] = keyValue[i];
-			}
+	s.split(',').forEach((value, i) => {
+		if (typeof preset[i] === 'object') {
+			Object.keys(preset[i]).forEach(key => {
+				resp[key] = {};
+				value.split(':').forEach((properties, j) => {
+					resp[key][preset[i][key][j]] = properties;
+				})
+			})
 		} else {
-			resp[keyValue[0]] = keyValue[1];
+			resp[preset[i]] = value;
 		}
 	})
 	return resp;
 }
-/**
- * use the storage to create new anonymous thread if there is no one with the browser hash
- */
-global.storage.on('CREATE-ANN-THREAD', (action) => {
-	const {hash} = action;
-	app.database().ref("anonymous/messages/")
-		.child(btoa(hash + ':null'))
-		.set({
-			1: hash
-		});
-})
 /**
  * @description util function to make a localStorage test
  */
