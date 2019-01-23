@@ -9,6 +9,7 @@ class yakInput extends MetaComponent {
 		this.createInput = this.createInput.bind(this);
 		this.createButton = this.createButton.bind(this);
 		this.handleSend = this.handleSend.bind(this);
+		this.handleInput = this.handleInput.bind(this);
 	}
 	// eslint-disable-next-line class-method-use-this
 	render () {
@@ -33,11 +34,7 @@ class yakInput extends MetaComponent {
 		this.input.addEventListener('focusout', () => {
 			this.className = '';
 		});
-		this.input.addEventListener('keypress', (e) => {
-			if (e.key === 'Enter') {
-				this.handleSend();
-			}
-		})
+		this.input.addEventListener('keydown', this.handleInput)
 	}
 	/**
 	 * create the send button & handle
@@ -49,6 +46,21 @@ class yakInput extends MetaComponent {
 		text.textContent = 'Send';
 		this.send.appendChild(text);
 		this.send.addEventListener('click', this.handleSend);
+	}
+	/**
+	 * handle the input keypress event
+	 * @param {Event} e 
+	 */
+	handleInput (e) {
+		if (e.key === 'Enter') {
+			this.handleSend();
+		}
+		const l = e.key === 'Backspace'
+			? this.input.value.split('').length - 1
+			: this.input.value.split('').length + 1;
+		this.send.className = l <= 0
+			? 'yak-send-disable'
+			: 'yak-send-enable';
 	}
 	/**
 	 * function handle, dispatch send message action
