@@ -8,10 +8,46 @@ yak-header{
 	grid-template-columns: 1fr 6em 2em;
 	width: 100%;
 }
-.yak-header-items span{
-	place-self: center;
+
+.user-options {
+	position: absolute;
+	display: grid;
+	width: 9em;
+	border: 1px solid #d3d3d3;
+	background-color: #d3d3d3;
+	text-align: center;
+	box-shadow: 0 0px 3px 1px #6666;
+	border-radius: 2.5em 0em 2.5em 2.5em;
+	color: #666;
 }
- 
+
+.user-options.green {
+	background-color: #7bce7e;
+	box-shadow: 0 0px 3px 1px #5b9e5e;
+	border-color: #7bce7e;
+	color: #000;
+}
+.user-options > span { 
+	cursor: pointer;
+}
+
+.user-options > span:hover { 
+	color: #fff !important; 
+}
+
+.yak-header-items > span{
+	padding-left: 2vw;
+}
+
+div[class^="user-actions"] {
+	font-size: 20px;
+	place-self: center;
+	cursor: pointer;
+}
+.user-actions-re {
+	color: #7bce7e;
+}
+
 div[class^="yak-min"] {
 	grid-area: 1 / 3;
 	width: 1em;

@@ -1,10 +1,13 @@
+/* FONT FAMILY ROBOTO */
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,light');
+@import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 @import url('./components/input/index.css');
 @import url('./components/viewer/index.css');
 @import url('./components/header/index.css');
 
 html, body {
 	height: 100%;
+	background-color: #f9f8f8;
 }
 
 * {
@@ -13,8 +16,8 @@ html, body {
 	font-family: Roboto;
 }
 #container {
-	width: 16em;
-	height: 24em;
+	width: 24vw;
+	height: 56vh;
 	place-self: center;
 	display: grid;
 	grid-template-rows: 2em 1fr 3em;
@@ -23,6 +26,11 @@ html, body {
 	border-radius: 1.5em;
 	border: 1px solid #d3d3d3;
 }
+.simple-chatbox, .register-chatbox {
+	position: absolute;
+	bottom: 2%;
+	right: 2%;
+}
 yak-main-container{
 	display: grid;
 	height: 100%;
@@ -30,4 +38,8 @@ yak-main-container{
 
 .no-border {
 	border: none !important;
+}
+
+.hide {
+	display: none !important;
 }

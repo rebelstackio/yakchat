@@ -10,6 +10,7 @@ String.prototype.lengthInUtf8Bytes = function() {
 	return this.length + (m ? m.length : 0);
 }
 /**
+ * TODO: create proper development firebase so the team have access
  * initialize the firebase
  */
 let app = firebase.initializeApp({ 
@@ -22,7 +23,7 @@ let app = firebase.initializeApp({
 });
 /**
  * the reason of this is to map the message into an object,
- * to avoid repeat al over again the keys of the object,
+ * to avoid repeat the keys of the object in each child,
  * SEE: objectCompress(), objectDecompress()
  */
 const msgPreset = ['type', {from: ['name']}, 'msg', 'date'];
@@ -36,11 +37,21 @@ app.auth().onAuthStateChanged(function(user) {
 	}
 });
 /**
+ * TODO: create user from email address
+ * @description function for sing up with your email address, then stablish connection
+ * @param {String} email
+ */
+export function singUpWithEmail (email) {
+	//createThread('singup', 'some-hash-id');
+	throw 'NOT-IMPLEMENTED';
+}
+/**
  * TODO: stablish an user email connection
  * @description function that stablish an user email connection with firebase
+ * @param {String} email
  */
-export function signInWithEmail () {
-
+export function signInWithEmail (email) {
+	throw 'NOT-IMPLEMENTED';
 }
 /**
  * @description function that stablish an anonymous connection with firebase
@@ -61,6 +72,7 @@ export async function signInAnonymous () {
 	}
 }
 /**
+ * TODO: make this function to be compatible with singin users
  * @description get the messages and dispatch it
  * @param {String} route the firebase message route
  * @param {String} hash MD5 hash 
@@ -84,7 +96,7 @@ function getMessages (route, hash) {
 				}
 			})
 			if (b) {
-				createThread('anonymous', hash);
+				createThread(route, hash);
 			}
 		})
 	} catch {
@@ -93,22 +105,18 @@ function getMessages (route, hash) {
 }
 /**
  * @description create a thread if it's the first time in the plataform
- * @param {String} type anonymous or singup
+ * @param {String} route route base for the messages
  * @param {String} id 
  */
-function createThread (type, id) {
-	if (type === 'anonymous') {
-		app.database().ref('anonymous/messages/')
-		.child(btoa(id + ':null'))
-		.set({
-			1: id
-		}).then(() => {
-			threadRoute = 'anonymous/messages/' + btoa(id + ':null');
-			listenRow(threadRoute);
-		})
-	} else {
-		// TODO: create first thread for a email user register
-	}
+function createThread (route, id) {
+	app.database().ref(route)
+	.child(btoa(id + ':null'))
+	.set({
+		1: id
+	}).then(() => {
+		threadRoute = route + btoa(id + ':null');
+		listenRow(threadRoute);
+	})
 }
 /**
  * @description listen to changes in database with the current thread
@@ -172,7 +180,8 @@ function objectCompress (t) {
 /**
  * turn plain formated text into an object, Only support one child
  * @returns Object
- * @param {String} s 
+ * @param {String} s
+ * @param {Array} preset the keys for the object 
  */
 function objectDecompress (s, preset) {
 	let resp = {};

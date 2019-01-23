@@ -11,6 +11,7 @@ class YakMainContainer extends MetaContainer {
 	render () {
 		this.content = document.createElement('div');
 		this.content.id = 'container';
+		this.content.className = 'simple-chatbox';
 		this.input = document.createElement('yak-input');
 		this.viewer = document.createElement('yak-viewer');
 		const header = document.createElement('yak-header');
