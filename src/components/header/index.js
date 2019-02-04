@@ -1,4 +1,5 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
+import './index.css';
 
 class Header extends MetaComponent {
 	/**
@@ -82,6 +83,12 @@ class Header extends MetaComponent {
 		const signUp = document.createElement('span');
 		signIn.innerHTML = 'login';
 		signUp.innerHTML = 'Sing Up';
+		signIn.addEventListener('click', () => {
+			this.toggleSing(0);
+		});
+		signUp.addEventListener('click', () => {
+			this.toggleSing(1);
+		})
 		actions.append(signIn, signUp);
 	}
 	/**
@@ -117,8 +124,21 @@ class Header extends MetaComponent {
 	 * TODO: make a sing in/up popup
 	 */
 	toggleSing (type) {
+		let popup;
+		if (document.querySelector('yak-popup')) {
+			popup = document.querySelector('yak-popup');
+		} else {
+			popup = document.createElement('yak-popup');
+			document.querySelector('body').appendChild(popup);
+		}
 		if (type === 0) {
 			// signin popup
+			popup.data = {
+				title: 'Welcome to Yak-chat',
+				body: `
+					<>
+				`
+			}
 		} else {
 			// singup popup
 		}

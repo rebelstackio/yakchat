@@ -12,7 +12,7 @@ yak-header{
 .user-options {
 	position: absolute;
 	display: grid;
-	width: 9em;
+	width: 35%;
 	border: 1px solid #d3d3d3;
 	background-color: #d3d3d3;
 	text-align: center;
