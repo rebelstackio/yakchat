@@ -1,4 +1,5 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
+import './index.css';
 
 class Viewer extends MetaComponent {
 	/**

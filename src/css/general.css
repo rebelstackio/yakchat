@@ -1,9 +1,6 @@
 /* FONT FAMILY ROBOTO */
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,light');
 @import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-@import url('./components/input/index.css');
-@import url('./components/viewer/index.css');
-@import url('./components/header/index.css');
 
 html, body {
 	height: 100%;

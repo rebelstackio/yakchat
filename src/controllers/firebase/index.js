@@ -139,7 +139,7 @@ function getMsgArray (msg) {
 	const val = msg.val();
 	if (val!== null) {
 		Object.keys(val).forEach(key => {
-			resp.push(objectDecompress(val[key]));
+			resp.push(objectDecompress(val[key], msgPreset));
 		})
 	}
 	return resp

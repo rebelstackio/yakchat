@@ -4,6 +4,7 @@ import '../../handlers';
 import '../../components/input';
 import '../../components/viewer';
 import '../../components/header';
+import '../../components/popup';
 import { signInAnonymous } from '../../controllers/firebase';
 
 class YakMainContainer extends MetaContainer {
