@@ -1,0 +1,23 @@
+yak-login > div {
+	height: 100%;
+	background-repeat: no-repeat;
+	background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+	display: grid;
+	grid-template-rows: 30vh 9vh 9vh;
+	grid-row-gap: 1vh;
+}
+
+input.login-input {
+	width: 20vw;
+	place-self: center;
+	height: 100%;
+}
+
+div.login-logo {
+	width: 10vw;
+	height: 25vh;
+	place-self: end center;
+	background: url('/images/logo.png') no-repeat;
+	background-size: 90%;
+	background-position: center;
+}
