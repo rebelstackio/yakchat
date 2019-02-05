@@ -22,21 +22,22 @@ class YakMainContainer extends MetaContainer {
 	 * @param {*} tag 
 	 * @param {*} classList 
 	 * @param {*} id 
-	 * @param {*} innerHtml 
-	 * @param {*} appendList 
+	 * @param {*} innerHtml  
 	 * @param {*} attList 
 	 */
 	instanceElement (tag, classList, id, innerHtml, attList) {
 		try {
 			const el = document.createElement(tag);
 			if (classList && classList.length > 0) {
-				el.classList.add(classList);
+				classList.forEach(cl => {
+					el.classList.add(cl);
+				});
 			}
 			if (id) {
 				el.id = id;
 			}
 			if (innerHtml) {
-				el.innerHtml = innerHtml;
+				el.innerHTML = innerHtml;
 			}
 			if (attList && attList.length > 0) {
 				attList.forEach(ob => {
