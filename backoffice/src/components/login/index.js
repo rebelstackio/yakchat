@@ -29,10 +29,9 @@ class Login extends MetaComponent {
 			[{'type': 'password'}]
 		);
 		const content = global.M_instanceElement(
-			'div',
-			not, not, not,
-			[logo, emailInput, passInput]
+			'div'
 		)
+		content.append(logo, emailInput, passInput)
 		return content;
 	}
 

@@ -26,7 +26,7 @@ class YakMainContainer extends MetaContainer {
 	 * @param {*} appendList 
 	 * @param {*} attList 
 	 */
-	instanceElement (tag, classList, id, innerHtml, appendList, attList) {
+	instanceElement (tag, classList, id, innerHtml, attList) {
 		try {
 			const el = document.createElement(tag);
 			if (classList && classList.length > 0) {
@@ -37,11 +37,6 @@ class YakMainContainer extends MetaContainer {
 			}
 			if (innerHtml) {
 				el.innerHtml = innerHtml;
-			}
-			if (appendList && appendList.length > 0) {
-				appendList.forEach(ap => {
-					el.appendChild(ap);
-				})
 			}
 			if (attList && attList.length > 0) {
 				attList.forEach(ob => {
