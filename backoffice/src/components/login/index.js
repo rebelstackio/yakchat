@@ -31,7 +31,11 @@ class Login extends MetaComponent {
 		const content = global.M_instanceElement(
 			'div'
 		)
-		content.append(logo, emailInput, passInput)
+		const submit = global.M_instanceElement(
+			'button',['btn', 'primary'], not,
+			`<strong>Submit</strong>`
+		);
+		content.append(logo, emailInput, passInput, submit)
 		return content;
 	}
 

@@ -3,7 +3,7 @@ yak-login > div {
 	background-repeat: no-repeat;
 	background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
 	display: grid;
-	grid-template-rows: 25vh 7vh 7vh;
+	grid-template-rows: 25vh 7vh 7vh 7vh;
 	grid-row-gap: 1vh;
 }
 
@@ -23,4 +23,11 @@ div.login-logo {
 	background: url(/images/logo.png) no-repeat;
 	background-size: 90%;
 	background-position: bottom;
+}
+
+button.btn {
+	width: 21.5vw;
+	place-self: center;
+	height: 100%;
+	padding: 10px;
 }
