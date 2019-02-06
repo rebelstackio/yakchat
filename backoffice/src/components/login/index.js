@@ -19,14 +19,14 @@ class Login extends MetaComponent {
 		const emailInput = global.M_instanceElement(
 			'input',
 			inputClassList,
-			not, not, not,
-			[{'type': 'text'}]
+			not, not,
+			[{'type': 'email'}, {'placeholder': 'Email address'}]
 		);
 		const passInput = global.M_instanceElement(
 			'input',
 			inputClassList,
-			not, not, not,
-			[{'type': 'password'}]
+			not, not,
+			[{'type': 'password'}, {'placeholder': 'Password'}]
 		);
 		const content = global.M_instanceElement(
 			'div'

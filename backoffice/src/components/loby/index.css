@@ -1,0 +1,64 @@
+yak-loby > div {
+	height: 100%;
+	display: grid;
+	grid-template-columns: 19vw 1fr;
+}
+
+.loby-side-menu {
+	background-repeat: no-repeat;
+	background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+}
+
+.loby-msg-body {
+	display: grid;
+	grid-template-rows: 8vh 1fr 8vh;
+}
+
+.msg-input {
+	display: grid;
+	grid-template-columns: 1fr 7vh;
+	padding-bottom: 4px;
+	padding: 0 10px 4px;
+}
+
+input.bottom-input {
+	outline: none;
+	padding: 10px;
+	border: none;
+	background: transparent;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+	font-size: 1rem;
+	color: rgba(0, 0, 0, 0.5);
+}
+
+input.bottom-input:focus { 
+	border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+}
+
+.btn.icon {
+	place-self: center;
+	font-size: 2rem;
+	color: #7d7d7d;
+}
+
+.msg-head {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.msg-head-logo {
+	display: grid;
+	grid-template-columns: .1fr 1fr;
+	cursor: pointer;
+	padding-left: 1em;
+	grid-column-gap: .3em;
+}
+
+.msg-head-logo > span { 
+	place-self: center start;
+}
+
+img.rblstck-logo {
+	place-self: center;
+}
+
