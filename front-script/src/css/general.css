@@ -1,0 +1,42 @@
+/* FONT FAMILY ROBOTO */
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,light');
+@import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
+html, body {
+	height: 100%;
+	background-color: #f9f8f8;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	font-family: Roboto;
+}
+#container {
+	width: 24vw;
+	height: 56vh;
+	place-self: center;
+	display: grid;
+	grid-template-rows: 2em 1fr 3em;
+	padding: 0em 0em 1em 0em;
+	grid-row-gap: 0.5em;
+	border-radius: 1.5em;
+	border: 1px solid #d3d3d3;
+}
+.simple-chatbox, .register-chatbox {
+	position: absolute;
+	bottom: 2%;
+	right: 2%;
+}
+yak-main-container{
+	display: grid;
+	height: 100%;
+}
+
+.no-border {
+	border: none !important;
+}
+
+.hide {
+	display: none !important;
+}
