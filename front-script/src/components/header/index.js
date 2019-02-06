@@ -10,19 +10,19 @@ class Header extends MetaComponent {
 	}
 	// eslint-disable-next-line class-method-use-this
 	render () {
-		this.hederContent = document.createElement('div');
+		this.headerContent = document.createElement('div');
 		this.createHeaderContent();
-		return this.hederContent;
+		return this.headerContent;
 	}
 	/**
 	 * create the header structure
 	 */
 	createHeaderContent () {
-		this.hederContent.className = 'yak-header-items'
+		this.headerContent.className = 'yak-header-items'
 		const title = document.createElement('span');
 		title.textContent = 'Yak Chat';
-		this.hederContent.appendChild(title);
-		this.createOptions(this.hederContent)
+		this.headerContent.appendChild(title);
+		this.createOptions(this.headerContent)
 		this.createCloseButton();
 	}
 	/**
@@ -154,7 +154,7 @@ class Header extends MetaComponent {
 			this.closeButton.classList.toggle('yak-min-close');
 			this.storage.dispatch({ type: 'TOGGLE-CHAT' })
 		})
-		this.hederContent.appendChild(this.closeButton);
+		this.headerContent.appendChild(this.closeButton);
 	}
 	/**
 	 * Handle Events in a organized way.
