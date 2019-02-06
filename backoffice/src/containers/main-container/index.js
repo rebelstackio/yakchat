@@ -1,10 +1,7 @@
 import { MetaContainer } from '@rebelstack-io/metaflux';
 import '../../css/general.css';
 import '../../handlers';
-import '../../components/input';
-import '../../components/viewer';
-import '../../components/header';
-import '../../components/popup';
+import '../../components/loby'
 import '../../components/login';
 
 class YakMainContainer extends MetaContainer {
@@ -13,9 +10,20 @@ class YakMainContainer extends MetaContainer {
 		global.M_instanceElement = this.instanceElement;
 		this.content = document.createElement('div');
 		this.content.id = 'container';
-		const loginEl = document.createElement('yak-login');
-		this.content.appendChild(loginEl);
+		let startEl;
+		if (this.requireAuth()) {
+			startEl = document.createElement('yak-login');
+		} else {
+			startEl = document.createElement('yak-loby');
+		}
+		this.content.appendChild(startEl);
 		return this.content;
+	}
+	/**
+	 * TODO: make a real require auth
+	 */
+	requireAuth () {
+		return document.location.hash !== '#loged';
 	}
 	/**
 	 * 
