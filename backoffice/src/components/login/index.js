@@ -1,6 +1,5 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import './index.css';
-
 class Login extends MetaComponent {
 	/**
 	 * MetaComponent constructor needs storage.
@@ -35,8 +34,24 @@ class Login extends MetaComponent {
 			'button',['btn', 'primary'], not,
 			`<strong>Submit</strong>`
 		);
+		passInput.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				this.handleSend(emailInput.value, passInput.value);
+			}
+		})
+		submit.addEventListener('click', () => {
+			this.handleSend(emailInput.value, passInput.value);
+		});
 		content.append(logo, emailInput, passInput, submit)
 		return content;
+	}
+
+	handleSend (email, password) {
+		global.storage.dispatch({
+			type: 'LOGIN-REQ' , 
+			email,
+			password
+		})
 	}
 
 }

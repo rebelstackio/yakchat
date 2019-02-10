@@ -16,6 +16,7 @@ class YakMainContainer extends MetaContainer {
 		} else {
 			startEl = document.createElement('yak-loby');
 		}
+		this.handleStoreEvents();
 		this.content.appendChild(startEl);
 		return this.content;
 	}
@@ -23,7 +24,21 @@ class YakMainContainer extends MetaContainer {
 	 * TODO: make a real require auth
 	 */
 	requireAuth () {
-		return document.location.hash !== '#loged';
+		return !global.storage.getState().Main.auth;
+	}
+	
+	handleStoreEvents () {
+		const { storage } = global;
+		storage.on('LOGIN-SUCCESS', () => {
+			const loby = document.createElement('yak-loby');
+			this.content.innerHTML = '';
+			this.content.appendChild(loby);
+		});
+		storage.on('LOGOUT', () => {
+			const login = document.createElement('yak-login');
+			this.content.innerHTML = '';
+			this.content.appendChild(login);
+		})
 	}
 	/**
 	 * 
