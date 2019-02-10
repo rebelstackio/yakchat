@@ -6,7 +6,7 @@ class Loby extends MetaComponent {
 	 * MetaComponent constructor needs storage.
 	 */
 	constructor () {
-		super();
+		super(global.storage);
 	}
 	// eslint-disable-next-line class-method-use-this
 	render () {
@@ -36,7 +36,18 @@ class Loby extends MetaComponent {
 	createMsgHeader (box) {
 		const not = undefined;
 		const toggleButtom = global.M_instanceElement('div', ['msg-head-logo']);
-		const actions = global.M_instanceElement('div', ['msg-head-actions']);
+		const actions = global.M_instanceElement(
+			'div',
+			['msg-head-actions'],
+			not,
+			`
+				<i class="fa fa-cog" id="options"></i>
+				<i class="fa fa-sign-out" id="logout"></i>
+			`
+		);
+		actions.querySelector('#logout').addEventListener('click', () => {
+			this.storage.dispatch({ type: 'LOGOUT' });
+		});
 		const logo = global.M_instanceElement(
 			'img',
 			['rblstck-logo'],
@@ -48,6 +59,9 @@ class Loby extends MetaComponent {
 			not, not,
 			`#Loby`
 		);
+		toggleButtom.addEventListener('click', () => {
+			this.storage.dispatch({type: 'TOGGLE-MENU'})
+		})
 		toggleButtom.append(logo, channel);
 		box.append(toggleButtom, actions);
 	}
@@ -69,6 +83,22 @@ class Loby extends MetaComponent {
 			[{type: 'text'}, {placeholder: 'Enter your message'}]
 		);
 		box.append(input, inputButton);
+	}
+
+	handleStoreEvents () {
+		return {
+			'TOGGLE-MENU': () => {
+				const sideBar = document.querySelector('.loby-side-menu');
+				const mainContent = document.querySelector('yak-loby > div');
+				if (sideBar.classList.contains('toggled')) {
+					sideBar.classList.remove('toggled');
+					mainContent.classList.remove('toggled');
+				} else {
+					sideBar.classList.add('toggled');
+					setTimeout(() => { mainContent.classList.add('toggled'); }, 400)
+				}
+			}
+		};
 	}
 
 }
