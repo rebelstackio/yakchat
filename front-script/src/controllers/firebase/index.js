@@ -21,12 +21,15 @@ let app = firebase.initializeApp({
 	storageBucket: "testing-chat-2af19.appspot.com",
 	messagingSenderId: "535251093263"
 });
+const channel = 'testing';
+var functions = app.functions();
 /**
  * the reason of this is to map the message into an object,
  * to avoid repeat the keys of the object in each child,
  * SEE: objectCompress(), objectDecompress()
  */
 const msgPreset = ['type', {from: ['name']}, 'msg', 'date'];
+const newPreset = ['date', 'message', 'by'];
 let threadRoute = '';
 
 app.auth().onAuthStateChanged(function(user) {
@@ -66,7 +69,7 @@ export async function signInAnonymous () {
 			hash = await getClientInfo();
 			localStorage.setItem('yak-hash', hash);
 		}
-		getMessages('anonymous/messages/', hash);
+		getMessages('/messages/', hash);
 	} catch {
 		//
 	}
@@ -80,23 +83,23 @@ export async function signInAnonymous () {
 function getMessages (route, hash) {
 	try {
 		app.database().ref(route).once('value').then(res => {
-			let b = true
-			res.forEach(chld => {
-				const keys = atob(chld.key).split(':');
-				if (keys[0] === hash) {
-					const mssgs = chld.child('2');
-					threadRoute = route + chld.key;
-					listenRow(threadRoute);
-					global.storage.dispatch({
-						type: 'FB-CONNECT',
-						msgList: getMsgArray(mssgs)
+			let b = true;
+			res.forEach(child => {
+				const keys = atob(child.key).split(':');
+				if (keys[0] === channel && keys[1] === hash) {
+					threadRoute = route + child.key;
+					listenRow(route + child.key);
+					getMsgArray(route + child.key).then(res => {
+						global.storage.dispatch({
+							type: 'FB-CONNECT',
+							msgList: res
+						})
 					})
-					console.log('has-threads');
 					b = false;
 				}
-			})
+			});
 			if (b) {
-				createThread(route, hash);
+				//TODO: create new thread with cloud function
 			}
 		})
 	} catch {
@@ -104,61 +107,57 @@ function getMessages (route, hash) {
 	}
 }
 /**
- * @description create a thread if it's the first time in the plataform
- * @param {String} route route base for the messages
- * @param {String} id 
- */
-function createThread (route, id) {
-	app.database().ref(route)
-	.child(btoa(id + ':null'))
-	.set({
-		1: id
-	}).then(() => {
-		threadRoute = route + btoa(id + ':null');
-		listenRow(threadRoute);
-	})
-}
-/**
  * @description listen to changes in database with the current thread
  * @param {String} route 
  */
 function listenRow (route) {
-	app.database().ref(route + '/2').limitToLast(1).on('child_added', function(snapshot) {
+	app.database().ref(route).limitToLast(1).on('child_added', function(snapshot) {
 		global.storage.dispatch({
 			type: 'MSG-ARRIVE',
-			msg: objectDecompress(snapshot.val(), msgPreset)
+			msg: objectDecompress(snapshot.val(), newPreset)
 		})
 	 });
 }
 /**
  * function util to transform the object into an array
- * @param {Object} msg 
+ * @param {String} msg route to the messages
  */
-function getMsgArray (msg) {
-	const resp = [];
-	const val = msg.val();
-	if (val!== null) {
-		Object.keys(val).forEach(key => {
-			resp.push(objectDecompress(val[key], msgPreset));
-		})
+async function getMsgArray (msg) {
+	const response = [];
+	try {
+		const resp = await app.database()
+		.ref(msg)
+		.once('value');
+		resp.forEach(message => {
+			const val = objectDecompress(message.val(), newPreset);
+			response.push(val);
+		});
+	return response;
+	} catch {
+		//
 	}
-	return resp
 }
 /**
- * on sending message event create the new msage
+ * TODO: public send message function
  */
-global.storage.on('SEND-MESSAGE', (action) => {
+export function send (msg) {
 	if (threadRoute !== '') {
-		const t = objectCompress(action.msg);
+		const t = objectCompress(msg);
 		app.database().ref(threadRoute)
-		.child('2')
 		.push()
 		.set(t)
 		.catch(err => {
 			console.log(err);
 		});
 	}
-})
+}
+/**
+ * on sending message event create the new msage
+ */
+/*
+global.storage.on('SEND-MESSAGE', (action) => {
+	send(action.msg);
+})*/
 /**
  * turn Object into an formated plain text, Only support one child
  * @returns String
