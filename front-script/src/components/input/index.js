@@ -68,7 +68,11 @@ class yakInput extends MetaComponent {
 	 */
 	handleSend () {
 		if (this.input.value !== '') {
-			const msg = {type: 'text', from: {name: 'you'}, msg: this.input.value, date: 'a sec ago'}
+			const msg = {
+				date: new Date().toDateString(),
+				message: btoa(this.input.value),
+				by: 'CLIENT'
+			}
 			global.storage.dispatch({
 				type: 'SEND-MESSAGE',
 				msg: msg
