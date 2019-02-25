@@ -1,0 +1,67 @@
+yak-sidebar.loby-side-menu > div {
+	display: grid;
+	grid-template-rows: 8vh 1fr;
+	padding: 1em;
+	grid-row-gap: 2em;
+}
+
+input.search-input {
+	height: 100%;
+	width: 78%;
+	background: transparent;
+	border: none;
+	padding-left: 1.5em;
+	color: #666;
+	outline: none;
+}
+
+.search-box {
+	background: rgba(255,255,255,.3);
+	border-radius: 2em;
+	color: #666;
+}
+
+.channel-box ul {
+	padding: .5em 2em;
+	list-style-type: none;
+	height: auto;
+	opacity: 1;
+	transition: all .2s ease-in;
+}
+
+.channel-box ul > li {
+	color: #1890ff;
+	cursor: pointer;
+}
+
+.channel-box ul > li:hover {
+	color: #40a9ff;
+}
+
+.collapse > ul {
+	height: 0;
+	opacity: 0;
+	display: none;
+}
+
+span.chnl-title {
+	cursor: pointer;
+	color: #666;
+}
+
+span.chnl-title > i {
+	padding-left: .5em;
+}
+
+.channel-box > div {
+	background: rgba(255,255,255, .6);
+	border-radius: 1em;
+	padding: .5em;
+}
+
+.channel-box {
+	display: grid;
+	grid-row-gap: 1em;
+	overflow-y: auto;
+	overflow-x: hidden;
+}

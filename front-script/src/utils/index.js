@@ -1,8 +1,3 @@
-import md5 from 'md5';
-
-String.prototype.md5Encode = function(){
-	return md5(this)
-}
 /**
  * @returns MD5 hash with the browser fingerprint
  */
