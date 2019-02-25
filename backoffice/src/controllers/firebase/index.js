@@ -31,7 +31,12 @@ let threadRoute = '';
 
 app.auth().onAuthStateChanged(function(user) {
 	try {
-		console.log('Connected',user.uid);
+		if (user) {
+			console.log('Connected',user.uid);
+			localStorage.setItem('fb-hash', user.uid)
+		} else {
+			console.log('im not loged');
+		}
 	} catch (er) {
 		// ...
 	}
@@ -50,16 +55,7 @@ export function singOut () {
 		console.log(error);
 	});
 }
-/**
- * TODO: create user from email address
- * @description function for sing up with your email address, then stablish connection
- * @param {String} email
- */
-export function singUpWithEmail (email) {
-	//createThread('singup', 'some-hash-id');
-	throw 'NOT-IMPLEMENTED';
-}
-/**
+/*
  * @description function that stablish an user email connection with firebase
  * @param {String} email
  * @param {String} password
@@ -77,24 +73,7 @@ export function signInWithEmail (email, password) {
 		})
 	});
 }
-/**
- * @description function that stablish an anonymous connection with firebase
- */
-export async function signInAnonymous () {
-	try {
-		await app.auth().signInAnonymously();
-		let hash = '';
-		if (lsTest() && localStorage.getItem('yak-hash')) {
-			hash = localStorage.getItem('yak-hash');
-		} else {
-			hash = await getClientInfo();
-			localStorage.setItem('yak-hash', hash);
-		}
-		getMessages('anonymous/messages/', hash);
-	} catch {
-		//
-	}
-}
+
 /**
  * TODO: make this function to be compatible with singin users
  * @description get the messages and dispatch it
@@ -168,25 +147,7 @@ function getMsgArray (msg) {
 	}
 	return resp
 }
-/**
- * on sending message event create the new msage
- */
-try {
-	global.storage.on('SEND-MESSAGE', (action) => {
-		if (threadRoute !== '') {
-			const t = objectCompress(action.msg);
-			app.database().ref(threadRoute)
-			.child('2')
-			.push()
-			.set(t)
-			.catch(err => {
-				console.log(err);
-			});
-		}
-	})
-} catch {
-	//
-}
+
 /**
  * turn Object into an formated plain text, Only support one child
  * @returns String

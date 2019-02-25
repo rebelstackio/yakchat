@@ -1,4 +1,5 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
+import { instanceElement } from '../../utils';
 import './index.css';
 class Login extends MetaComponent {
 	/**
@@ -11,26 +12,26 @@ class Login extends MetaComponent {
 	render () {
 		const inputClassList = ['login-input'];
 		const not = undefined;
-		const logo = global.M_instanceElement(
+		const logo = instanceElement(
 			'div',
 			['login-logo']
 		);
-		const emailInput = global.M_instanceElement(
+		const emailInput = instanceElement(
 			'input',
 			inputClassList,
 			not, not,
 			[{'type': 'email'}, {'placeholder': 'Email address'}]
 		);
-		const passInput = global.M_instanceElement(
+		const passInput = instanceElement(
 			'input',
 			inputClassList,
 			not, not,
 			[{'type': 'password'}, {'placeholder': 'Password'}]
 		);
-		const content = global.M_instanceElement(
+		const content = instanceElement(
 			'div'
 		)
-		const submit = global.M_instanceElement(
+		const submit = instanceElement(
 			'button',['btn', 'primary'], not,
 			`<strong>Submit</strong>`
 		);

@@ -53,7 +53,7 @@ class Header extends MetaComponent {
 	createUserActions (type) {
 		const box = document.createElement('div');
 		const icon = document.createElement('i');
-		icon.className = 'fa fa-user-secret';
+		icon.className = 'fa fa-user';
 		if (type === 0) {
 			box.className = 'user-actions-an'
 		} else {
@@ -97,9 +97,7 @@ class Header extends MetaComponent {
 		}
 	}
 	/**
-	 * TODO: create an display in the viewer and input areas to sign in
-	 * NOTE: there's no need to login, only sign-up because it's would store in
-	 * the localstorage and if the user lost his session he has to get a recovery email
+	 *
 	 */
 	toggleSing () {
 		this.storage.dispatch({ type: 'SING-UP-REQ'});

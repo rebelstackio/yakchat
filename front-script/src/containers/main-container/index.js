@@ -15,8 +15,6 @@ class YakMainContainer extends MetaContainer {
 		this.input = document.createElement('yak-input');
 		this.viewer = document.createElement('yak-viewer');
 		const header = document.createElement('yak-header');
-		this.input.classList.add('hide');
-		this.viewer.classList.add('hide');
 		global.storage.on('TOGGLE-CHAT', this.handleMinEvent.bind(this));
 		global.storage.on('SING-UP-REQ', this.handleSignEvent.bind(this));
 		this.content.append(header, this.input, this.viewer);
@@ -28,6 +26,8 @@ class YakMainContainer extends MetaContainer {
 	 */
 	createSignUpForm () {
 		const signpup = document.createElement('yak-signup');
+		signpup.classList.add('hide');
+		global.storage.dispatch({ type: 'SING-ANONYMOUS' })
 		this.content.appendChild(signpup);
 	}
 	/**
@@ -49,7 +49,6 @@ class YakMainContainer extends MetaContainer {
 		signup.classList.toggle('hide');
 		if (signup.classList.contains('hide')) {
 			document.querySelector('.fa.fa-user-secret').className = 'fa fa-user';
-			global.storage.dispatch({ type: 'SING-ANONYMOUS' })
 		} else {
 			document.querySelector('.fa.fa-user').className = 'fa fa-user-secret';
 		}
