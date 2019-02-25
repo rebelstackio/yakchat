@@ -1,4 +1,5 @@
 import { signInWithEmail, singOut } from '../controllers/firebase';
+import { stat } from 'fs';
 
 const MainDefaultState = {
 	auth: localStorage.getItem('fb-hash') ? true : false,
@@ -74,6 +75,17 @@ export default {
 		'CHAT-SELECTED': (action, state) => {
 			state.clientSelected = action.data;
 			state.selectedMessages = demoMessages;
+			return { newState: state }
+		},
+		'SEND-MESSAGE': (action, state) => {
+			/**
+			 * TODO: make a real api call
+			 */
+			state.selectedMessages.push({
+				date: new Date().toDateString(),
+				message: action.data,
+				from: 'SERVER'
+			});
 			return { newState: state }
 		}
 	}
