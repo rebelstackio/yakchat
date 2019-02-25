@@ -1,13 +1,15 @@
 import { MetaContainer } from '@rebelstack-io/metaflux';
+import { instanceElement } from '../../utils';
 import '../../css/general.css';
 import '../../handlers';
 import '../../components/loby'
 import '../../components/login';
+import '../../components/sidebar';
 
 class YakMainContainer extends MetaContainer {
 	// eslint-disable-next-line class-method-use-this
 	render () {
-		global.M_instanceElement = this.instanceElement;
+		//global.M_instanceElement = this.instanceElement;
 		this.content = document.createElement('div');
 		this.content.id = 'container';
 		let startEl;
@@ -40,40 +42,7 @@ class YakMainContainer extends MetaContainer {
 			this.content.appendChild(login);
 		})
 	}
-	/**
-	 * 
-	 * @param {*} tag 
-	 * @param {*} classList 
-	 * @param {*} id 
-	 * @param {*} innerHtml  
-	 * @param {*} attList 
-	 */
-	instanceElement (tag, classList, id, innerHtml, attList) {
-		try {
-			const el = document.createElement(tag);
-			if (classList && classList.length > 0) {
-				classList.forEach(cl => {
-					el.classList.add(cl);
-				});
-			}
-			if (id) {
-				el.id = id;
-			}
-			if (innerHtml) {
-				el.innerHTML = innerHtml;
-			}
-			if (attList && attList.length > 0) {
-				attList.forEach(ob => {
-					Object.keys(ob).forEach(key => {
-						el.setAttribute(key, ob[key]);
-					})
-				});
-			}
-			return el;
-		} catch (err) {
-			throw err;
-		}
-	}
+
 }
 
 window.customElements.define('yak-main-container', YakMainContainer);

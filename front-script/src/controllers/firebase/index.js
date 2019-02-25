@@ -40,13 +40,27 @@ app.auth().onAuthStateChanged(function(user) {
 	}
 });
 /**
- * TODO: create user from email address
  * @description function for sing up with your email address, then stablish connection
  * @param {String} email
+ * @param {String} iniMsg
+ * @param {String} name
  */
-export function singUpWithEmail (email) {
-	//createThread('singup', 'some-hash-id');
-	throw 'NOT-IMPLEMENTED';
+export function singUpWithEmail (email, name, iniMsg) {
+	const hash = email.md5Encode();
+	const createThread = functions.httpsCallable('crateThread');
+	createThread({
+		id: hash, 
+		type: name,
+		iniMsg: iniMsg,
+		email: email,
+		channel: channel
+	}).then(v => {
+		if (v.data) {
+			localStorage.setItem('yak-hash', hash);
+			getMessages(hash);
+			global.storage.dispatch({ type: 'SING-UP-REQ' })
+		}
+	})
 }
 /**
  * TODO: stablish an user email connection
@@ -69,7 +83,7 @@ export async function signInAnonymous () {
 			hash = await getClientInfo();
 			localStorage.setItem('yak-hash', hash);
 		}
-		getMessages('/messages/', hash);
+		getMessages(hash);
 	} catch {
 		//
 	}
@@ -80,16 +94,16 @@ export async function signInAnonymous () {
  * @param {String} route the firebase message route
  * @param {String} hash MD5 hash 
  */
-function getMessages (route, hash) {
+function getMessages (hash) {
 	try {
-		app.database().ref(route).once('value').then(res => {
+		app.database().ref('/messages/').once('value').then(res => {
 			let b = true;
 			res.forEach(child => {
 				const keys = atob(child.key).split(':');
 				if (keys[0] === channel && keys[1] === hash) {
-					threadRoute = route + child.key;
-					listenRow(route + child.key);
-					getMsgArray(route + child.key).then(res => {
+					threadRoute = '/messages/' + child.key;
+					listenRow(threadRoute);
+					getMsgArray(threadRoute).then(res => {
 						global.storage.dispatch({
 							type: 'FB-CONNECT',
 							msgList: res
@@ -99,7 +113,15 @@ function getMessages (route, hash) {
 				}
 			});
 			if (b) {
-				//TODO: create new thread with cloud function
+				const createThread = functions.httpsCallable('crateThread');
+				createThread({
+					id: hash, type:'anonymous',
+					iniMsg:undefined,
+					email: undefined,
+					channel: channel
+				}).then(v => {
+					console.log(v);
+				})
 			}
 		})
 	} catch {
@@ -151,13 +173,6 @@ export function send (msg) {
 		});
 	}
 }
-/**
- * on sending message event create the new msage
- */
-/*
-global.storage.on('SEND-MESSAGE', (action) => {
-	send(action.msg);
-})*/
 /**
  * turn Object into an formated plain text, Only support one child
  * @returns String

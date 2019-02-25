@@ -1,4 +1,4 @@
-import {signInAnonymous, send} from '../controllers/firebase';
+import { signInAnonymous, send, singUpWithEmail } from '../controllers/firebase';
 
 /*
 * DEFAULT HANDLER
@@ -34,6 +34,11 @@ export default {
 		},
 		'SING-ANONYMOUS': (action, state) => {
 			signInAnonymous();
+			return { newState: state }
+		},
+		'SIGN-UP': (action, state) => {
+			const {email, name, msg} = action
+			singUpWithEmail(email, name, msg);
 			return { newState: state }
 		}
 	}

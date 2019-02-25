@@ -12,18 +12,24 @@ yak-loby > div.toggled {
 	background-repeat: no-repeat;
 	background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
 	width: 100%;
-	transition: width 0.5s cubic-bezier(0.74, 0.11, 0.06, 0.75);
+	transition: all 0.5s cubic-bezier(0.74, 0.11, 0.06, 0.75);
 }
 
 
 
 .loby-side-menu.toggled {
 	width: 0;
+	visibility: hidden;
 }
 
 .loby-msg-body {
 	display: grid;
 	grid-template-rows: 8vh 1fr 8vh;
+}
+
+.msg-body {
+	display: grid;
+	padding: 4vh 5vw;
 }
 
 .msg-input {
@@ -91,4 +97,31 @@ img.rblstck-logo {
 }
 .msg-head-actions > i:hover {
 	color: rgba(0,0,0,.7);
+}
+
+div[class^="yak-view-item"] {
+	display: grid;
+	grid-template-rows: auto;
+	grid-template-columns: auto;
+	width: 60%;
+	padding: 1em;
+	color: #666;
+}
+.yak-view-item-right{
+	background-color: rgba(24,144,255,0.7);
+	place-self: center end;
+	color: #fff !important;
+	border-radius: 1em 0em 1em 1em;
+}
+
+.yak-view-item-left{
+	background-color: rgba(0,0,0,.1);
+	place-self: center start;
+	border-radius: 0em 1em 1em 1em;
+}
+
+span.msg-date {
+	font-size: 14px;
+	padding-top: 10px;
+	font-style: italic;
 }
