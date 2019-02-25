@@ -14,7 +14,6 @@ class Viewer extends MetaComponent {
 		this.msgList = this.storage.getState().Main.list;
 		this.listContent = document.createElement('div');
 		this.createMsgList(this.msgList);
-		global.storage.on('TOGGLE-CHAT', this.handleTogge.bind(this))
 		return this.listContent;
 	}
 	/**
@@ -23,18 +22,22 @@ class Viewer extends MetaComponent {
 	createMsgList (list) {
 		this.listContent.innerHTML = '';
 		this.listContent.className = 'yak-viewer-list';
-		list.map((l) => {
-			const listItem = document.createElement('div');
-			const msg = document.createElement('span');
-			const from = document.createElement('span');
-			listItem.className = l.from.name === 'you' ? 'yak-view-item-right' : 'yak-view-item-left';
-			msg.className = 'yak-view-msg';
-			from.className = 'yak-view-from';
-			msg.textContent = l.msg;
-			from.textContent = l.from.name + ': ' + l.date;
-			listItem.append(msg, from);
-			this.listContent.appendChild(listItem);
-		})
+		try {
+			list.map((l) => {
+				const listItem = document.createElement('div');
+				const msg = document.createElement('span');
+				const from = document.createElement('span');
+				listItem.className = l.by === 'CLIENT' ? 'yak-view-item-right' : 'yak-view-item-left';
+				msg.className = 'yak-view-msg';
+				from.className = 'yak-view-from';
+				msg.textContent = atob(l.message);
+				from.textContent = l.date;
+				listItem.append(msg, from);
+				this.listContent.appendChild(listItem);
+			})
+		} catch {
+			///
+		}
 		this.scrollTop = this.scrollHeight;
 	}
 	/**
@@ -54,9 +57,12 @@ class Viewer extends MetaComponent {
 				this.msgList = this.storage.getState().Main.list;
 				this.createMsgList(this.msgList);
 			},
-			'FB-CONNECT': (state) => {
+			'FB-CONNECT': () => {
 				this.msgList = this.storage.getState().Main.list;
 				this.createMsgList(this.msgList);
+			},
+			'TOGGLE-CHAT': () => {
+				this.handleTogge.bind(this)
 			}
 		};
 	}

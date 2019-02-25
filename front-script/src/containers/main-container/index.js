@@ -4,8 +4,7 @@ import '../../handlers';
 import '../../components/input';
 import '../../components/viewer';
 import '../../components/header';
-import '../../components/popup';
-import { signInAnonymous } from '../../controllers/firebase';
+import '../../components/signup';
 
 class YakMainContainer extends MetaContainer {
 	// eslint-disable-next-line class-method-use-this
@@ -16,19 +15,43 @@ class YakMainContainer extends MetaContainer {
 		this.input = document.createElement('yak-input');
 		this.viewer = document.createElement('yak-viewer');
 		const header = document.createElement('yak-header');
-		global.storage.on('TOGGLE-CHAT', this.handleStoreEvent.bind(this));
-		signInAnonymous();
+		global.storage.on('TOGGLE-CHAT', this.handleMinEvent.bind(this));
+		global.storage.on('SING-UP-REQ', this.handleSignEvent.bind(this));
 		this.content.append(header, this.input, this.viewer);
+		this.createSignUpForm();
 		return this.content;
 	}
 	/**
-	 * hadle the toggle chat action
+	 * @description create the sigup form by default has the class .hide
 	 */
-	handleStoreEvent () {
+	createSignUpForm () {
+		const signpup = document.createElement('yak-signup');
+		signpup.classList.add('hide');
+		global.storage.dispatch({ type: 'SING-ANONYMOUS' })
+		this.content.appendChild(signpup);
+	}
+	/**
+	 * @description hadle the toggle chat action
+	 */
+	handleMinEvent () {
 		const isOpen = global.storage.getState().Main.isOpen;
 		this.viewer.className = !isOpen ? 'hide' : 'show';
 		this.input.className = !isOpen ? 'hide' : 'show';
 		this.content.classList.toggle('no-border');
+	}
+	/**
+	 * @description toggle between the sign-up and the message viewver
+	 */
+	handleSignEvent () {
+		this.viewer.classList.toggle('hide');
+		this.input.classList.toggle('hide');
+		const signup = document.querySelector('yak-signup');
+		signup.classList.toggle('hide');
+		if (signup.classList.contains('hide')) {
+			document.querySelector('.fa.fa-user-secret').className = 'fa fa-user';
+		} else {
+			document.querySelector('.fa.fa-user').className = 'fa fa-user-secret';
+		}
 	}
 }
 

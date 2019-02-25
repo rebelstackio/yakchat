@@ -1,3 +1,5 @@
+import { signInAnonymous, send, singUpWithEmail } from '../controllers/firebase';
+
 /*
 * DEFAULT HANDLER
 */
@@ -24,6 +26,19 @@ export default {
 		},
 		'FB-CONNECT': (action, state) => {
 			state.Main.list = action.msgList;
+			return { newState: state }
+		},
+		'SEND-MESSAGE': (action, state) => {
+			send(action.msg);
+			return { newState: state }
+		},
+		'SING-ANONYMOUS': (action, state) => {
+			signInAnonymous();
+			return { newState: state }
+		},
+		'SIGN-UP': (action, state) => {
+			const {email, name, msg} = action
+			singUpWithEmail(email, name, msg);
 			return { newState: state }
 		}
 	}

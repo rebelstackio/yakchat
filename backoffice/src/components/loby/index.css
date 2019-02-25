@@ -4,14 +4,32 @@ yak-loby > div {
 	grid-template-columns: 19vw 1fr;
 }
 
+yak-loby > div.toggled {
+	grid-template-columns: 1px 1fr;
+}
+
 .loby-side-menu {
 	background-repeat: no-repeat;
 	background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+	width: 100%;
+	transition: all 0.5s cubic-bezier(0.74, 0.11, 0.06, 0.75);
+}
+
+
+
+.loby-side-menu.toggled {
+	width: 0;
+	visibility: hidden;
 }
 
 .loby-msg-body {
 	display: grid;
 	grid-template-rows: 8vh 1fr 8vh;
+}
+
+.msg-body {
+	display: grid;
+	padding: 4vh 5vw;
 }
 
 .msg-input {
@@ -52,6 +70,7 @@ input.bottom-input:focus {
 	cursor: pointer;
 	padding-left: 1em;
 	grid-column-gap: .3em;
+	width: 10vw;
 }
 
 .msg-head-logo > span { 
@@ -62,3 +81,47 @@ img.rblstck-logo {
 	place-self: center;
 }
 
+.msg-head-actions {
+	width: 10vw;
+	place-self: end;
+	height: 100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.msg-head-actions > i {
+	place-self: center;
+	font-size: 1.5rem;
+	color: rgba(0,0,0,.5);
+	cursor: pointer;
+}
+.msg-head-actions > i:hover {
+	color: rgba(0,0,0,.7);
+}
+
+div[class^="yak-view-item"] {
+	display: grid;
+	grid-template-rows: auto;
+	grid-template-columns: auto;
+	width: 60%;
+	padding: 1em;
+	color: #666;
+}
+.yak-view-item-right{
+	background-color: rgba(24,144,255,0.7);
+	place-self: center end;
+	color: #fff !important;
+	border-radius: 1em 0em 1em 1em;
+}
+
+.yak-view-item-left{
+	background-color: rgba(0,0,0,.1);
+	place-self: center start;
+	border-radius: 0em 1em 1em 1em;
+}
+
+span.msg-date {
+	font-size: 14px;
+	padding-top: 10px;
+	font-style: italic;
+}

@@ -56,41 +56,17 @@ class Header extends MetaComponent {
 		icon.className = 'fa fa-user';
 		if (type === 0) {
 			box.className = 'user-actions-an'
-			this.createUnregisteredActions();
 		} else {
 			box.className = 'user-actions-re';
 			this.createRegisteredActions();
 		}
 		box.addEventListener('click',() => { 
-			this.toggleUserAction(box);
+			this.toggleSing();
 		})
 		box.append(icon);
 		return box;
 	}
-	/**
-	 * create the options for anonymous users
-	 */
-	createUnregisteredActions () {
-		let actions;
-		if (document.querySelector('.user-options')) {
-			actions = document.querySelector('.user-options');
-		} else {
-			actions = document.createElement('div');
-			actions.classList.add('hide', 'user-options');
-			document.querySelector('#container').append(actions);
-		}
-		const signIn = document.createElement('span');
-		const signUp = document.createElement('span');
-		signIn.innerHTML = 'login';
-		signUp.innerHTML = 'Sing Up';
-		signIn.addEventListener('click', () => {
-			this.toggleSing(0);
-		});
-		signUp.addEventListener('click', () => {
-			this.toggleSing(1);
-		})
-		actions.append(signIn, signUp);
-	}
+
 	/**
 	 * create the options for loged in users
 	 */
@@ -121,27 +97,10 @@ class Header extends MetaComponent {
 		}
 	}
 	/**
-	 * TODO: make a sing in/up popup
+	 *
 	 */
-	toggleSing (type) {
-		let popup;
-		if (document.querySelector('yak-popup')) {
-			popup = document.querySelector('yak-popup');
-		} else {
-			popup = document.createElement('yak-popup');
-			document.querySelector('body').appendChild(popup);
-		}
-		if (type === 0) {
-			// signin popup
-			popup.data = {
-				title: 'Welcome to Yak-chat',
-				body: `
-					<>
-				`
-			}
-		} else {
-			// singup popup
-		}
+	toggleSing () {
+		this.storage.dispatch({ type: 'SING-UP-REQ'});
 	}
 	
 	/**
