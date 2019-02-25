@@ -14,12 +14,12 @@ String.prototype.lengthInUtf8Bytes = function() {
  * initialize the firebase
  */
 let app = firebase.initializeApp({ 
-	apiKey: "AIzaSyD5lLizDWKXMKd5LYs8mMbB_0hvYVIKQ1w",
-	authDomain: "testing-chat-2af19.firebaseapp.com",
-	databaseURL: "https://testing-chat-2af19.firebaseio.com",
-	projectId: "testing-chat-2af19",
-	storageBucket: "testing-chat-2af19.appspot.com",
-	messagingSenderId: "535251093263"
+	apiKey: "AIzaSyAYzDrJanF6W6iO_TWxg3suaHz7lyBnih0",
+	authDomain: "yakchat-20e2a.firebaseapp.com",
+	databaseURL: "https://yakchat-20e2a.firebaseio.com",
+	projectId: "yakchat-20e2a",
+	storageBucket: "yakchat-20e2a.appspot.com",
+	messagingSenderId: "20591052421"
 });
 /**
  * the reason of this is to map the message into an object,

@@ -1,7 +1,7 @@
 yak-login > div {
 	height: 100%;
 	background-repeat: no-repeat;
-	background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+	background-image: linear-gradient(rgb(104, 210, 255), rgb(0, 210, 55));
 	display: grid;
 	grid-template-rows: 25vh 7vh 7vh 7vh;
 	grid-row-gap: 1vh;

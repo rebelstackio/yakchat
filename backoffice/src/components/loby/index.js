@@ -1,6 +1,7 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import { instanceElement } from '../../utils';
 import './index.css';
+import { isPrimitive } from 'util';
 
 class Loby extends MetaComponent {
 	/**
@@ -83,7 +84,25 @@ class Loby extends MetaComponent {
 			'<i class="fa fa-angle-right"></i>',
 			[{type: 'text'}, {placeholder: 'Enter your message'}]
 		);
+		input.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				this.sendMessage(input);
+			}
+		});
+		inputButton.addEventListener('click', () => {
+			this.sendMessage(input);
+		})
 		box.append(input, inputButton);
+	}
+	/**
+	 * @description dispatch the send message action
+	 * @param {HTMLElement} input 
+	 */
+	sendMessage (input) {
+		if (input.value !== '') {
+			this.storage.dispatch({ type: 'SEND-MESSAGE', data: input.value })
+			input.value = '';
+		}
 	}
 	/**
 	 * @description create the messages
@@ -91,6 +110,7 @@ class Loby extends MetaComponent {
 	 */
 	createMessages (msgList) {
 		const body = document.querySelector('.msg-body');
+		body.innerHTML = '';
 		msgList.forEach(msg => {
 			const msgBox = instanceElement(
 				'div',
@@ -101,6 +121,7 @@ class Loby extends MetaComponent {
 				`
 			)
 			body.appendChild(msgBox);
+			body.scrollTop = body.scrollHeight;
 		});
 	}
 
@@ -121,7 +142,12 @@ class Loby extends MetaComponent {
 				const {selectedMessages, clientSelected} = state.newState;
 				this.channel.innerHTML = '#' + clientSelected.name;
 				this.createMessages(selectedMessages);
-			}
+			},
+			'SEND-MESSAGE': (state) => {
+				const {selectedMessages, clientSelected} = state.newState;
+				this.channel.innerHTML = '#' + clientSelected.name;
+				this.createMessages(selectedMessages);
+			} 
 		};
 	}
 
