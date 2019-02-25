@@ -1,0 +1,28 @@
+# message types
+
+message key allows 256 possible message types:
+
+0 - system
+	system messages include identification/fingerprint, viewport dimensions, user data (locale, location deduced by ip, etc)
+	to keep data size down, we'll use array with elements defined by their position in array
+	[ fingerprint:<md5>, viewport:<array>, locale:<ISOlocale>, location:<geocode_bigint> ]
+
+
+1 - page analytic
+	information about navigation including path, referrer (previous path), payment_attempt
+	[ path:<pathstring>, referrer:<URI>, ? ]
+
+
+2 - chat message ( only text gzipped? )
+	"text"
+
+3 .. 239 - actions ( operators can push some/all? ) 
+	scroll_y : <integer>
+	shopping_cart: <object>
+	end : <?>
+	navigate : <object>
+	open_chat : <object>
+	close_chat : <object>
+	...
+
+240 -  255 - reserved for future use
