@@ -4,6 +4,7 @@ import '../../handlers';
 import '../../components/loby'
 import '../../components/login';
 import '../../components/sidebar';
+import '../../components/settings';
 
 class YakMainContainer extends MetaContainer {
 	// eslint-disable-next-line class-method-use-this
@@ -15,6 +16,8 @@ class YakMainContainer extends MetaContainer {
 			startEl = document.createElement('yak-login');
 		} else {
 			startEl = document.createElement('yak-loby');
+			const settingsPopUp = instanceElement('yak-settings', ['hide']);
+			startEl.appendChild(settingsPopUp);
 		}
 		this.handleStoreEvents();
 		this.content = startEl;
