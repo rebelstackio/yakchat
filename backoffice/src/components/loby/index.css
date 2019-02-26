@@ -13,9 +13,8 @@ yak-loby > div.toggled {
 	background-image: linear-gradient(rgb(104, 210, 255), rgb(0, 210, 55));
 	width: 100%;
 	transition: all 0.5s cubic-bezier(0.74, 0.11, 0.06, 0.75);
+	font-size: 1rem;
 }
-
-
 
 .loby-side-menu.toggled {
 	width: 0;
@@ -50,6 +49,7 @@ input.bottom-input {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.5);
 	font-size: 1rem;
 	color: rgba(0, 0, 0, 0.5);
+	font-size: 2rem;
 }
 
 input.bottom-input:focus { 
@@ -65,6 +65,7 @@ input.bottom-input:focus {
 .msg-head {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
+	font-size: 2rem;
 }
 
 .msg-head-logo {
@@ -90,6 +91,7 @@ img.rblstck-logo {
 	height: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr;
+	margin-right: 1em;
 }
 
 .msg-head-actions > i {
