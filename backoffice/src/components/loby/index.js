@@ -12,7 +12,12 @@ class Loby extends MetaComponent {
 	// eslint-disable-next-line class-method-use-this
 	render () {
 		const content = document.createElement('div');
+		var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 		const sideBar = instanceElement('yak-sidebar', ['loby-side-menu']);
+		if (w <= 400) {
+			content.classList.add('toggled');
+			sideBar.classList.add('toggled');
+		}
 		const msgBody = instanceElement('div', ['loby-msg-body']);
 		this.createMsgArea(msgBody);
 		content.append(sideBar, msgBody);
