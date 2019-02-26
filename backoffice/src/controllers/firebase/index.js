@@ -59,16 +59,14 @@ export function singOut () {
  * @param {String} password
  */
 export function signInWithEmail (email, password) {
-	app.auth().signInWithEmailAndPassword(email, password)
-	.then(() => {
+	app.auth().signInWithEmailAndPassword(email, password).then(() => {
 		global.storage.dispatch({
 			type: 'LOGIN-SUCCESS'
 		})
-	})
-	.catch(function() {
+	}).catch(() => {
 		global.storage.dispatch({
 			type: 'LOGIN-FAIL'
-		})
+		});
 	});
 }
 
