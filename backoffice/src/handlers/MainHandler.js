@@ -1,7 +1,9 @@
 import { signInWithEmail, singOut } from '../controllers/firebase';
+import { stat } from 'fs';
 
 const MainDefaultState = {
 	auth: localStorage.getItem('fb-hash') ? true : false,
+	isSoundEnable: true,
 	chnlList : [
 		{
 			title: 'ToursSercers',
@@ -37,7 +39,8 @@ const MainDefaultState = {
 				}
 			]
 		}
-	]
+	],
+	selectedMessages: []
 };
 
 const demoMessages = [
@@ -74,6 +77,26 @@ export default {
 		'CHAT-SELECTED': (action, state) => {
 			state.clientSelected = action.data;
 			state.selectedMessages = demoMessages;
+			return { newState: state }
+		},
+		'SEND-MESSAGE': (action, state) => {
+			/**
+			 * TODO: make a real api call
+			 */
+			if (!state.selectedMessages) state.selectedMessages = []
+			state.selectedMessages.push({
+				date: new Date().toDateString(),
+				message: action.data,
+				from: 'SERVER'
+			});
+			return { newState: state }
+		},
+		'TOGGLE-SOUND': (action, state) => {
+			state.isSoundEnable = !state.isSoundEnable;
+			return { newState: state }
+		},
+		'CHNG-PASS': (action, state) => {
+			console.log(action.type, action.data);
 			return { newState: state }
 		}
 	}

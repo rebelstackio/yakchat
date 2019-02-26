@@ -12,7 +12,12 @@ class Loby extends MetaComponent {
 	// eslint-disable-next-line class-method-use-this
 	render () {
 		const content = document.createElement('div');
+		var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 		const sideBar = instanceElement('yak-sidebar', ['loby-side-menu']);
+		if (w <= 400) {
+			content.classList.add('toggled');
+			sideBar.classList.add('toggled');
+		}
 		const msgBody = instanceElement('div', ['loby-msg-body']);
 		this.createMsgArea(msgBody);
 		content.append(sideBar, msgBody);
@@ -42,12 +47,15 @@ class Loby extends MetaComponent {
 			['msg-head-actions'],
 			not,
 			`
-				<i class="fa fa-cog" id="options"></i>
+				<i class="fa fa-cog" id="settings"></i>
 				<i class="fa fa-sign-out" id="logout"></i>
 			`
 		);
 		actions.querySelector('#logout').addEventListener('click', () => {
 			this.storage.dispatch({ type: 'LOGOUT' });
+		});
+		actions.querySelector('#settings').addEventListener('click', () => {
+			this.storage.dispatch({ type: 'TOGGLE-SETTINGS' });
 		});
 		const logo = instanceElement(
 			'img',
@@ -83,7 +91,25 @@ class Loby extends MetaComponent {
 			'<i class="fa fa-angle-right"></i>',
 			[{type: 'text'}, {placeholder: 'Enter your message'}]
 		);
+		input.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				this.sendMessage(input);
+			}
+		});
+		inputButton.addEventListener('click', () => {
+			this.sendMessage(input);
+		})
 		box.append(input, inputButton);
+	}
+	/**
+	 * @description dispatch the send message action
+	 * @param {HTMLElement} input 
+	 */
+	sendMessage (input) {
+		if (input.value !== '') {
+			this.storage.dispatch({ type: 'SEND-MESSAGE', data: input.value })
+			input.value = '';
+		}
 	}
 	/**
 	 * @description create the messages
@@ -91,6 +117,7 @@ class Loby extends MetaComponent {
 	 */
 	createMessages (msgList) {
 		const body = document.querySelector('.msg-body');
+		body.innerHTML = '';
 		msgList.forEach(msg => {
 			const msgBox = instanceElement(
 				'div',
@@ -101,6 +128,7 @@ class Loby extends MetaComponent {
 				`
 			)
 			body.appendChild(msgBox);
+			body.scrollTop = body.scrollHeight;
 		});
 	}
 
@@ -121,6 +149,14 @@ class Loby extends MetaComponent {
 				const {selectedMessages, clientSelected} = state.newState;
 				this.channel.innerHTML = '#' + clientSelected.name;
 				this.createMessages(selectedMessages);
+			},
+			'SEND-MESSAGE': (state) => {
+				const {selectedMessages, clientSelected} = state.newState;
+				this.channel.innerHTML = '#' + clientSelected.name;
+				this.createMessages(selectedMessages);
+			},
+			'TOGGLE-SETTINGS': () => {
+				document.querySelector('yak-settings').classList.toggle('hide');
 			}
 		};
 	}
