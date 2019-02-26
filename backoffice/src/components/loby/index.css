@@ -1,7 +1,7 @@
 yak-loby > div {
 	height: 100%;
 	display: grid;
-	grid-template-columns: 19vw 1fr;
+	grid-template-columns: 22vw 1fr;
 }
 
 yak-loby > div.toggled {
