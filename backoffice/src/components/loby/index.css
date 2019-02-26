@@ -1,7 +1,7 @@
 yak-loby > div {
 	height: 100%;
 	display: grid;
-	grid-template-columns: 19vw 1fr;
+	grid-template-columns: 22vw 1fr;
 }
 
 yak-loby > div.toggled {
@@ -10,12 +10,11 @@ yak-loby > div.toggled {
 
 .loby-side-menu {
 	background-repeat: no-repeat;
-	background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+	background-image: linear-gradient(rgb(104, 210, 255), rgb(0, 210, 55));
 	width: 100%;
 	transition: all 0.5s cubic-bezier(0.74, 0.11, 0.06, 0.75);
+	font-size: 1rem;
 }
-
-
 
 .loby-side-menu.toggled {
 	width: 0;
@@ -30,6 +29,9 @@ yak-loby > div.toggled {
 .msg-body {
 	display: grid;
 	padding: 4vh 5vw;
+	overflow-y: auto;
+	max-height: 76vh;
+	grid-row-gap: 2vh;
 }
 
 .msg-input {
@@ -47,6 +49,7 @@ input.bottom-input {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.5);
 	font-size: 1rem;
 	color: rgba(0, 0, 0, 0.5);
+	font-size: 2rem;
 }
 
 input.bottom-input:focus { 
@@ -62,6 +65,7 @@ input.bottom-input:focus {
 .msg-head {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
+	font-size: 2rem;
 }
 
 .msg-head-logo {
@@ -87,6 +91,7 @@ img.rblstck-logo {
 	height: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr;
+	margin-right: 1em;
 }
 
 .msg-head-actions > i {

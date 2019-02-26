@@ -3,6 +3,7 @@ yak-sidebar.loby-side-menu > div {
 	grid-template-rows: 8vh 1fr;
 	padding: 1em;
 	grid-row-gap: 2em;
+	font-size: 1.5em;
 }
 
 input.search-input {
@@ -47,6 +48,8 @@ input.search-input {
 span.chnl-title {
 	cursor: pointer;
 	color: #666;
+	display: grid;
+	grid-template-columns: 1fr 1em;
 }
 
 span.chnl-title > i {
