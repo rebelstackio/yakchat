@@ -1,5 +1,4 @@
 import { MetaContainer } from '@rebelstack-io/metaflux';
-import { instanceElement } from '../../utils';
 import '../../css/general.css';
 import '../../handlers';
 import '../../components/loby'
@@ -9,7 +8,6 @@ import '../../components/sidebar';
 class YakMainContainer extends MetaContainer {
 	// eslint-disable-next-line class-method-use-this
 	render () {
-		//global.M_instanceElement = this.instanceElement;
 		this.content = document.createElement('div');
 		this.content.id = 'container';
 		let startEl;
@@ -19,27 +17,37 @@ class YakMainContainer extends MetaContainer {
 			startEl = document.createElement('yak-loby');
 		}
 		this.handleStoreEvents();
-		this.content.appendChild(startEl);
+		this.content = startEl;
 		return this.content;
 	}
+	
 	/**
 	 * TODO: make a real require auth
 	 */
 	requireAuth () {
-		return !global.storage.getState().Main.auth;
+		// return !global.storage.getState().Main.auth;
+		return true;
 	}
 	
 	handleStoreEvents () {
 		const { storage } = global;
+
 		storage.on('LOGIN-SUCCESS', () => {
+			// Clean the current content
+			this.innerHTML = '';
+			// Create the lobby component
 			const loby = document.createElement('yak-loby');
-			this.content.innerHTML = '';
-			this.content.appendChild(loby);
+			// Add to the DOM
+			this.appendChild(loby);
 		});
+
 		storage.on('LOGOUT', () => {
+			// Clean the current content
+			this.innerHTML = '';
+			// Create the login component
 			const login = document.createElement('yak-login');
-			this.content.innerHTML = '';
-			this.content.appendChild(login);
+			// Add to the DOM
+			this.appendChild(login);
 		})
 	}
 
