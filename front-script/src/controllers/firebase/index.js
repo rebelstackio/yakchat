@@ -9,18 +9,16 @@ String.prototype.lengthInUtf8Bytes = function() {
 	var m = encodeURIComponent(this).match(/%[89ABab]/g);
 	return this.length + (m ? m.length : 0);
 }
-/**
- * TODO: create proper development firebase so the team have access
- * initialize the firebase
- */
-let app = firebase.initializeApp({ 
-	apiKey: "AIzaSyD5lLizDWKXMKd5LYs8mMbB_0hvYVIKQ1w",
-	authDomain: "testing-chat-2af19.firebaseapp.com",
-	databaseURL: "https://testing-chat-2af19.firebaseio.com",
-	projectId: "testing-chat-2af19",
-	storageBucket: "testing-chat-2af19.appspot.com",
-	messagingSenderId: "535251093263"
+
+const app = firebase.initializeApp({ 
+	apiKey: process.env.FB_APIKEY,
+	authDomain: process.env.FB_AUTHDOMAIN,
+	databaseURL: process.env.FB_DATABASEURL,
+	projectId: process.env.FB_PROJECTID,
+	storageBucket: process.env.FB_STORAGEBUCKET,
+	messagingSenderId: process.env.FB_PROJECTID
 });
+
 const channel = 'testing';
 var functions = app.functions();
 /**
