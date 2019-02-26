@@ -1,5 +1,5 @@
 	/**
-	 * @returns HTMLElemnt
+	 * @returns {HTMLElemnt}
 	 * @description util to write an element quickly
 	 * @param {String} tag tag name (div, span, h1) MANDATORY
 	 * @param {Array} classList array of classes you want to have the element NOT-MANDATORY

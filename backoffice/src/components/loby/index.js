@@ -1,7 +1,6 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import { instanceElement } from '../../utils';
 import './index.css';
-import { isPrimitive } from 'util';
 
 class Loby extends MetaComponent {
 	/**
@@ -43,12 +42,15 @@ class Loby extends MetaComponent {
 			['msg-head-actions'],
 			not,
 			`
-				<i class="fa fa-cog" id="options"></i>
+				<i class="fa fa-cog" id="settings"></i>
 				<i class="fa fa-sign-out" id="logout"></i>
 			`
 		);
 		actions.querySelector('#logout').addEventListener('click', () => {
 			this.storage.dispatch({ type: 'LOGOUT' });
+		});
+		actions.querySelector('#settings').addEventListener('click', () => {
+			this.storage.dispatch({ type: 'TOGGLE-SETTINGS' });
 		});
 		const logo = instanceElement(
 			'img',
@@ -147,7 +149,10 @@ class Loby extends MetaComponent {
 				const {selectedMessages, clientSelected} = state.newState;
 				this.channel.innerHTML = '#' + clientSelected.name;
 				this.createMessages(selectedMessages);
-			} 
+			},
+			'TOGGLE-SETTINGS': () => {
+				document.querySelector('yak-settings').classList.toggle('hide');
+			}
 		};
 	}
 
