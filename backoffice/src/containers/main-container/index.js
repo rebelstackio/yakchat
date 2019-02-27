@@ -16,8 +16,6 @@ class YakMainContainer extends MetaContainer {
 			startEl = document.createElement('yak-login');
 		} else {
 			startEl = document.createElement('yak-loby');
-			const settingsPopUp = instanceElement('yak-settings', ['hide']);
-			startEl.appendChild(settingsPopUp);
 		}
 		this.handleStoreEvents();
 		this.content = startEl;

@@ -17,4 +17,7 @@
 	input.bottom-input {
 		font-size: 1rem !important;
 	}
+	.option-body {
+		grid-template-columns: 1fr !important;
+	}
 }

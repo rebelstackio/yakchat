@@ -21,6 +21,8 @@ class Loby extends MetaComponent {
 		const msgBody = instanceElement('div', ['loby-msg-body']);
 		this.createMsgArea(msgBody);
 		content.append(sideBar, msgBody);
+		const settingsPopUp = instanceElement('yak-settings', ['hide']);
+		this.appendChild(settingsPopUp);
 		return content;
 	}
 	/**

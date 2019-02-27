@@ -65,3 +65,8 @@ i#set-close {
 	border: 1px solid #d3d3d3;
 	border-radius: 3px;
 }
+
+.set-new-pass > button {
+	height: 6vh;
+	font-size: 1em;
+}
