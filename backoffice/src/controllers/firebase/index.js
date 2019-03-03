@@ -98,7 +98,7 @@ function getMessages (route, hash) {
 				createThread(route, hash);
 			}
 		})
-	} catch {
+	} catch (err) {
 		///
 	}
 }
