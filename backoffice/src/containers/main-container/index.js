@@ -33,6 +33,10 @@ class YakMainContainer extends MetaContainer {
 	handleStoreEvents () {
 		const { storage } = global;
 
+		// TODO: there is already firebase.auth().onAuthStateChanged() so i don't think we need storage.on('LOGIN-SUCCESS') or 'LOGOUT'
+		// TODO: instead, follow this pattern: https://firebase.google.com/docs/auth/admin/custom-claims#client_side_implementation_javascript
+		// TODO: following that, you can query the role of the user via user.getIdToken() - once you've identified the role in the token, you can lazy-load the appropriate scripts and interface
+
 		storage.on('LOGIN-SUCCESS', () => {
 			// Clean the current content
 			this.innerHTML = '';
