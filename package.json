@@ -9,7 +9,7 @@
     "install:fs": "npm install --prefix ./front-script",
     "start": "npm-run-all --parallel start:bo start:fs",
     "start:bo": "npm start --prefix ./backoffice",
-    "build:bo": "npm run build --prefix c",
+    "build:bo": "npm run build --prefix ./backoffice",
     "start:fs": "npm start --prefix ./front-script",
     "build:fs": "npm run build --prefix ./front-script"
   },
