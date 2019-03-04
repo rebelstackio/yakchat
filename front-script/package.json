@@ -1,11 +1,11 @@
 {
-  "name": "metaflux-boilerplate",
+  "name": "yakchat-frontscript",
   "version": "1.0.0",
-  "description": "Project Boilerplate for metaflux",
-  "main": "index.js",
+  "description": "Yakchat front script",
+  "main": "src/main/index.js",
   "scripts": {
-    "start": "./node_modules/.bin/webpack-dev-server  --mode development --host 0.0.0.0",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "parcel ./public/index.html -p 8081",
+    "build": "parcel build ./public/index.html"
   },
   "contributors": [
     {
