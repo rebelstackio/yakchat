@@ -43,7 +43,7 @@ export async function getClientInfo () {
 				p.push(navigator.plugins[x].name);
 			}
 			return p.length > 0 ? p.join(':') : '!0';
-		} catch {
+		} catch (err) {
 			return '!0';
 		}
 	}
