@@ -26,8 +26,8 @@ class YakMainContainer extends MetaContainer {
 	 * TODO: make a real require auth
 	 */
 	requireAuth () {
-		// return !global.storage.getState().Main.auth;
-		return true;
+		return !global.storage.getState().Main.auth;
+		//return true;
 	}
 	
 	handleStoreEvents () {
