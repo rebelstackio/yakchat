@@ -35,7 +35,7 @@ class Viewer extends MetaComponent {
 				listItem.append(msg, from);
 				this.listContent.appendChild(listItem);
 			})
-		} catch {
+		} catch (er) {
 			///
 		}
 		this.scrollTop = this.scrollHeight;
