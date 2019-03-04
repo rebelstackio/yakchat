@@ -51,7 +51,7 @@ class Sidebar extends MetaComponent {
 				chnlBox.appendChild(chEl);
 			});
 			el.appendChild(chnlBox);
-		} catch {
+		} catch (err) {
 			//
 		}
 	}

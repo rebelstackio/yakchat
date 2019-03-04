@@ -82,7 +82,7 @@ export async function signInAnonymous () {
 			localStorage.setItem('yak-hash', hash);
 		}
 		getMessages(hash);
-	} catch {
+	} catch (er) {
 		//
 	}
 }
@@ -122,7 +122,7 @@ function getMessages (hash) {
 				})
 			}
 		})
-	} catch {
+	} catch (err) {
 		///
 	}
 }
@@ -153,7 +153,7 @@ async function getMsgArray (msg) {
 			response.push(val);
 		});
 	return response;
-	} catch {
+	} catch (er) {
 		//
 	}
 }
