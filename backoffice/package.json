@@ -2,7 +2,7 @@
   "name": "yakchat-backoffice",
   "version": "1.0.0",
   "description": "Yakchat backoffice application",
-  "main": "index.js",
+  "main": "src/main/index.js",
   "scripts": {
     "start": "parcel ./public/index.html -p 8080",
     "build": "parcel build ./public/index.html"
