@@ -1,17 +1,20 @@
-# To deploy the project
-you need to install parceljs
+# Yakchat FrontScript
+
+## Getting started
+
+### Run the dev server
+To run on development mode:
+
 ```shell
-npm install -g parcel-bundler
+npm start
 ```
-now parcel it's available globaly so we can start a dev server
+
+Once the build is finished you can open your browser at http://localhost:8081
+
+### Create the build
+
 ```shell
-parcel ./public/index.html
+npm run build
 ```
-```shell
-Server running at http://localhost:1234
-```
-or can blundle it uglify
-```shel
-parcel build ./public/index.html
-```
-this would generate in ./public/dist/ with a main.xxx.js & main.xxx.css both minified
+
+this would generate all the assets in  the `dist` folder.
