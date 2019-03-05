@@ -156,14 +156,15 @@ function sendEmail(email, urlString, domain) {
  */
 exports.inviteOperator = functions.https.onCall((param) => {
 	const { uuid, email, name } = param;
-	const domain = 'http://localhost:1234';
-	return admin.database().ref('/pendingusers/' + uuid)
+	const domain = 'http://localhost:8080';
+	return admin.database().ref('/pendingusers/')
 	.push({
+		0: uuid,
 		1: email ? email : '',
 		2: name ? name : ''
 	})
 	.then(res => {
-		const urlString = '/?k=' + res.key + (email ? '&m=' + email : '') + (name ? '&n=' + name : '');
+		const urlString = '/#/invite/?k=' + res.key + (email ? '&m=' + email : '') + (name ? '&n=' + name : '');
 		if (email) {
 			// dispatch email
 			sendEmail(email, urlString, domain);
