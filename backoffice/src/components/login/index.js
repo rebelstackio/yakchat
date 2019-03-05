@@ -1,5 +1,5 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
-import imageURL from '../../../public/images/yakchat.svg';
+import imageURL from '../../../public/images/logo/yakchat.svg';
 import './index.css';
 
 class Login extends MetaComponent {
