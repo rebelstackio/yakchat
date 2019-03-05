@@ -34,3 +34,5 @@ class ConfirmInvitation extends MetaComponent {
 		//.
 	}
 }
+
+window.customElements.define('confirm-invitation', Settings);
