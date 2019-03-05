@@ -3,40 +3,83 @@ const admin = require('firebase-admin');
 
 admin.initializeApp();
 
-exports.singInAnonymous = functions.https.onRequest((request, response) => {
-	const headers = request.headers;
-	console.log(request.connection.remoteAddress);
-	response.send('ok ' + (headers['X-Forwarded-For'] || request.connection.remoteAddress));
-})
-
-const routes = ['messages', 'clients', 'channels', 'operators', 'emailreq', 'channelreq']
-// permisons
-const _p = {
-	none: '0000', // 0
-	read: '0001', // 1
-	write: '0010', // 2
-	edit: '0100', // 4
-	delete: '1000', // 8
-	read_write: '0011' // 3
+/**
+ * @description return the custom claims Object
+ * @param {Integer} type 
+ */
+function getCustomClaims (type) {
+	switch (type) {
+		case 1:
+			// operator
+			return {
+				accessLevel: 3,
+				admin: false
+			};
+		case 2:
+			// client t0
+			return {
+				accessLevel: 5,
+				admin: false
+			}
+		case 3:
+			// client t1
+			return {
+				accessLevel: 6,
+				admin: false
+			}
+		case 4: 
+			// client t2
+			return {
+				accessLevel: 7,
+				admin: false
+			}
+		case 5: 
+			// admin
+			return {
+				accessLevel: 10,
+				admin: true
+			}
+		default:
+			// registrant
+			return {
+				accessLevel: 2,
+				admin: false
+			}
+	}
 }
-// role set
-const visitor = [
-	parseInt(_p.read_write, 2),
-	parseInt(_p.none, 2),
-	parseInt(_p.none, 2),
-	parseInt(_p.none, 2),
-	parseInt(_p.none, 2),
-	parseInt(_p.none, 2)
-];
-
-const registrant = [
-	parseInt(_p.read_write, 2),
-	parseInt(_p.none, 2),
-	parseInt(_p.read_write, 2),
-	parseInt(_p.read, 2),
-	parseInt(_p.read, 2),
-	parseInt(_p.none, 2)
-];
+/**
+ * @description sign up API handle role base with firebase custom claims
+ * recive { email: 'email@domain.com', password: '123456', displayName: 'test', type: 0 ... 5 }
+ */
+exports.signup = functions.https.onCall((param) => {
+	const {email, password, displayName, type} = param;
+	return admin.auth().createUser({
+		email: email,
+		displayName: displayName,
+		emailVerified: false,
+		password: password,
+		disabled: false
+	})
+	.then((userRecord) => {
+		console.log("Successfully created new user " + displayName, userRecord.uid);
+		const customClaims = getCustomClaims(type);
+		// Set custom user claims on this newly created user.
+		return admin.auth().setCustomUserClaims(userRecord.uid, customClaims)
+		.then(() => {
+			// Update real-time database to notify client to force refresh.
+			const metadataRef = admin.database().ref("metadata/" + userRecord.uid);
+			// Set the refresh time to the current UTC timestamp.
+			// This will be captured on the client to force a token refresh.
+			return metadataRef.set({refreshTime: new Date().getTime()});
+		})
+		.catch(error => {
+			console.log(error);
+		});
+	})
+	.catch((error) => {
+		console.log("Error creating new user:", error);
+	});
+})
 
 exports.crateThread = functions.https.onCall((data, context) => {
 	let { id, type, iniMsg, email, channel } = data;

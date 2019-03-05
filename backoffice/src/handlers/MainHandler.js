@@ -1,9 +1,10 @@
 import { signInWithEmail, singOut } from '../controllers/firebase';
-import { stat } from 'fs';
 
 const MainDefaultState = {
 	auth: localStorage.getItem('fb-hash') ? true : false,
 	isSoundEnable: true,
+	accessLevel: 0,
+	admin: false,
 	chnlList : [
 		{
 			title: 'ToursSercers',
@@ -66,6 +67,8 @@ export default {
 		},
 		'LOGIN-SUCCESS': (action, state) => {
 			state.auth = true;
+			state.accessLevel = action.accessLevel;
+			state.admin = action.admin;
 			return { newState: state }
 		},
 		'LOGOUT': (action, state) => {

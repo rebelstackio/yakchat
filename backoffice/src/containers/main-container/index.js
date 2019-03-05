@@ -26,20 +26,51 @@ class YakMainContainer extends MetaContainer {
 	 * TODO: make a real require auth
 	 */
 	requireAuth () {
-		// return !global.storage.getState().Main.auth;
-		return true;
+		return !global.storage.getState().Main.auth;
+		//return true;
+	}
+	/**
+	 * @description create the view depending on your user role
+	 * @param {Integer} accessLevel 
+	 * @param {Boolean} admin 
+	 */
+	createRoleView (accessLevel, admin) {
+		this.innerHTML = '';
+		let el;
+		// TODO: CREATE EACH VIEW
+		el = document.createElement('yak-loby');
+		if (admin && accessLevel === 10) {
+			// admin login
+			console.log('i\'m admin');
+		} else {
+			switch (accessLevel) {
+				case 3: 
+					//operator
+					console.log('i\'m admin an operatorator');
+				break;
+				case 5:
+					//client t0
+					console.log('i\'m admin a client T0');
+				break;
+				case 6: 
+					//client t1
+					console.log('i\'m admin a client T1');
+				break;
+				case 7:
+					// client t2
+					console.log('i\'m admin a client T2');
+				break;
+			}
+		}
+		// Add to the DOM
+		this.appendChild(el);
 	}
 	
 	handleStoreEvents () {
 		const { storage } = global;
-
-		storage.on('LOGIN-SUCCESS', () => {
-			// Clean the current content
-			this.innerHTML = '';
-			// Create the lobby component
-			const loby = document.createElement('yak-loby');
-			// Add to the DOM
-			this.appendChild(loby);
+		storage.on('LOGIN-SUCCESS', (state) => {
+			const {accessLevel, admin} = state.newState;
+			this.createRoleView(accessLevel, admin)
 		});
 
 		storage.on('LOGOUT', () => {
