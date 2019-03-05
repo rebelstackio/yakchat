@@ -1,4 +1,5 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
+import imageURL from '../../../public/images/logo.png';
 import './index.css';
 
 class Login extends MetaComponent {
@@ -30,7 +31,7 @@ class Login extends MetaComponent {
 			<div class="login__container">
 				<form class="login__form">
 					<div class="login__logo-box">
-						<img src="/images/logo.png" alt="Logo" class="login__logo">
+						<img src="${imageURL}" alt="Logo" class="login__logo">
 					</div>
 
 					<h1 class="login__title">
