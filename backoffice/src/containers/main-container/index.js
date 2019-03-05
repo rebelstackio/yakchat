@@ -1,4 +1,5 @@
 import { MetaContainer } from '@rebelstack-io/metaflux';
+import Navigo from 'navigo';
 import '../../css/general.css';
 import '../../handlers';
 import '../../components/loby'
@@ -11,6 +12,7 @@ class YakMainContainer extends MetaContainer {
 	render () {
 		this.content = document.createElement('div');
 		this.content.id = 'container';
+		this.handleRoute();
 		let startEl;
 		if (this.requireAuth()) {
 			startEl = document.createElement('yak-login');
@@ -20,6 +22,18 @@ class YakMainContainer extends MetaContainer {
 		this.handleStoreEvents();
 		this.content = startEl;
 		return this.content;
+	}
+
+	handleRoute () {
+		var root = '/';
+		var useHash = true; // Defaults to: false
+		var hash = '#!'; // Defaults to: '#'
+		var router = new Navigo(root, useHash, hash);
+		router.on({
+			'/loby': () => {
+				console.log(global.storage.getState().Main.auth)
+			}}
+		)
 	}
 	
 	/**
