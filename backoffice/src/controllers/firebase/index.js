@@ -27,11 +27,36 @@ const app = firebase.initializeApp({
 const msgPreset = ['type', {from: ['name']}, 'msg', 'date'];
 let threadRoute = '';
 
+let callback = null;
+let metadataRef = null;
 app.auth().onAuthStateChanged(function(user) {
 	try {
 		if (user) {
 			console.log('Connected',user.uid);
 			localStorage.setItem('fb-hash', user.uid)
+			// Check if refresh is required.
+			metadataRef = firebase.database().ref('metadata/' + user.uid + '/refreshTime');
+			callback = (snapshot) => {
+			  // Force refresh to pick up the latest custom claims changes.
+			  // Note this is always triggered on first call. Further optimization could be
+			  // added to avoid the initial trigger when the token is issued and already contains
+			  // the latest claims.
+			  user.getIdToken(true);
+			};
+			// Subscribe new listener to changes on that node.
+			metadataRef.on('value', callback);
+			firebase.auth().currentUser.getIdTokenResult()
+			.then((idTokenResult) => {
+				// Confirm the user is an Admin.
+				global.storage.dispatch({
+					type: 'LOGIN-SUCCESS',
+					accessLevel: idTokenResult.claims.accessLevel,
+					admin: idTokenResult.claims.admin
+				});
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 		} else {
 			console.log('im not loged');
 		}
@@ -59,11 +84,7 @@ export function singOut () {
  * @param {String} password
  */
 export function signInWithEmail (email, password) {
-	app.auth().signInWithEmailAndPassword(email, password).then(() => {
-		global.storage.dispatch({
-			type: 'LOGIN-SUCCESS'
-		})
-	}).catch(() => {
+	app.auth().signInWithEmailAndPassword(email, password).catch(() => {
 		global.storage.dispatch({
 			type: 'LOGIN-FAIL'
 		});
