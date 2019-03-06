@@ -4,4 +4,4 @@ node_modules
 .cache
 
 # For backoffice
-dist
+/dist
