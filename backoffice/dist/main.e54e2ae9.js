@@ -68991,8 +68991,8 @@ class Loby extends _metaflux.MetaComponent {
 }
 
 window.customElements.define('yak-loby', Loby);
-},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","../../utils":"../src/utils/index.js","./index.css":"../src/components/loby/index.css"}],"images/logo.png":[function(require,module,exports) {
-module.exports = "/logo.6023b87e.png";
+},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","../../utils":"../src/utils/index.js","./index.css":"../src/components/loby/index.css"}],"images/logo/yakchat.svg":[function(require,module,exports) {
+module.exports = "/yakchat.908aa091.svg";
 },{}],"../src/components/login/index.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
@@ -69004,7 +69004,7 @@ var global = arguments[3];
 
 var _metaflux = require("@rebelstack-io/metaflux");
 
-var _logo = _interopRequireDefault(require("../../../public/images/logo.png"));
+var _yakchat = _interopRequireDefault(require("../../../public/images/logo/yakchat.svg"));
 
 require("./index.css");
 
@@ -69040,7 +69040,7 @@ class Login extends _metaflux.MetaComponent {
 			<div class="login__container">
 				<form class="login__form">
 					<div class="login__logo-box">
-						<img src="${_logo.default}" alt="Logo" class="login__logo">
+						<img src="${_yakchat.default}" alt="Logo" class="login__logo">
 					</div>
 
 					<h1 class="login__title">
@@ -69073,7 +69073,7 @@ class Login extends _metaflux.MetaComponent {
 }
 
 window.customElements.define('yak-login', Login);
-},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","../../../public/images/logo.png":"images/logo.png","./index.css":"../src/components/login/index.css"}],"../src/components/sidebar/index.css":[function(require,module,exports) {
+},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","../../../public/images/logo/yakchat.svg":"images/logo/yakchat.svg","./index.css":"../src/components/login/index.css"}],"../src/components/sidebar/index.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -69405,6 +69405,15 @@ class YakMainContainer extends _metaflux.MetaContainer {
         this.innerHTML = '';
         el = document.createElement('confirm-invitation');
         this.appendChild(el);
+      },
+      '/': () => {
+        this.innerHTML = '';
+
+        if (!this.requireAuth()) {
+          router.navigate('/lobby');
+        } else {
+          router.navigate('/login');
+        }
       }
     }).resolve();
   }
@@ -69431,24 +69440,24 @@ class YakMainContainer extends _metaflux.MetaContainer {
       switch (accessLevel) {
         case 3:
           //operator
-          console.log('i\'m admin an operatorator');
+          console.log('i\'m an operatorator');
           document.location.hash = '#/lobby';
           break;
 
         case 5:
           //client t0
-          console.log('i\'m admin a client T0');
+          console.log('i\'m a client T0');
           document.location.hash = '#/dashboard';
           break;
 
         case 6:
           //client t1
-          console.log('i\'m admin a client T1');
+          console.log('i\'m a client T1');
           break;
 
         case 7:
           // client t2
-          console.log('i\'m admin a client T2');
+          console.log('i\'m a client T2');
           break;
       }
     }
@@ -69514,7 +69523,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44867" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45545" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
