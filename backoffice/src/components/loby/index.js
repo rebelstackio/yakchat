@@ -1,5 +1,9 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import { instanceElement } from '../../utils';
+import cogIcon from '../../css/icons/cog-solid.svg';
+import logoutIcon from '../../css/icons/sign-out-alt-solid.svg';
+import imageURL from '../../../public/images/logo/yakchat.svg';
+import sendIcon from '../../css/icons/chevron-right-solid.svg';
 import './index.css';
 
 class Loby extends MetaComponent {
@@ -49,11 +53,12 @@ class Loby extends MetaComponent {
 			['msg-head-actions'],
 			not,
 			`
-				<i class="fa fa-cog" id="settings"></i>
-				<i class="fa fa-sign-out" id="logout"></i>
+				<img src="${cogIcon}" id="settings"></img>
+				<img src="${logoutIcon}" id="logout"></img>
 			`
 		);
 		actions.querySelector('#logout').addEventListener('click', () => {
+			document.location.hash = '#/login';
 			this.storage.dispatch({ type: 'LOGOUT' });
 		});
 		actions.querySelector('#settings').addEventListener('click', () => {
@@ -63,7 +68,7 @@ class Loby extends MetaComponent {
 			'img',
 			['rblstck-logo'],
 			not, not,
-			[{src: 'images/logo.png'}, {width: '30'}, {height: '30'}]
+			[{src: imageURL}, {width: '30'}, {height: '30'}]
 		);
 		this.channel = instanceElement(
 			'span',
@@ -90,7 +95,7 @@ class Loby extends MetaComponent {
 		const inputButton = instanceElement(
 			'div', ['btn', 'icon'],
 			not,
-			'<i class="fa fa-angle-right"></i>',
+			`<img src="${sendIcon}"></img>`,
 			[{type: 'text'}, {placeholder: 'Enter your message'}]
 		);
 		input.addEventListener('keydown', (e) => {

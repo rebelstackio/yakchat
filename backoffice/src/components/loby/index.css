@@ -82,6 +82,8 @@ input.bottom-input:focus {
 
 img.rblstck-logo {
 	place-self: center;
+	height: 1.5em;
+	width: 1.5em;
 }
 
 .msg-head-actions {
@@ -94,13 +96,13 @@ img.rblstck-logo {
 	grid-column-gap: .5em;
 }
 
-.msg-head-actions > i {
+.msg-head-actions > img {
 	place-self: center;
 	font-size: 1.5rem;
 	color: rgba(0,0,0,.5);
 	cursor: pointer;
 }
-.msg-head-actions > i:hover {
+.msg-head-actions > img:hover {
 	color: rgba(0,0,0,.7);
 }
 
@@ -129,4 +131,8 @@ span.msg-date {
 	font-size: 14px;
 	padding-top: 10px;
 	font-style: italic;
+}
+
+img {
+	height: 1em;
 }
