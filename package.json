@@ -8,9 +8,10 @@
     "install:bo": "npm install --prefix ./backoffice",
     "install:fs": "npm install --prefix ./front-script",
     "start": "npm-run-all --parallel start:bo start:fs",
-    "start:bo": "npm start --prefix ./backoffice",
+    "build": "npm-run-all --parallel build:bo build:fs",
     "build:bo": "npm run build --prefix ./backoffice",
     "start:fs": "npm start --prefix ./front-script",
+    "start:bo": "npm start --prefix ./backoffice",
     "build:fs": "npm run build --prefix ./front-script"
   },
   "contributors": [
