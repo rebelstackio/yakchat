@@ -18,7 +18,7 @@ const app = firebase.initializeApp({
 	storageBucket: process.env.FB_STORAGEBUCKET,
 	messagingSenderId: process.env.FB_PROJECTID
 });
-
+var functions = app.functions();
 /**
  * the reason of this is to map the message into an object,
  * to avoid repeat the keys of the object in each child,
@@ -89,6 +89,24 @@ export function signInWithEmail (email, password) {
 			type: 'LOGIN-FAIL'
 		});
 	});
+}
+
+export function processInvitation (key, email, password, name) {
+	app.database()
+	.ref('/pendingusers/')
+	.equalTo(key)
+	.once('value', (v) => {
+		console.log(v, 'va')
+	});
+	const signup = functions.httpsCallable('signup');
+	signup({
+		email: email,
+		password: password,
+		displayName: name,
+		type: 1
+	}).then(res => {
+		global.storage.dispatch({type: 'LOGIN-REQ', email: email, password: password});
+	})
 }
 
 /**
