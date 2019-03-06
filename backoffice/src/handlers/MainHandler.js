@@ -1,4 +1,4 @@
-import { signInWithEmail, singOut, processInvitation } from '../controllers/firebase';
+import { signInWithEmail, singOut, processInvitation, signUp } from '../controllers/firebase';
 
 const MainDefaultState = {
 	auth: localStorage.getItem('fb-hash') ? true : false,
@@ -101,6 +101,11 @@ export default {
 		'CHNG-PASS': (action, state) => {
 			console.log(action.type, action.data);
 			return { newState: state }
+		},
+		'SIGNUP': (action, state) => {
+			const {email, displayName, password, type, domain} = action.data
+			signUp(displayName, email, password, domain, type);
+			return {newState: state}
 		},
 		'ACEPT-INVITATION': (action, state) => {
 			processInvitation(action.data.key, action.data.m, action.data.ps, action.data.un);

@@ -6,7 +6,8 @@ import '../../components/loby'
 import '../../components/login';
 import '../../components/sidebar';
 import '../../components/settings';
-import '../../components/operators/confirm-invitation'
+import '../../components/operators/confirm-invitation';
+import '../../components/signup';
 
 class YakMainContainer extends MetaContainer {
 	constructor () {
@@ -33,7 +34,7 @@ class YakMainContainer extends MetaContainer {
 		el = document.createElement('yak-loby');
 		router.on({
 			'/lobby': () => {
-				console.log('loby',this.requireAuth())
+				console.log('loby', !this.requireAuth())
 				if (!this.requireAuth()) {
 					this.innerHTML = '';
 					// Add to the DOM
@@ -62,6 +63,11 @@ class YakMainContainer extends MetaContainer {
 			'/invite': () => {
 				this.innerHTML = '';
 				el = document.createElement('confirm-invitation');
+				this.appendChild(el);
+			},
+			'/signup': () => {
+				this.innerHTML = '';
+				el = document.createElement('yak-signup');
 				this.appendChild(el);
 			}
 		})
@@ -95,15 +101,17 @@ class YakMainContainer extends MetaContainer {
 				case 5:
 					//client t0
 					console.log('i\'m admin a client T0');
-					document.location.hash = '#/dashboard';
+					document.location.hash = '#/lobby';
 				break;
 				case 6: 
 					//client t1
 					console.log('i\'m admin a client T1');
+					document.location.hash = '#/lobby';
 				break;
 				case 7:
 					// client t2
 					console.log('i\'m admin a client T2');
+					document.location.hash = '#/lobby';
 				break;
 			}
 		}
