@@ -64,13 +64,20 @@
 }
 
 .login__inputbox {
-	margin-bottom: 1.8rem;
+	margin-bottom: 1rem;
 }
 
-.login__error{
+.login__error {
 	color: var(--error-validation-color);
-	/* display: none; */
 	font-size: 1rem;
+}
+
+.login__error--hide {
+	opacity: 0;
+}
+
+.login__error--show {
+	opacity: 1;
 }
 
 .login__forgot-box {
