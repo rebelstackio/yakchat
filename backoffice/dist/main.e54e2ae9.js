@@ -119,7 +119,7 @@ var define;
 !function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define(t):e.Navigo=t()}(this,function(){"use strict";var e="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};function t(){return!("undefined"==typeof window||!window.history||!window.history.pushState)}function n(e,n,o){this.root=null,this._routes=[],this._useHash=n,this._hash=void 0===o?"#":o,this._paused=!1,this._destroyed=!1,this._lastRouteResolved=null,this._notFoundHandler=null,this._defaultHandler=null,this._usePushState=!n&&t(),this._onLocationChange=this._onLocationChange.bind(this),this._genericHooks=null,this._historyAPIUpdateMethod="pushState",e?this.root=n?e.replace(/\/$/,"/"+this._hash):e.replace(/\/$/,""):n&&(this.root=this._cLoc().split(this._hash)[0].replace(/\/$/,"/"+this._hash)),this._listen(),this.updatePageLinks()}function o(e){return e instanceof RegExp?e:e.replace(/\/+$/,"").replace(/^\/+/,"^/")}function i(e){return e.replace(/\/$/,"").split("/").length}function s(e,t){return i(t)-i(e)}function r(e,t){return function(e){return(arguments.length>1&&void 0!==arguments[1]?arguments[1]:[]).map(function(t){var i=function(e){var t=[];return{regexp:e instanceof RegExp?e:new RegExp(e.replace(n.PARAMETER_REGEXP,function(e,o,i){return t.push(i),n.REPLACE_VARIABLE_REGEXP}).replace(n.WILDCARD_REGEXP,n.REPLACE_WILDCARD)+n.FOLLOWED_BY_SLASH_REGEXP,n.MATCH_REGEXP_FLAGS),paramNames:t}}(o(t.route)),s=i.regexp,r=i.paramNames,a=e.replace(/^\/+/,"/").match(s),h=function(e,t){return 0===t.length?null:e?e.slice(1,e.length).reduce(function(e,n,o){return null===e&&(e={}),e[t[o]]=decodeURIComponent(n),e},null):null}(a,r);return!!a&&{match:a,route:t,params:h}}).filter(function(e){return e})}(e,t)[0]||!1}function a(e,t){var n=t.map(function(t){return""===t.route||"*"===t.route?e:e.split(new RegExp(t.route+"($|/)"))[0]}),i=o(e);return n.length>1?n.reduce(function(e,t){return e.length>t.length&&(e=t),e},n[0]):1===n.length?n[0]:i}function h(e,n,o){var i,s=function(e){return e.split(/\?(.*)?$/)[0]};return void 0===o&&(o="#"),t()&&!n?s(e).split(o)[0]:(i=e.split(o)).length>1?s(i[1]):s(i[0])}function u(t,n,o){if(n&&"object"===(void 0===n?"undefined":e(n))){if(n.before)return void n.before(function(){(!(arguments.length>0&&void 0!==arguments[0])||arguments[0])&&(t(),n.after&&n.after(o))},o);if(n.after)return t(),void(n.after&&n.after(o))}t()}return n.prototype={helpers:{match:r,root:a,clean:o,getOnlyURL:h},navigate:function(e,t){var n;return e=e||"",this._usePushState?(n=(n=(t?"":this._getRoot()+"/")+e.replace(/^\/+/,"/")).replace(/([^:])(\/{2,})/g,"$1/"),history[this._historyAPIUpdateMethod]({},"",n),this.resolve()):"undefined"!=typeof window&&(e=e.replace(new RegExp("^"+this._hash),""),window.location.href=window.location.href.replace(/#$/,"").replace(new RegExp(this._hash+".*$"),"")+this._hash+e),this},on:function(){for(var t=this,n=arguments.length,o=Array(n),i=0;i<n;i++)o[i]=arguments[i];if("function"==typeof o[0])this._defaultHandler={handler:o[0],hooks:o[1]};else if(o.length>=2)if("/"===o[0]){var r=o[1];"object"===e(o[1])&&(r=o[1].uses),this._defaultHandler={handler:r,hooks:o[2]}}else this._add(o[0],o[1],o[2]);else"object"===e(o[0])&&Object.keys(o[0]).sort(s).forEach(function(e){t.on(e,o[0][e])});return this},off:function(e){return null!==this._defaultHandler&&e===this._defaultHandler.handler?this._defaultHandler=null:null!==this._notFoundHandler&&e===this._notFoundHandler.handler&&(this._notFoundHandler=null),this._routes=this._routes.reduce(function(t,n){return n.handler!==e&&t.push(n),t},[]),this},notFound:function(e,t){return this._notFoundHandler={handler:e,hooks:t},this},resolve:function(e){var n,o,i=this,s=(e||this._cLoc()).replace(this._getRoot(),"");this._useHash&&(s=s.replace(new RegExp("^/"+this._hash),"/"));var a=function(e){return e.split(/\?(.*)?$/).slice(1).join("")}(e||this._cLoc()),l=h(s,this._useHash,this._hash);return!this._paused&&(this._lastRouteResolved&&l===this._lastRouteResolved.url&&a===this._lastRouteResolved.query?(this._lastRouteResolved.hooks&&this._lastRouteResolved.hooks.already&&this._lastRouteResolved.hooks.already(this._lastRouteResolved.params),!1):(o=r(l,this._routes))?(this._callLeave(),this._lastRouteResolved={url:l,query:a,hooks:o.route.hooks,params:o.params,name:o.route.name},n=o.route.handler,u(function(){u(function(){o.route.route instanceof RegExp?n.apply(void 0,o.match.slice(1,o.match.length)):n(o.params,a)},o.route.hooks,o.params,i._genericHooks)},this._genericHooks,o.params),o):this._defaultHandler&&(""===l||"/"===l||l===this._hash||function(e,n,o){if(t()&&!n)return!1;if(!e.match(o))return!1;var i=e.split(o);return i.length<2||""===i[1]}(l,this._useHash,this._hash))?(u(function(){u(function(){i._callLeave(),i._lastRouteResolved={url:l,query:a,hooks:i._defaultHandler.hooks},i._defaultHandler.handler(a)},i._defaultHandler.hooks)},this._genericHooks),!0):(this._notFoundHandler&&u(function(){u(function(){i._callLeave(),i._lastRouteResolved={url:l,query:a,hooks:i._notFoundHandler.hooks},i._notFoundHandler.handler(a)},i._notFoundHandler.hooks)},this._genericHooks),!1))},destroy:function(){this._routes=[],this._destroyed=!0,this._lastRouteResolved=null,this._genericHooks=null,clearTimeout(this._listeningInterval),"undefined"!=typeof window&&(window.removeEventListener("popstate",this._onLocationChange),window.removeEventListener("hashchange",this._onLocationChange))},updatePageLinks:function(){var e=this;"undefined"!=typeof document&&this._findLinks().forEach(function(t){t.hasListenerAttached||(t.addEventListener("click",function(n){if((n.ctrlKey||n.metaKey)&&"a"==n.target.tagName.toLowerCase())return!1;var o=e.getLinkPath(t);e._destroyed||(n.preventDefault(),e.navigate(o.replace(/\/+$/,"").replace(/^\/+/,"/")))}),t.hasListenerAttached=!0)})},generate:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},n=this._routes.reduce(function(n,o){var i;if(o.name===e)for(i in n=o.route,t)n=n.toString().replace(":"+i,t[i]);return n},"");return this._useHash?this._hash+n:n},link:function(e){return this._getRoot()+e},pause:function(){var e=!(arguments.length>0&&void 0!==arguments[0])||arguments[0];this._paused=e,this._historyAPIUpdateMethod=e?"replaceState":"pushState"},resume:function(){this.pause(!1)},historyAPIUpdateMethod:function(e){return void 0===e?this._historyAPIUpdateMethod:(this._historyAPIUpdateMethod=e,e)},disableIfAPINotAvailable:function(){t()||this.destroy()},lastRouteResolved:function(){return this._lastRouteResolved},getLinkPath:function(e){return e.getAttribute("href")},hooks:function(e){this._genericHooks=e},_add:function(t){var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:null,o=arguments.length>2&&void 0!==arguments[2]?arguments[2]:null;return"string"==typeof t&&(t=encodeURI(t)),this._routes.push("object"===(void 0===n?"undefined":e(n))?{route:t,handler:n.uses,name:n.as,hooks:o||n.hooks}:{route:t,handler:n,hooks:o}),this._add},_getRoot:function(){return null!==this.root?this.root:(this.root=a(this._cLoc().split("?")[0],this._routes),this.root)},_listen:function(){var e=this;if(this._usePushState)window.addEventListener("popstate",this._onLocationChange);else if("undefined"!=typeof window&&"onhashchange"in window)window.addEventListener("hashchange",this._onLocationChange);else{var t=this._cLoc(),n=void 0,o=void 0;(o=function(){n=e._cLoc(),t!==n&&(t=n,e.resolve()),e._listeningInterval=setTimeout(o,200)})()}},_cLoc:function(){return"undefined"!=typeof window?void 0!==window.__NAVIGO_WINDOW_LOCATION_MOCK__?window.__NAVIGO_WINDOW_LOCATION_MOCK__:o(window.location.href):""},_findLinks:function(){return[].slice.call(document.querySelectorAll("[data-navigo]"))},_onLocationChange:function(){this.resolve()},_callLeave:function(){var e=this._lastRouteResolved;e&&e.hooks&&e.hooks.leave&&e.hooks.leave(e.params)}},n.PARAMETER_REGEXP=/([:*])(\w+)/g,n.WILDCARD_REGEXP=/\*/g,n.REPLACE_VARIABLE_REGEXP="([^/]+)",n.REPLACE_WILDCARD="(?:.*)",n.FOLLOWED_BY_SLASH_REGEXP="(?:/$|$)",n.MATCH_REGEXP_FLAGS="",n});
 
 
-},{}],"../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{}],"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -151,7 +151,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -186,17 +186,17 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../src/css/responsive.css":[function(require,module,exports) {
+},{"./bundle-url":"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../src/css/responsive.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/css/general.css":[function(require,module,exports) {
+},{"_css_loader":"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/css/general.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"./responsive.css":"../src/css/responsive.css","_css_loader":"../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/@firebase/polyfill/node_modules/whatwg-fetch/fetch.js":[function(require,module,exports) {
+},{"./responsive.css":"../src/css/responsive.css","_css_loader":"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/@firebase/polyfill/node_modules/whatwg-fetch/fetch.js":[function(require,module,exports) {
 (function(self) {
   'use strict';
 
@@ -14843,7 +14843,7 @@ function __importDefault(mod) {
     default: mod
   };
 }
-},{}],"../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/node_modules/process/browser.js":[function(require,module,exports) {
+},{}],"../../../../../../usr/local/lib/node_modules/parcel-bundler/node_modules/process/browser.js":[function(require,module,exports) {
 
 // shim for using process in browser
 var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
@@ -30410,7 +30410,7 @@ exports.ServerValue = ServerValue;
 exports.DataSnapshot = DataSnapshot;
 exports.OnDisconnect = OnDisconnect;
 
-},{"@firebase/util":"../node_modules/@firebase/util/dist/index.cjs.js","@firebase/logger":"../node_modules/@firebase/logger/dist/index.esm.js","tslib":"../node_modules/@firebase/database/node_modules/tslib/tslib.es6.js","@firebase/app":"../node_modules/@firebase/app/dist/index.cjs.js","process":"../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/node_modules/process/browser.js"}],"../node_modules/@firebase/firestore/node_modules/tslib/tslib.es6.js":[function(require,module,exports) {
+},{"@firebase/util":"../node_modules/@firebase/util/dist/index.cjs.js","@firebase/logger":"../node_modules/@firebase/logger/dist/index.esm.js","tslib":"../node_modules/@firebase/database/node_modules/tslib/tslib.es6.js","@firebase/app":"../node_modules/@firebase/app/dist/index.cjs.js","process":"../../../../../../usr/local/lib/node_modules/parcel-bundler/node_modules/process/browser.js"}],"../node_modules/@firebase/firestore/node_modules/tslib/tslib.es6.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68840,7 +68840,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/components/loby/index.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/components/loby/index.js":[function(require,module,exports) {
 var global = arguments[3];
 "use strict";
 
@@ -69043,8 +69043,11 @@ class Loby extends _metaflux.MetaComponent {
 
 window.customElements.define('yak-loby', Loby);
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","../../utils":"../src/utils/index.js","../../css/icons/cog-solid.svg":"../src/css/icons/cog-solid.svg","../../css/icons/sign-out-alt-solid.svg":"../src/css/icons/sign-out-alt-solid.svg","../../../public/images/logo/yakchat.svg":"images/logo/yakchat.svg","../../css/icons/chevron-right-solid.svg":"../src/css/icons/chevron-right-solid.svg","./index.css":"../src/components/loby/index.css"}],"../src/components/login/index.css":[function(require,module,exports) {
 =======
+=======
+>>>>>>> Update  error color and anoying dist files
 },{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","../../utils":"../src/utils/index.js","./index.css":"../src/components/loby/index.css"}],"images/logo/yakchat.svg":[function(require,module,exports) {
 module.exports = "/yakchat.908aa091.svg";
 },{}],"../src/components/login/index.css":[function(require,module,exports) {
@@ -69053,7 +69056,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/components/login/index.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/components/login/index.js":[function(require,module,exports) {
 var global = arguments[3];
 "use strict";
 
@@ -69081,10 +69084,62 @@ class Login extends _metaflux.MetaComponent {
     return this.querySelector('#password').value;
   }
 
+  showErrors(id) {
+    this.querySelector(`#${id} + span`).classList.remove('login__error--hide');
+    this.querySelector(`#${id} + span`).classList.add('login__error--show');
+  }
+
+  hideErrors(id) {
+    this.querySelector(`#${id} + span`).classList.add('login__error--hide');
+    this.querySelector(`#${id} + span`).classList.remove('login__error--show');
+  }
+  /**
+   * Validate form inputs
+   */
+
+
+  sendFormData() {
+    const emailselector = this.querySelector('#email');
+    const passwordselector = this.querySelector('#password');
+    const form = this.querySelector('#loginform');
+
+    if (form.checkValidity()) {
+      this.handleSend(this.email, this.password);
+    } else {
+      if (!emailselector.checkValidity()) {
+        this.showErrors('email');
+      }
+
+      if (!passwordselector.checkValidity()) {
+        this.showErrors('password');
+      }
+    }
+  }
+
   addListeners() {
     this.querySelector('#loginbtn').addEventListener('click', e => {
       e.preventDefault();
-      this.handleSend(this.email, this.password);
+      this.sendFormData();
+    }); // Listener for the email
+
+    this.querySelector('#email').addEventListener('keyup', e => {
+      const valid = this.querySelector('#email').checkValidity();
+
+      if (valid) {
+        this.hideErrors('email');
+      } else {
+        this.showErrors('email');
+      }
+    }); // Listener for the password
+
+    this.querySelector('#password').addEventListener('keyup', e => {
+      const valid = this.querySelector('#password').checkValidity();
+
+      if (valid) {
+        this.hideErrors('password');
+      } else {
+        this.showErrors('password');
+      }
     });
   }
 
@@ -69093,7 +69148,7 @@ class Login extends _metaflux.MetaComponent {
       /*html*/
       `
 			<div class="login__container">
-				<form class="login__form">
+				<form id="loginform" class="login__form">
 					<div class="login__logo-box">
 						<img src="${_yakchat.default}" alt="Logo" class="login__logo">
 					</div>
@@ -69103,8 +69158,14 @@ class Login extends _metaflux.MetaComponent {
 					</h1>
 					
 					<div class="login__formcontent">
-						<input id="email" name="email" placeholder="Email" type="text" />
-						<input id="password" name="password" placeholder="Password" type="password" /><br />
+						<div class="login__inputbox">
+							<input id="email" name="email" placeholder="Email" type="email" required/>
+							<span class="login__error login__error--hide">Use a valid email account</span>
+						</div>
+						<div class="login__inputbox">
+							<input id="password" name="password" placeholder="Password" type="password" required minlength="5"/>
+							<span class="login__error login__error--hide">Must contains at leats 4 characters</span>
+						</div>
 						<input id="loginbtn" type="submit" value="Log in">
 						<br />
 					</div>
@@ -69133,7 +69194,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/components/sidebar/index.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/components/sidebar/index.js":[function(require,module,exports) {
 var global = arguments[3];
 "use strict";
 
@@ -69205,7 +69266,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/components/settings/index.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/components/settings/index.js":[function(require,module,exports) {
 var global = arguments[3];
 "use strict";
 
@@ -69312,7 +69373,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/components/operators/confirm-invitation/index.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/components/operators/confirm-invitation/index.js":[function(require,module,exports) {
 var global = arguments[3];
 "use strict";
 
@@ -69665,7 +69726,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.createElement('yak-main-container');
   document.body.appendChild(container);
 });
-},{"../containers/main-container":"../src/containers/main-container/index.js"}],"../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../containers/main-container":"../src/containers/main-container/index.js"}],"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -69693,10 +69754,14 @@ if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
 <<<<<<< HEAD
+<<<<<<< HEAD
   var ws = new WebSocket(protocol + '://' + hostname + ':' + "44381" + '/');
 =======
   var ws = new WebSocket(protocol + '://' + hostname + ':' + "45545" + '/');
 >>>>>>> 1b2f4245ba10bb1cd3a8bc2700b5a1cd0e813845
+=======
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40837" + '/');
+>>>>>>> Update  error color and anoying dist files
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
@@ -69838,5 +69903,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},["../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","../src/main/index.js"], null)
+},{}]},{},["../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","../src/main/index.js"], null)
 //# sourceMappingURL=/main.e54e2ae9.map
