@@ -68397,6 +68397,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.singOut = singOut;
 exports.signInWithEmail = signInWithEmail;
 exports.processInvitation = processInvitation;
+exports.signUp = signUp;
 
 var firebase = _interopRequireWildcard(require("firebase"));
 
@@ -68507,6 +68508,24 @@ function processInvitation(key, email, password, name) {
     displayName: name,
     type: 1
   }).then(res => {
+    global.storage.dispatch({
+      type: 'LOGIN-REQ',
+      email: email,
+      password: password
+    });
+  });
+}
+
+function signUp(displayName, email, password, domain, type) {
+  const signup = functions.httpsCallable('signup');
+  signup({
+    email: email,
+    password: password,
+    displayName: displayName,
+    type: type === 'client' ? 2 : 1,
+    domain
+  }).then(res => {
+    console.log('yeeey');
     global.storage.dispatch({
       type: 'LOGIN-REQ',
       email: email,
@@ -68769,6 +68788,19 @@ var _default = {
         newState: state
       };
     },
+    'SIGNUP': (action, state) => {
+      const {
+        email,
+        displayName,
+        password,
+        type,
+        domain
+      } = action.data;
+      (0, _firebase.signUp)(displayName, email, password, domain, type);
+      return {
+        newState: state
+      };
+    },
     'ACEPT-INVITATION': (action, state) => {
       (0, _firebase.processInvitation)(action.data.key, action.data.m, action.data.ps, action.data.un);
       return {
@@ -68795,7 +68827,15 @@ const {
 global.storage = new _metaflux.Store({
   Main: MainDefaultState
 }, MainHandler);
-},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","./MainHandler":"../src/handlers/MainHandler.js"}],"../src/components/loby/index.css":[function(require,module,exports) {
+},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","./MainHandler":"../src/handlers/MainHandler.js"}],"../src/css/icons/cog-solid.svg":[function(require,module,exports) {
+module.exports = "/cog-solid.9f6a8dc2.svg";
+},{}],"../src/css/icons/sign-out-alt-solid.svg":[function(require,module,exports) {
+module.exports = "/sign-out-alt-solid.0f92895b.svg";
+},{}],"images/logo/yakchat.svg":[function(require,module,exports) {
+module.exports = "/yakchat.908aa091.svg";
+},{}],"../src/css/icons/chevron-right-solid.svg":[function(require,module,exports) {
+module.exports = "/chevron-right-solid.65896992.svg";
+},{}],"../src/components/loby/index.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -68808,7 +68848,17 @@ var _metaflux = require("@rebelstack-io/metaflux");
 
 var _utils = require("../../utils");
 
+var _cogSolid = _interopRequireDefault(require("../../css/icons/cog-solid.svg"));
+
+var _signOutAltSolid = _interopRequireDefault(require("../../css/icons/sign-out-alt-solid.svg"));
+
+var _yakchat = _interopRequireDefault(require("../../../public/images/logo/yakchat.svg"));
+
+var _chevronRightSolid = _interopRequireDefault(require("../../css/icons/chevron-right-solid.svg"));
+
 require("./index.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class Loby extends _metaflux.MetaComponent {
   /**
@@ -68860,10 +68910,11 @@ class Loby extends _metaflux.MetaComponent {
     const not = undefined;
     const toggleButtom = (0, _utils.instanceElement)('div', ['msg-head-logo']);
     const actions = (0, _utils.instanceElement)('div', ['msg-head-actions'], not, `
-				<i class="fa fa-cog" id="settings"></i>
-				<i class="fa fa-sign-out" id="logout"></i>
+				<img src="${_cogSolid.default}" id="settings"></img>
+				<img src="${_signOutAltSolid.default}" id="logout"></img>
 			`);
     actions.querySelector('#logout').addEventListener('click', () => {
+      document.location.hash = '#/login';
       this.storage.dispatch({
         type: 'LOGOUT'
       });
@@ -68874,7 +68925,7 @@ class Loby extends _metaflux.MetaComponent {
       });
     });
     const logo = (0, _utils.instanceElement)('img', ['rblstck-logo'], not, not, [{
-      src: 'images/logo.png'
+      src: _yakchat.default
     }, {
       width: '30'
     }, {
@@ -68902,7 +68953,7 @@ class Loby extends _metaflux.MetaComponent {
     }, {
       placeholder: 'Enter your message'
     }]);
-    const inputButton = (0, _utils.instanceElement)('div', ['btn', 'icon'], not, '<i class="fa fa-angle-right"></i>', [{
+    const inputButton = (0, _utils.instanceElement)('div', ['btn', 'icon'], not, `<img src="${_chevronRightSolid.default}"></img>`, [{
       type: 'text'
     }, {
       placeholder: 'Enter your message'
@@ -68991,9 +69042,7 @@ class Loby extends _metaflux.MetaComponent {
 }
 
 window.customElements.define('yak-loby', Loby);
-},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","../../utils":"../src/utils/index.js","./index.css":"../src/components/loby/index.css"}],"images/logo.png":[function(require,module,exports) {
-module.exports = "/logo.6023b87e.png";
-},{}],"../src/components/login/index.css":[function(require,module,exports) {
+},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","../../utils":"../src/utils/index.js","../../css/icons/cog-solid.svg":"../src/css/icons/cog-solid.svg","../../css/icons/sign-out-alt-solid.svg":"../src/css/icons/sign-out-alt-solid.svg","../../../public/images/logo/yakchat.svg":"images/logo/yakchat.svg","../../css/icons/chevron-right-solid.svg":"../src/css/icons/chevron-right-solid.svg","./index.css":"../src/components/loby/index.css"}],"../src/components/login/index.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -69004,7 +69053,7 @@ var global = arguments[3];
 
 var _metaflux = require("@rebelstack-io/metaflux");
 
-var _logo = _interopRequireDefault(require("../../../public/images/logo.png"));
+var _yakchat = _interopRequireDefault(require("../../../public/images/logo/yakchat.svg"));
 
 require("./index.css");
 
@@ -69040,7 +69089,7 @@ class Login extends _metaflux.MetaComponent {
 			<div class="login__container">
 				<form class="login__form">
 					<div class="login__logo-box">
-						<img src="${_logo.default}" alt="Logo" class="login__logo">
+						<img src="${_yakchat.default}" alt="Logo" class="login__logo">
 					</div>
 
 					<h1 class="login__title">
@@ -69073,7 +69122,7 @@ class Login extends _metaflux.MetaComponent {
 }
 
 window.customElements.define('yak-login', Login);
-},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","../../../public/images/logo.png":"images/logo.png","./index.css":"../src/components/login/index.css"}],"../src/components/sidebar/index.css":[function(require,module,exports) {
+},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","../../../public/images/logo/yakchat.svg":"images/logo/yakchat.svg","./index.css":"../src/components/login/index.css"}],"../src/components/sidebar/index.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -69323,7 +69372,111 @@ class ConfirmInvitation extends _metaflux.MetaComponent {
 }
 
 window.customElements.define('confirm-invitation', ConfirmInvitation);
-},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","./style.css":"../src/components/operators/confirm-invitation/style.css"}],"../src/containers/main-container/index.js":[function(require,module,exports) {
+},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","./style.css":"../src/components/operators/confirm-invitation/style.css"}],"../src/components/signup/index.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../../../.nvm/versions/node/v11.4.0/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/components/signup/index.js":[function(require,module,exports) {
+var global = arguments[3];
+"use strict";
+
+var _metaflux = require("@rebelstack-io/metaflux");
+
+var _yakchat = _interopRequireDefault(require("../../../public/images/logo/yakchat.svg"));
+
+require("./index.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class Signup extends _metaflux.MetaComponent {
+  /**
+   * MetaComponent constructor needs storage.
+   */
+  constructor() {
+    super();
+  }
+
+  get email() {
+    return this.querySelector('#email').value;
+  }
+
+  get password() {
+    return this.querySelector('#password').value;
+  }
+
+  get domain() {
+    return this.querySelector("#domain").value;
+  }
+
+  get displayName() {
+    return this.querySelector("#display-name").value;
+  }
+
+  get type() {
+    return this.querySelector('#type').value;
+  }
+
+  addListeners() {
+    this.querySelector('#signup-btn').addEventListener('click', e => {
+      e.preventDefault();
+      console.log('e!!');
+      this.handleSend(this.email, this.password, this.displayName, this.type, this.domain);
+    });
+    this.querySelector('#type').addEventListener('change', () => {
+      this.querySelector('#domain').classList.toggle('hide');
+    });
+  }
+
+  render() {
+    return (
+      /*html*/
+      `
+			<div class="login__container">
+				<form class="signup__form">
+					<div class="login__logo-box">
+						<img src="${_yakchat.default}" alt="Logo" class="login__logo">
+					</div>
+
+					<h1 class="login__title">
+						Sign up
+					</h1>
+					
+					<div class="login__formcontent">
+						<select id="type">
+							<option value="operator"> Operator</option>
+							<option value="client"> Client</option> 
+						</select>
+						<input id="display-name" type="text" placeholder="Display name"/>
+						<input id="email" name="email" placeholder="Email" type="text" />
+						<input id="password" name="password" placeholder="Password" type="password" /><br />
+						<input id="domain" class="hide" type="text" placeholder="www.example.com"/>
+						<input id="signup-btn" type="submit" value="Sign">
+						<br />
+					</div>
+				</form>
+			</div>
+		`
+    );
+  }
+
+  handleSend(email, password, displayName, type, domain) {
+    global.storage.dispatch({
+      type: 'SIGNUP',
+      data: {
+        email,
+        password,
+        displayName,
+        type,
+        domain
+      }
+    });
+  }
+
+}
+
+window.customElements.define('yak-signup', Signup);
+},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","../../../public/images/logo/yakchat.svg":"images/logo/yakchat.svg","./index.css":"../src/components/signup/index.css"}],"../src/containers/main-container/index.js":[function(require,module,exports) {
 var global = arguments[3];
 "use strict";
 
@@ -69344,6 +69497,8 @@ require("../../components/sidebar");
 require("../../components/settings");
 
 require("../../components/operators/confirm-invitation");
+
+require("../../components/signup");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -69374,7 +69529,7 @@ class YakMainContainer extends _metaflux.MetaContainer {
     el = document.createElement('yak-loby');
     router.on({
       '/lobby': () => {
-        console.log('loby', this.requireAuth());
+        console.log('loby', !this.requireAuth());
 
         if (!this.requireAuth()) {
           this.innerHTML = ''; // Add to the DOM
@@ -69404,6 +69559,11 @@ class YakMainContainer extends _metaflux.MetaContainer {
       '/invite': () => {
         this.innerHTML = '';
         el = document.createElement('confirm-invitation');
+        this.appendChild(el);
+      },
+      '/signup': () => {
+        this.innerHTML = '';
+        el = document.createElement('yak-signup');
         this.appendChild(el);
       }
     }).resolve();
@@ -69438,17 +69598,19 @@ class YakMainContainer extends _metaflux.MetaContainer {
         case 5:
           //client t0
           console.log('i\'m admin a client T0');
-          document.location.hash = '#/dashboard';
+          document.location.hash = '#/lobby';
           break;
 
         case 6:
           //client t1
           console.log('i\'m admin a client T1');
+          document.location.hash = '#/lobby';
           break;
 
         case 7:
           // client t2
           console.log('i\'m admin a client T2');
+          document.location.hash = '#/lobby';
           break;
       }
     }
@@ -69478,7 +69640,7 @@ class YakMainContainer extends _metaflux.MetaContainer {
 }
 
 window.customElements.define('yak-main-container', YakMainContainer);
-},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","navigo":"../node_modules/navigo/lib/navigo.min.js","../../css/general.css":"../src/css/general.css","../../handlers":"../src/handlers/index.js","../../components/loby":"../src/components/loby/index.js","../../components/login":"../src/components/login/index.js","../../components/sidebar":"../src/components/sidebar/index.js","../../components/settings":"../src/components/settings/index.js","../../components/operators/confirm-invitation":"../src/components/operators/confirm-invitation/index.js"}],"../src/main/index.js":[function(require,module,exports) {
+},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","navigo":"../node_modules/navigo/lib/navigo.min.js","../../css/general.css":"../src/css/general.css","../../handlers":"../src/handlers/index.js","../../components/loby":"../src/components/loby/index.js","../../components/login":"../src/components/login/index.js","../../components/sidebar":"../src/components/sidebar/index.js","../../components/settings":"../src/components/settings/index.js","../../components/operators/confirm-invitation":"../src/components/operators/confirm-invitation/index.js","../../components/signup":"../src/components/signup/index.js"}],"../src/main/index.js":[function(require,module,exports) {
 "use strict";
 
 require("../containers/main-container");
@@ -69514,7 +69676,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44867" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38017" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
