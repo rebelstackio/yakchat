@@ -11,6 +11,7 @@
     "build": "npm-run-all --parallel build:bo build:fs",
     "build:bo": "npm run build --prefix ./backoffice",
     "start:fs": "npm start --prefix ./front-script",
+    "start:bo": "npm start --prefix ./backoffice",
     "build:fs": "npm run build --prefix ./front-script"
   },
   "contributors": [
