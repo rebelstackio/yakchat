@@ -19,17 +19,38 @@ class Login extends MetaComponent {
 		return this.querySelector('#password').value;
 	}
 
+	/**
+	 * Validate form inputs
+	 */
+	sendFormData() {
+		const form = this.querySelector('#loginform');
+		if ( form.checkValidity() ) {
+			this.handleSend(this.email, this.password);
+		} else {
+			alert('fail');
+		}
+	}
+
 	addListeners() {
+
 		this.querySelector('#loginbtn').addEventListener('click', (e) => {
 			e.preventDefault();
-			this.handleSend(this.email, this.password);
+			this.sendFormData();
+		});
+		// Listener for the email
+		this.querySelector('#email').addEventListener('keyup', (e) => {
+			this.querySelector('#email').checkValidity();
+		});
+		// Listener for the password
+		this.querySelector('#password').addEventListener('keyup', (e) => {
+			this.querySelector('#password').checkValidity();
 		});
 	}
 
 	render () {
 		return /*html*/`
 			<div class="login__container">
-				<form class="login__form">
+				<form id="loginform" class="login__form">
 					<div class="login__logo-box">
 						<img src="${imageURL}" alt="Logo" class="login__logo">
 					</div>
@@ -39,8 +60,14 @@ class Login extends MetaComponent {
 					</h1>
 					
 					<div class="login__formcontent">
-						<input id="email" name="email" placeholder="Email" type="text" />
-						<input id="password" name="password" placeholder="Password" type="password" /><br />
+						<div class="login__inputbox">
+							<input id="email" name="email" placeholder="Email" type="email" required/>
+							<span class="login__error"></span>
+						</div>
+						<div class="login__inputbox">
+							<input id="password" name="password" placeholder="Password" type="password" required minlength="5"/>
+							<span class="login__error">Error</span>
+						</div>
 						<input id="loginbtn" type="submit" value="Log in">
 						<br />
 					</div>
@@ -57,7 +84,7 @@ class Login extends MetaComponent {
 			type: 'LOGIN-REQ', 
 			email,
 			password
-		})
+		});
 	}
 
 }
