@@ -19,18 +19,26 @@ class Login extends MetaComponent {
 		return this.querySelector('#password').value;
 	}
 
+	/**
+	 * Add the css class to show form errors to the target selector by id
+	 * @param {string} id Html Id
+	 */
 	showErrors(id) {
 		this.querySelector(`#${id} + span`).classList.remove('login__error--hide');
 		this.querySelector(`#${id} + span`).classList.add('login__error--show');
 	}
 
+	/**
+	 * Add the css class to hide form errors to the target selector by id
+	 * @param {string} id Html Id
+	 */
 	hideErrors(id) {
 		this.querySelector(`#${id} + span`).classList.add('login__error--hide');
 		this.querySelector(`#${id} + span`).classList.remove('login__error--show');
 	}
 
 	/**
-	 * Validate form inputs
+	 * Validate form inputs with HTML5 input rules and send the data if everything is fine
 	 */
 	sendFormData() {
 		const emailselector = this.querySelector('#email');
@@ -39,12 +47,23 @@ class Login extends MetaComponent {
 		if ( form.checkValidity() ) {
 			this.handleSend(this.email, this.password);
 		} else {
-			if (!emailselector.checkValidity() ) {
-				this.showErrors('email');
-			}
-			if (!passwordselector.checkValidity() ) {
-				this.showErrors('password');
-			}
+			this.hideErrors('password');
+			this.hideErrors('email');
+			// timeout to show the css effects first
+			setTimeout(() => {
+				// Password input with errors
+				if (!passwordselector.checkValidity() ) {
+					this.showErrors('password');
+					// Set the focus to the element - helps to disabled the css class in the log in button
+					passwordselector.focus();
+				}
+				// Email input with errors
+				if (!emailselector.checkValidity() ) {
+					this.showErrors('email');
+					// Set the focus to the element - helps to disabled the css class in the log in button
+					emailselector.focus();
+				}
+			}, 100)
 		}
 	}
 
@@ -86,16 +105,20 @@ class Login extends MetaComponent {
 						Sign in
 					</h1>
 					
-					<div class="login__formcontent">
+					<div id="form-body" class="login__formcontent">
 						<div class="login__inputbox">
 							<input id="email" name="email" placeholder="Email" type="email" required/>
 							<span class="login__error login__error--hide">Use a valid email account</span>
 						</div>
 						<div class="login__inputbox">
 							<input id="password" name="password" placeholder="Password" type="password" required minlength="5"/>
-							<span class="login__error login__error--hide">Must contains at leats 4 characters</span>
+							<span class="login__error login__error--hide">Must contains at leats 5 characters</span>
 						</div>
-						<input id="loginbtn" type="submit" value="Log in">
+						<div class="login__inputbox">
+							<a id="loginbtn" class="login__btn login__btn--lightblue"href="#form-body">
+								Log In
+							</a>
+						</div>
 						<br />
 					</div>
 					<div class="login__forgot-box">
