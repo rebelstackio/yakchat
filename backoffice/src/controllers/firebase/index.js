@@ -84,9 +84,10 @@ export function singOut () {
  * @param {String} password
  */
 export function signInWithEmail (email, password) {
-	app.auth().signInWithEmailAndPassword(email, password).catch(() => {
+	app.auth().signInWithEmailAndPassword(email, password).catch((error) => {
 		global.storage.dispatch({
-			type: 'LOGIN-FAIL'
+			type: 'LOGIN-FAIL',
+			error
 		});
 	});
 }
