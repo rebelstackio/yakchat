@@ -52,7 +52,7 @@ function getCustomClaims (type) {
  * recive { email: 'email@domain.com', password: '123456', displayName: 'test', type: 0 ... 5 }
  */
 exports.signup = functions.https.onCall((param) => {
-	const {email, password, displayName, type} = param;
+	const {email, password, displayName, type, domain} = param;
 	return admin.auth().createUser({
 		email: email,
 		displayName: displayName,
@@ -63,6 +63,10 @@ exports.signup = functions.https.onCall((param) => {
 	.then((userRecord) => {
 		console.log("Successfully created new user " + displayName, userRecord.uid);
 		const customClaims = getCustomClaims(type);
+		if (type === 2) {
+			admin.database().ref('domains/'+ userRecord.uid)
+			.set(domain);
+		}
 		// Set custom user claims on this newly created user.
 		return admin.auth().setCustomUserClaims(userRecord.uid, customClaims)
 		.then(() => {

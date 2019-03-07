@@ -109,6 +109,20 @@ export function processInvitation (key, email, password, name) {
 	})
 }
 
+export function signUp (displayName, email, password, domain, type) {
+	const signup = functions.httpsCallable('signup');
+	signup({
+		email: email,
+		password: password,
+		displayName: displayName,
+		type: type === 'client' ? 2 : 1,
+		domain
+	}).then(res => {
+		console.log('yeeey');
+		global.storage.dispatch({type: 'LOGIN-REQ', email: email, password: password});
+	})
+}
+
 /**
  * TODO: make this function to be compatible with singin users
  * @description get the messages and dispatch it
