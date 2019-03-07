@@ -2,6 +2,8 @@ import { MetaComponent } from '@rebelstack-io/metaflux';
 import imageURL from '../../../public/images/logo/yakchat.svg';
 import './index.css';
 
+const DEFAULT_EMAIL_ERROR_MESSAGE = 'Use a valid email account';
+
 class Login extends MetaComponent {
 	
 	/**
@@ -9,6 +11,8 @@ class Login extends MetaComponent {
 	 */
 	constructor () {
 		super();
+		this.handleStoreEvents();
+		global.storage.on('LOGIN-FAIL', this.handleInvalidLogin.bind(this));
 	}
 
 	get email() {
@@ -41,10 +45,15 @@ class Login extends MetaComponent {
 	 * Validate form inputs with HTML5 input rules and send the data if everything is fine
 	 */
 	sendFormData() {
+		// Validate the whole form
 		const emailselector = this.querySelector('#email');
 		const passwordselector = this.querySelector('#password');
 		const form = this.querySelector('#loginform');
 		if ( form.checkValidity() ) {
+			// Hide all errors
+			this.hideErrors('email');
+			this.hideErrors('password');
+			// Send request
 			this.handleSend(this.email, this.password);
 		} else {
 			this.hideErrors('password');
@@ -63,12 +72,44 @@ class Login extends MetaComponent {
 					// Set the focus to the element - helps to disabled the css class in the log in button
 					emailselector.focus();
 				}
-			}, 100)
+			}, 100);
 		}
 	}
 
-	addListeners() {
+	/**
+	 * Handle error response from the server
+	 * @param {*} state 
+	 */
+	handleInvalidLogin(state) {
+		const { error } = state;
+		// Set a custom error message that comes from the server
+		this.setErrorMessage('email', error.message);
+		this.showErrors('email');
+	}
 
+	/**
+	 * Set a message in the span element 
+	 * @param {string} id HTML id
+	 * @param {string} message Custom message
+	 */
+	setErrorMessage(id, message = DEFAULT_EMAIL_ERROR_MESSAGE) {
+		this.querySelector(`#${id} + span`).innerHTML = message;
+	}
+
+	/**
+	 * Send the data to firebase endpoints
+	 * @param {*} email 
+	 * @param {*} password 
+	 */
+	handleSend (email, password) {
+		global.storage.dispatch({
+			type: 'LOGIN-REQ', 
+			email,
+			password
+		});
+	}
+
+	addListeners() {
 		this.querySelector('#loginbtn').addEventListener('click', (e) => {
 			e.preventDefault();
 			this.sendFormData();
@@ -79,6 +120,9 @@ class Login extends MetaComponent {
 			if ( valid ) {
 				this.hideErrors('email');
 			} else {
+				// Set default error message for email field
+				this.setErrorMessage('email', DEFAULT_EMAIL_ERROR_MESSAGE);
+				// Show the error
 				this.showErrors('email');
 			}
 		});
@@ -128,15 +172,6 @@ class Login extends MetaComponent {
 			</div>
 		`;
 	}
-
-	handleSend (email, password) {
-		global.storage.dispatch({
-			type: 'LOGIN-REQ', 
-			email,
-			password
-		});
-	}
-
 }
 
 window.customElements.define('yak-login', Login);
