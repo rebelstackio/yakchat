@@ -3,5 +3,5 @@ node_modules
 .env
 .cache
 
-# For backoffice
-/dist
+# For backoffice and frontscript
+dist
