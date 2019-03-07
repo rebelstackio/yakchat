@@ -6,7 +6,8 @@ import '../../components/loby'
 import '../../components/login';
 import '../../components/sidebar';
 import '../../components/settings';
-import '../../components/operators/confirm-invitation'
+import '../../components/operators/confirm-invitation';
+import '../../components/signup';
 
 class YakMainContainer extends MetaContainer {
 	constructor () {
@@ -33,7 +34,7 @@ class YakMainContainer extends MetaContainer {
 		el = document.createElement('yak-loby');
 		router.on({
 			'/lobby': () => {
-				console.log('loby',this.requireAuth())
+				console.log('loby', !this.requireAuth())
 				if (!this.requireAuth()) {
 					this.innerHTML = '';
 					// Add to the DOM
@@ -63,6 +64,19 @@ class YakMainContainer extends MetaContainer {
 				this.innerHTML = '';
 				el = document.createElement('confirm-invitation');
 				this.appendChild(el);
+			},
+			'/signup': () => {
+				this.innerHTML = '';
+				el = document.createElement('yak-signup');
+				this.appendChild(el);
+			},
+			'/': () => {
+				this.innerHTML = '';
+				if (!this.requireAuth()) {
+					router.navigate('/lobby');
+				} else {
+					router.navigate('/login');
+				}
 			}
 		})
 		.resolve();
@@ -89,21 +103,21 @@ class YakMainContainer extends MetaContainer {
 			switch (accessLevel) {
 				case 3: 
 					//operator
-					console.log('i\'m admin an operatorator');
+					console.log('i\'m an operatorator');
 					document.location.hash = '#/lobby';
 				break;
 				case 5:
 					//client t0
-					console.log('i\'m admin a client T0');
+					console.log('i\'m a client T0');
 					document.location.hash = '#/dashboard';
 				break;
 				case 6: 
 					//client t1
-					console.log('i\'m admin a client T1');
+					console.log('i\'m a client T1');
 				break;
 				case 7:
 					// client t2
-					console.log('i\'m admin a client T2');
+					console.log('i\'m a client T2');
 				break;
 			}
 		}
