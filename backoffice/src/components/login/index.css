@@ -131,7 +131,7 @@
 /* Form validation */
 .login__error {
 	color: var(--error-validation-color);
-	font-size: 1rem;
+	font-size: .9rem;
 }
 
 .login__error--hide {
