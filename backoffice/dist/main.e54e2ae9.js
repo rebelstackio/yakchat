@@ -69042,7 +69042,13 @@ class Loby extends _metaflux.MetaComponent {
 }
 
 window.customElements.define('yak-loby', Loby);
+<<<<<<< HEAD
 },{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","../../utils":"../src/utils/index.js","../../css/icons/cog-solid.svg":"../src/css/icons/cog-solid.svg","../../css/icons/sign-out-alt-solid.svg":"../src/css/icons/sign-out-alt-solid.svg","../../../public/images/logo/yakchat.svg":"images/logo/yakchat.svg","../../css/icons/chevron-right-solid.svg":"../src/css/icons/chevron-right-solid.svg","./index.css":"../src/components/loby/index.css"}],"../src/components/login/index.css":[function(require,module,exports) {
+=======
+},{"@rebelstack-io/metaflux":"../node_modules/@rebelstack-io/metaflux/dist/metaflux.js","../../utils":"../src/utils/index.js","./index.css":"../src/components/loby/index.css"}],"images/logo/yakchat.svg":[function(require,module,exports) {
+module.exports = "/yakchat.908aa091.svg";
+},{}],"../src/components/login/index.css":[function(require,module,exports) {
+>>>>>>> 1b2f4245ba10bb1cd3a8bc2700b5a1cd0e813845
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -69561,10 +69567,22 @@ class YakMainContainer extends _metaflux.MetaContainer {
         el = document.createElement('confirm-invitation');
         this.appendChild(el);
       },
+<<<<<<< HEAD
       '/signup': () => {
         this.innerHTML = '';
         el = document.createElement('yak-signup');
         this.appendChild(el);
+      },
+=======
+>>>>>>> 1b2f4245ba10bb1cd3a8bc2700b5a1cd0e813845
+      '/': () => {
+        this.innerHTML = '';
+
+        if (!this.requireAuth()) {
+          router.navigate('/lobby');
+        } else {
+          router.navigate('/login');
+        }
       }
     }).resolve();
   }
@@ -69591,26 +69609,24 @@ class YakMainContainer extends _metaflux.MetaContainer {
       switch (accessLevel) {
         case 3:
           //operator
-          console.log('i\'m admin an operatorator');
+          console.log('i\'m an operatorator');
           document.location.hash = '#/lobby';
           break;
 
         case 5:
           //client t0
-          console.log('i\'m admin a client T0');
-          document.location.hash = '#/lobby';
+          console.log('i\'m a client T0');
+          document.location.hash = '#/dashboard';
           break;
 
         case 6:
           //client t1
-          console.log('i\'m admin a client T1');
-          document.location.hash = '#/lobby';
+          console.log('i\'m a client T1');
           break;
 
         case 7:
           // client t2
-          console.log('i\'m admin a client T2');
-          document.location.hash = '#/lobby';
+          console.log('i\'m a client T2');
           break;
       }
     }
@@ -69676,7 +69692,11 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38017" + '/');
+<<<<<<< HEAD
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44381" + '/');
+=======
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45545" + '/');
+>>>>>>> 1b2f4245ba10bb1cd3a8bc2700b5a1cd0e813845
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
