@@ -3,6 +3,7 @@ import imageURL from '../../../public/images/logo/yakchat.svg';
 import './index.css';
 
 const DEFAULT_EMAIL_ERROR_MESSAGE = 'Use a valid email account';
+const UNHANDLE_ERROR_MESSAGE = 'There was a problem in your last action';
 
 class Login extends MetaComponent {
 	
@@ -46,6 +47,7 @@ class Login extends MetaComponent {
 	 */
 	sendFormData() {
 		// Validate the whole form
+		const loginbtnselector = this.querySelector('#loginbtn');
 		const emailselector = this.querySelector('#email');
 		const passwordselector = this.querySelector('#password');
 		const form = this.querySelector('#loginform');
@@ -55,6 +57,7 @@ class Login extends MetaComponent {
 			this.hideErrors('password');
 			// Send request
 			this.handleSend(this.email, this.password);
+			loginbtnselector.classList.add('login__btn--disabled');
 		} else {
 			this.hideErrors('password');
 			this.hideErrors('email');
@@ -77,13 +80,29 @@ class Login extends MetaComponent {
 	}
 
 	/**
+	 * Check the error code to get a short error message
+	 * @param {string} code firebase error code
+	 */
+	getServerErrorMessage(code) {
+		switch(code) {
+			case 'auth/user-not-found':
+				return 'User not found. Please check the email';
+			default:
+				return UNHANDLE_ERROR_MESSAGE;
+		}
+	}
+
+	/**
 	 * Handle error response from the server
 	 * @param {*} state 
 	 */
 	handleInvalidLogin(state) {
 		const { error } = state;
+		// Enable the login btn again
+		this.querySelector('#loginbtn').classList.remove('login__btn--disabled');
 		// Set a custom error message that comes from the server
-		this.setErrorMessage('email', error.message);
+		this.setErrorMessage('email', this.getServerErrorMessage(error.code));
+		// Show the custom error message
 		this.showErrors('email');
 	}
 
@@ -112,6 +131,7 @@ class Login extends MetaComponent {
 	addListeners() {
 		this.querySelector('#loginbtn').addEventListener('click', (e) => {
 			e.preventDefault();
+			// e.target.classList.addClass('disabled');
 			this.sendFormData();
 		});
 		// Listener for the email
@@ -159,7 +179,7 @@ class Login extends MetaComponent {
 							<span class="login__error login__error--hide">Must contains at leats 5 characters</span>
 						</div>
 						<div class="login__inputbox">
-							<a id="loginbtn" class="login__btn login__btn--lightblue"href="#form-body">
+							<a id="loginbtn" class="login__btn login__btn--lightblue" href="#form-body">
 								Log In
 							</a>
 						</div>

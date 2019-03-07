@@ -2,7 +2,7 @@
 @import url('./responsive.css');
 
 :root {
-  --error-validation-color: #ea2626;
+  --error-validation-color: #ff8080;
 }
 
 html, body {

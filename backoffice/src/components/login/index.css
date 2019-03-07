@@ -51,6 +51,11 @@
 	transition: all .4s;
 }
 
+.login__btn--disabled {
+	pointer-events: none;
+	opacity: 0.5;
+}
+
 /* login container */
 .login__container {
 	display: flex;
@@ -131,7 +136,7 @@
 /* Form validation */
 .login__error {
 	color: var(--error-validation-color);
-	font-size: .9rem;
+	font-size: .9	rem;
 }
 
 .login__error--hide {
