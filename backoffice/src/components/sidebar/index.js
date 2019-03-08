@@ -1,5 +1,6 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import { instanceElement } from '../../utils';
+import defaulAvatar from '../../../public/images/user.png';
 import './index.css';
 class Sidebar extends MetaComponent {
 	constructor () {
@@ -9,7 +10,7 @@ class Sidebar extends MetaComponent {
 	render () {
 		const content = document.createElement('div');
 		const uid = localStorage.getItem('fb-hash');
-		const urlImg = localStorage.getItem(uid) ? localStorage.getItem(uid) : '';
+		const urlImg = localStorage.getItem(uid) ? localStorage.getItem(uid) : defaulAvatar;
 		const profile = instanceElement(
 			'div',
 			['side-profile'],

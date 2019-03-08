@@ -1,4 +1,5 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
+import defaulAvatar from '../../../public/images/user.png';
 import './index.css';
 
 class PatchProfile extends MetaComponent {
@@ -71,7 +72,7 @@ class PatchProfile extends MetaComponent {
 		const uid = localStorage.getItem('fb-hash');
 		const profileUrl = localStorage.getItem(uid)
 		? localStorage.getItem(uid)
-		: '';
+		: defaulAvatar;
 		return /*html*/`
 		<div class="hide" id="profile-popup">
 			<div class="profile-title">
