@@ -4,7 +4,9 @@ import {
 	processInvitation,
 	signUp,
 	uploadProfileImg,
-	patchProfile
+	patchProfile,
+	getClientChannels,
+	updateClientChannel
 } from '../controllers/firebase';
 
 const MainDefaultState = {
@@ -15,38 +17,15 @@ const MainDefaultState = {
 	admin: false,
 	displayName: '',
 	email: '',
+	domain: '',
+	channelList: [],
 	chnlList : [
 		{
 			title: 'ToursSercers',
 			clientList: [
 				{
-					name: 'Eustaquio',
+					name: 'Dummie',
 					id: 'random-hash'
-				},
-				{
-					name: 'Filomeno',
-					id: 'random-hash-2'
-				},
-				{
-					name: 'Anonymous',
-					id: 'random-hash-3'
-				}
-			]
-		},
-		{
-			title: 'RainForestTours',
-			clientList: [
-				{
-					name: 'Eustaquio',
-					id: 'random-hash'
-				},
-				{
-					name: 'Filomeno',
-					id: 'random-hash-2'
-				},
-				{
-					name: 'Anonymous',
-					id: 'random-hash-3'
 				}
 			]
 		}
@@ -82,6 +61,10 @@ export default {
 			state.uid = action.uid;
 			state.displayName = action.displayName;
 			state.email = action.email;
+			if (action.accessLevel > 1) {
+				//get channels
+				getClientChannels(action.uid);
+			}
 			return { newState: state }
 		},
 		'LOGOUT': (action, state) => {
@@ -133,6 +116,21 @@ export default {
 		'PATCH-PROFILE': (action, state) => {
 			const {email, password, currentPassword, displayName} = action.data;
 			patchProfile(email, password, currentPassword, displayName);
+			return { newState: state }
+		},
+		'CHANNEL-ARRIVE': (action, state) => {
+			const {value} = action.data;
+			state.domain = value ? value[1] : '';
+			//TODO: MAKE THIS SUPPORT ONE TO MANY CHANNELS
+			state.channelList = [{title: value ? value[2]: ''}];
+			return { newState: state } 
+		},
+		'UPDATE-CHANNEL': (action, state) => {
+			updateClientChannel(
+				action.data.channel,
+				action.data.domain,
+				action.data.uid
+			);
 			return { newState: state }
 		}
 	}

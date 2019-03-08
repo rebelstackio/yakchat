@@ -65,7 +65,10 @@ exports.signup = functions.https.onCall((param) => {
 		const customClaims = getCustomClaims(type);
 		if (type === 2) {
 			admin.database().ref('domains/'+ userRecord.uid)
-			.set(domain);
+			.set({
+				1: domain,
+				2: '' //this will be the channel
+			});
 		}
 		// Set custom user claims on this newly created user.
 		return admin.auth().setCustomUserClaims(userRecord.uid, customClaims)
