@@ -1,5 +1,6 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
-import imageURL from '../../images/logo/yakchat.svg';
+// import imageURL from '../../images/logo/yakchat.svg';
+import imageURL from '../../../public/images/logo/yakchat.svg';
 import './index.css';
 
 const DEFAULT_EMAIL_ERROR_MESSAGE = 'Use a valid email account';
