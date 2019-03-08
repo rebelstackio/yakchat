@@ -18,8 +18,7 @@ class Loby extends MetaComponent {
 		const toggleButton = this.querySelector('.msg-head-logo');
 		const inputButton = this.querySelector('#input-button');
 		toggleButton.addEventListener('click', () => {
-			this.storage.dispatch({type: 'TOGGLE-MENU'})
-			console.log('click happend')
+			this.toggleSidebar();
 		});
 		inputButton.addEventListener('click', () => {
 			this.sendMessage(input);
@@ -29,28 +28,8 @@ class Loby extends MetaComponent {
 			document.location.hash = '#/login';
 		});
 		this.querySelector('#settings').addEventListener('click', () => {
-			this.storage.dispatch({ type: 'TOGGLE-SETTINGS' });
+			this.toggleSetting();
 		});
-		/**
-		 * had to move this action because in the handleStoreEvents 
-		 * the action happend twice
-		 */
-		this.storage.on('TOGGLE-MENU', () => {
-			console.log('action happend');
-			const sideBar = document.querySelector('.loby-side-menu');
-			const mainContent = document.querySelector('yak-loby > div');
-			if (sideBar.classList.contains('toggled')) {
-				sideBar.classList.remove('toggled');
-				mainContent.classList.remove('toggled');
-			} else {
-				sideBar.classList.add('toggled');
-				setTimeout(() => { mainContent.classList.add('toggled'); }, 400)
-			}
-		});
-		this.storage.on('TOGGLE-SETTINGS', () => {
-			console.log('toggling the settings');
-			this.querySelector('yak-settings').classList.toggle('hide');
-		})
 	}
 	// eslint-disable-next-line class-method-use-this
 	render () {
@@ -165,12 +144,30 @@ class Loby extends MetaComponent {
 			body.scrollTop = body.scrollHeight;
 		});
 	}
-
+	/**
+	 * handle the toggle sidebar
+	 */
+	toggleSidebar () {
+		const sideBar = document.querySelector('.loby-side-menu');
+		const mainContent = document.querySelector('yak-loby > div');
+		if (sideBar.classList.contains('toggled')) {
+			sideBar.classList.remove('toggled');
+			mainContent.classList.remove('toggled');
+		} else {
+			sideBar.classList.add('toggled');
+			setTimeout(() => { mainContent.classList.add('toggled'); }, 400)
+		}
+	}
+	/**
+	 * handle the toggle pop up settings
+	 */
+	toggleSetting () {
+		console.log('toggling the settings');
+		this.querySelector('yak-settings').classList.toggle('hide');
+	}
+	
 	handleStoreEvents () {
 		return {
-			'TOGGLE-MENU': () => {
-				console.log('toggle-menu BUG');
-			},
 			'CHAT-SELECTED': (state) => {
 				const {selectedMessages, clientSelected} = state.newState;
 				document.querySelector('#header-channel').innerHTML = '#' + clientSelected.name;
@@ -180,9 +177,6 @@ class Loby extends MetaComponent {
 				const {selectedMessages, clientSelected} = state.newState;
 				document.querySelector('#header-channel').innerHTML = '#' + clientSelected.name;
 				this.createMessages(selectedMessages);
-			},
-			'TOGGLE-SETTINGS': () => {
-				console.log('toggle-settings BUG');
 			}
 		};
 	}

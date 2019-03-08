@@ -32,7 +32,6 @@ class YakMainContainer extends MetaContainer {
 		var hash = '#'; // Defaults to: '#'
 		var router = new Navigo(root, useHash, hash);
 		// TODO: CREATE EACH VIEW
-		el = document.createElement('yak-loby');
 		router.on({
 			'/lobby': () => {
 				console.log('loby', this.auth)
@@ -110,7 +109,7 @@ class YakMainContainer extends MetaContainer {
 				case 5:
 					//client t0
 					console.log('i\'m a client T0');
-					document.location.hash = '#/dashboard';
+					document.location.hash = '#/lobby';
 				break;
 				case 6: 
 					//client t1
