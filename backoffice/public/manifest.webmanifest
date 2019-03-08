@@ -7,22 +7,22 @@
 	"start_url": "index.html",
 	"icons": [
 		{
-			"src": "./images/logo/yakchat_128.png",
+			"src": "./images/manifest/yakchat_128.png",
 			"type": "image/png",
 			"sizes": "128x128"
 		},
 		{
-			"src": "./images/logo/yakchat_144.png",
+			"src": "./images/manifest/yakchat_144.png",
 			"type": "image/png",
 			"sizes": "144x144"
 		},
 		{
-			"src": "./images/logo/yakchat_152.png",
+			"src": "./images/manifest/yakchat_152.png",
 			"type": "image/png",
 			"sizes": "152x152"
 		},
 		{
-			"src": "./images/logo/yakchat_192.png",
+			"src": "./images/manifest/yakchat_192.png",
 			"type": "image/png",
 			"sizes": "192x192"
 		}
