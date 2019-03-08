@@ -18,9 +18,11 @@ install:
 
 script:
   - npm run build
+
 deploy:
+  provider: pages
   skip-cleanup: true
-  github-token: 13797437948a1e729e6636bf5e97fc01bb8eef5f
+  github-token: $GITHUB_TOKEN
   keep-history: true
   local-dir: dist
   on:
