@@ -4,6 +4,7 @@ import cogIcon from '../../css/icons/cog-solid.svg';
 import logoutIcon from '../../css/icons/sign-out-alt-solid.svg';
 import imageURL from '../../../public/images/logo/yakchat.svg';
 import sendIcon from '../../css/icons/chevron-right-solid.svg';
+import '../patchprofile';
 import './index.css';
 
 class Loby extends MetaComponent {
@@ -26,7 +27,8 @@ class Loby extends MetaComponent {
 		this.createMsgArea(msgBody);
 		content.append(sideBar, msgBody);
 		const settingsPopUp = instanceElement('yak-settings', ['hide']);
-		this.appendChild(settingsPopUp);
+		const profilePopUp = instanceElement('yak-patchprofile');
+		this.append(settingsPopUp, profilePopUp);
 		return content;
 	}
 	/**

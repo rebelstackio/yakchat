@@ -19,6 +19,7 @@ const app = firebase.initializeApp({
 	messagingSenderId: process.env.FB_PROJECTID
 });
 var functions = app.functions();
+const storage = app.storage();
 /**
  * the reason of this is to map the message into an object,
  * to avoid repeat the keys of the object in each child,
@@ -51,7 +52,10 @@ app.auth().onAuthStateChanged(function(user) {
 				global.storage.dispatch({
 					type: 'LOGIN-SUCCESS',
 					accessLevel: idTokenResult.claims.accessLevel,
-					admin: idTokenResult.claims.admin
+					admin: idTokenResult.claims.admin,
+					uid: user.uid,
+					displayName: idTokenResult.claims.name,
+					email: idTokenResult.claims.email
 				});
 			})
 			.catch((error) => {
@@ -109,7 +113,14 @@ export function processInvitation (key, email, password, name) {
 		global.storage.dispatch({type: 'LOGIN-REQ', email: email, password: password});
 	})
 }
-
+/**
+ * 
+ * @param {*} displayName 
+ * @param {*} email 
+ * @param {*} password 
+ * @param {*} domain 
+ * @param {*} type 
+ */
 export function signUp (displayName, email, password, domain, type) {
 	const signup = functions.httpsCallable('signup');
 	signup({
@@ -124,6 +135,53 @@ export function signUp (displayName, email, password, domain, type) {
 	})
 }
 
+export function uploadProfileImg (img, uuid) {
+	var storageRef = storage.ref(uuid + "/profile.jpg");
+	var uploadTask = storageRef.put(img);
+	uploadTask.then(res => {
+		global.storage.dispatch({
+			type: 'UPLOAD-SUCCESS'
+		})
+	}).catch(err => {
+		console.log('upload fail');
+		global.storage.dispatch({
+			type: 'UPLOAD-FAIL',
+			err
+		})
+	})
+}
+
+export function patchProfile (email, newPassword, currentPassword , displayName) {
+	let currentUser = app.auth().currentUser;
+	const oldMail = currentUser.email;
+	const oldName = currentUser.displayName;
+	app.auth().signInWithEmailAndPassword(oldMail, currentPassword)
+	.then(function(res) {
+		const user = res.user;
+		if (email !== '' && email !== oldMail) {
+			// if not empty and not the same
+			user.updateEmail(email)
+			.then(() => {
+				console.log('email changed');
+			})
+		}
+		if (displayName !== '' && displayName !== oldName) {
+			// if not empty and not the same
+			user.updateProfile({displayName: displayName})
+			.then(() => {
+				console.log('display name changed');
+			})
+		}
+		if(newPassword !== '' && newPassword !== currentPassword) {
+			user.updatePassword(newPassword).then(() => {
+				// Update successful.
+				console.log('password changed');
+			}, (error) => {
+				// An error happened.
+			});
+		}
+	})
+}
 /**
  * TODO: make this function to be compatible with singin users
  * @description get the messages and dispatch it
