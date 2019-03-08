@@ -9,10 +9,11 @@
     "install:fs": "npm install --prefix ./front-script",
     "start": "npm-run-all --parallel start:bo start:fs",
     "build": "npm-run-all --parallel build:bo build:fs",
-    "build:bo": "npm run build --prefix ./backoffice",
+    "build:bo": "parcel build ./backoffice/public/index.html --out-file backoffice.html",
+    "build:fs": "parcel build --out-file frontscript.html ./front-script/public/index.html",
     "start:fs": "npm start --prefix ./front-script",
     "start:bo": "npm start --prefix ./backoffice",
-    "build:fs": "npm run build --prefix ./front-script"
+    "deploy": "npm run build && ./node_modules/gh-pages/bin/gh-pages -t -d dist"
   },
   "contributors": [
     {
