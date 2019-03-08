@@ -9,7 +9,7 @@
     "install:fs": "npm install --prefix ./front-script",
     "start": "npm-run-all --parallel start:bo start:fs",
     "build": "npm-run-all --parallel build:bo build:fs",
-    "build:bo": "parcel build ./backoffice/public/index.html --out-file backoffice.html",
+    "build:bo": "parcel build --out-file backoffice.html ./backoffice/public/index.html",
     "build:fs": "parcel build --out-file frontscript.html ./front-script/public/index.html",
     "start:fs": "npm start --prefix ./front-script",
     "start:bo": "npm start --prefix ./backoffice",
