@@ -9,12 +9,11 @@
     "install:fs": "npm install --prefix ./front-script",
     "start": "npm-run-all --parallel start:bo start:fs",
     "build": "npm-run-all --parallel build:bo build:fs",
-    "build:bo2": "parcel build --out-file backoffice.html --public-url /yakchat/ ./backoffice/public/index.html",
     "build:bo": "parcel build --out-file backoffice.html --public-url ./ ./backoffice/public/index.html",
     "build:fs": "parcel build --out-file frontscript.html --public-url ./ ./front-script/public/index.html",
     "start:fs": "npm start --prefix ./front-script",
     "start:bo": "npm start --prefix ./backoffice",
-    "deploy": "npm run build && node_modules/gh-pages/bin/gh-pages.js -t -d dist"
+    "deploy": "node_modules/gh-pages/bin/gh-pages.js -t -d dist"
   },
   "contributors": [
     {
