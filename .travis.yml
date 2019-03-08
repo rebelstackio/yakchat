@@ -16,16 +16,6 @@ install:
   - npm install -g parcel-bundler
   - npm install npm-run-all
 script:
-  - npm run build
-  # The en variables are set in travis config panel ( secure )
   - printf '%s\n' "FB_APIKEY=$FB_APIKEY" "FB_AUTHDOMAIN=${FB_AUTHDOMAIN}" "FB_DATABASEURL=$FB_DATABASEURL" "FB_PROJECTID=${FB_PROJECTID}" "FB_STORAGEBUCKET=$FB_STORAGEBUCKET" "FB_MESSAGINGSENDERID=${FB_MESSAGINGSENDERID}" >.env
-  - mv .env dist/
-
-deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN
-  keep-history: false
-  local-dir: dist
-  on:
-    branch: develop
+  - npm run build
+  - npm run deploy
