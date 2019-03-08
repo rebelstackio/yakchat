@@ -18,6 +18,8 @@ install:
 
 script:
   - npm run build
+  - sh scripts/deploy_gh.sh
+  - mv scripts/.env dist/
 
 deploy:
   provider: pages
