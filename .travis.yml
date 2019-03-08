@@ -17,7 +17,7 @@ install:
   - npm install npm-run-all
 script:
   - npm run build
-  # The en variables are set in travis config panel
+  # The en variables are set in travis config panel ( secure )
   - printf '%s\n' "FB_APIKEY=$FB_APIKEY" "FB_AUTHDOMAIN=${FB_AUTHDOMAIN}" "FB_DATABASEURL=$FB_DATABASEURL" "FB_PROJECTID=${FB_PROJECTID}" "FB_STORAGEBUCKET=$FB_STORAGEBUCKET" "FB_MESSAGINGSENDERID=${FB_MESSAGINGSENDERID}" >.env
   - mv .env dist/
 
