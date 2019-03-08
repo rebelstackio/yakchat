@@ -57,6 +57,10 @@ class PatchProfile extends MetaComponent {
 				preview.src = "";
 			}
 		});
+		this.querySelector('#close-profile')
+		.addEventListener('click', () => {
+			this.querySelector('#profile-popup').classList.add('hide');
+		})
 		global.storage.on('LOGIN-SUCCESS', (state) => {
 			this.displayName = state.newState.displayName;
 			this.email = state.newState.email;
@@ -69,8 +73,11 @@ class PatchProfile extends MetaComponent {
 		? localStorage.getItem(uid)
 		: '';
 		return /*html*/`
-		<div id="profile-popup">
-			<h2> edit profile </h2>
+		<div class="hide" id="profile-popup">
+			<div class="profile-title">
+				<h2> edit profile </h2>
+				<span id="close-profile">X</span>
+			</div>
 			<div class="prof-pict">
 				<label for="upload" class="custom-file-upload">
 					Upload

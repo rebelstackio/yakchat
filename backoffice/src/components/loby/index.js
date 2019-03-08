@@ -14,6 +14,44 @@ class Loby extends MetaComponent {
 	constructor () {
 		super(global.storage);
 	}
+	addListeners() {
+		const toggleButton = this.querySelector('.msg-head-logo');
+		const inputButton = this.querySelector('#input-button');
+		toggleButton.addEventListener('click', () => {
+			this.storage.dispatch({type: 'TOGGLE-MENU'})
+			console.log('click happend')
+		});
+		inputButton.addEventListener('click', () => {
+			this.sendMessage(input);
+		});
+		this.querySelector('#logout').addEventListener('click', () => {
+			this.storage.dispatch({ type: 'LOGOUT' });
+			document.location.hash = '#/login';
+		});
+		this.querySelector('#settings').addEventListener('click', () => {
+			this.storage.dispatch({ type: 'TOGGLE-SETTINGS' });
+		});
+		/**
+		 * had to move this action because in the handleStoreEvents 
+		 * the action happend twice
+		 */
+		this.storage.on('TOGGLE-MENU', () => {
+			console.log('action happend');
+			const sideBar = document.querySelector('.loby-side-menu');
+			const mainContent = document.querySelector('yak-loby > div');
+			if (sideBar.classList.contains('toggled')) {
+				sideBar.classList.remove('toggled');
+				mainContent.classList.remove('toggled');
+			} else {
+				sideBar.classList.add('toggled');
+				setTimeout(() => { mainContent.classList.add('toggled'); }, 400)
+			}
+		});
+		this.storage.on('TOGGLE-SETTINGS', () => {
+			console.log('toggling the settings');
+			this.querySelector('yak-settings').classList.toggle('hide');
+		})
+	}
 	// eslint-disable-next-line class-method-use-this
 	render () {
 		const content = document.createElement('div');
@@ -49,7 +87,7 @@ class Loby extends MetaComponent {
 	 */
 	createMsgHeader (box) {
 		const not = undefined;
-		const toggleButtom = instanceElement('div', ['msg-head-logo']);
+		const toggleButton = instanceElement('div', ['msg-head-logo']);
 		const actions = instanceElement(
 			'div',
 			['msg-head-actions'],
@@ -59,13 +97,6 @@ class Loby extends MetaComponent {
 				<img src="${logoutIcon}" id="logout"></img>
 			`
 		);
-		actions.querySelector('#logout').addEventListener('click', () => {
-			document.location.hash = '#/login';
-			this.storage.dispatch({ type: 'LOGOUT' });
-		});
-		actions.querySelector('#settings').addEventListener('click', () => {
-			this.storage.dispatch({ type: 'TOGGLE-SETTINGS' });
-		});
 		const logo = instanceElement(
 			'img',
 			['rblstck-logo'],
@@ -74,14 +105,11 @@ class Loby extends MetaComponent {
 		);
 		this.channel = instanceElement(
 			'span',
-			not, not,
+			not, 'header-channel',
 			`#Loby`
 		);
-		toggleButtom.addEventListener('click', () => {
-			this.storage.dispatch({type: 'TOGGLE-MENU'})
-		})
-		toggleButtom.append(logo, this.channel);
-		box.append(toggleButtom, actions);
+		toggleButton.append(logo, this.channel);
+		box.append(toggleButton, actions);
 	}
 	/**
 	 * @description create the inputs for the msg area
@@ -96,7 +124,7 @@ class Loby extends MetaComponent {
 		);
 		const inputButton = instanceElement(
 			'div', ['btn', 'icon'],
-			not,
+			'input-button',
 			`<img src="${sendIcon}"></img>`,
 			[{type: 'text'}, {placeholder: 'Enter your message'}]
 		);
@@ -105,9 +133,6 @@ class Loby extends MetaComponent {
 				this.sendMessage(input);
 			}
 		});
-		inputButton.addEventListener('click', () => {
-			this.sendMessage(input);
-		})
 		box.append(input, inputButton);
 	}
 	/**
@@ -144,28 +169,20 @@ class Loby extends MetaComponent {
 	handleStoreEvents () {
 		return {
 			'TOGGLE-MENU': () => {
-				const sideBar = document.querySelector('.loby-side-menu');
-				const mainContent = document.querySelector('yak-loby > div');
-				if (sideBar.classList.contains('toggled')) {
-					sideBar.classList.remove('toggled');
-					mainContent.classList.remove('toggled');
-				} else {
-					sideBar.classList.add('toggled');
-					setTimeout(() => { mainContent.classList.add('toggled'); }, 400)
-				}
+				console.log('toggle-menu BUG');
 			},
 			'CHAT-SELECTED': (state) => {
 				const {selectedMessages, clientSelected} = state.newState;
-				this.channel.innerHTML = '#' + clientSelected.name;
+				document.querySelector('#header-channel').innerHTML = '#' + clientSelected.name;
 				this.createMessages(selectedMessages);
 			},
 			'SEND-MESSAGE': (state) => {
 				const {selectedMessages, clientSelected} = state.newState;
-				this.channel.innerHTML = '#' + clientSelected.name;
+				document.querySelector('#header-channel').innerHTML = '#' + clientSelected.name;
 				this.createMessages(selectedMessages);
 			},
 			'TOGGLE-SETTINGS': () => {
-				document.querySelector('yak-settings').classList.toggle('hide');
+				console.log('toggle-settings BUG');
 			}
 		};
 	}
