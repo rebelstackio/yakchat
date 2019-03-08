@@ -1,5 +1,5 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
-import defaulAvatar from '../../../public/images/user.png';
+import defaulAvatar from '../../images/user.png';
 import './index.css';
 
 class PatchProfile extends MetaComponent {
