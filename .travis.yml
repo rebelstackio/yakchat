@@ -1,0 +1,26 @@
+language: node_js
+node_js:
+  - "8"
+dist: trusty
+sudo: false
+
+branches:
+  only:
+  - develop
+
+cache:
+  directories:
+    - node_modules
+
+install:
+  - npm install -g parcel-bundler
+
+script:
+  - npm run build
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: c6780d2ae932b0efbbeec7517a75773538f25949
+  local_dir: dist
+  on:
+    branch: develop
