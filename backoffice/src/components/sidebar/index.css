@@ -1,8 +1,8 @@
 yak-sidebar.loby-side-menu > div {
 	display: grid;
-	grid-template-rows: 8vh 1fr;
+	grid-template-rows: 20vh 8vh 1fr;
 	padding: 1em;
-	grid-row-gap: 2em;
+	grid-row-gap: 1em;
 	font-size: 1.5em;
 }
 
@@ -67,4 +67,16 @@ span.chnl-title > i {
 	grid-row-gap: 1em;
 	overflow-y: auto;
 	overflow-x: hidden;
+}
+
+img.profile-img {
+	height: 100%;
+	place-self: center;
+	border: 1px solid #d3d3d3;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+.side-profile {
+	display: grid;
 }

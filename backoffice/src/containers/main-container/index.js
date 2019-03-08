@@ -19,6 +19,7 @@ class YakMainContainer extends MetaContainer {
 	render () {
 		this.content = document.createElement('div');
 		this.content.id = 'container';
+		this.auth = global.storage.getState().Main.auth;
 		this.handleRoute();
 		this.handleStoreEvents();
 		return this.content;
@@ -31,11 +32,10 @@ class YakMainContainer extends MetaContainer {
 		var hash = '#'; // Defaults to: '#'
 		var router = new Navigo(root, useHash, hash);
 		// TODO: CREATE EACH VIEW
-		el = document.createElement('yak-loby');
 		router.on({
 			'/lobby': () => {
-				console.log('loby', !this.requireAuth())
-				if (!this.requireAuth()) {
+				console.log('loby', this.auth)
+				if (this.auth) {
 					this.innerHTML = '';
 					// Add to the DOM
 					el = document.createElement('yak-loby');
@@ -45,10 +45,10 @@ class YakMainContainer extends MetaContainer {
 				}
 			},
 			'/dashboard': () => {
-				console.log('dashboard',global.storage.getState().Main.auth)
-				if (!this.requireAuth()) {
-					// Add to the DOM
-					this.appendChild(el);
+				console.log('dashboard', this.auth)
+				if (this.auth) {
+					// TODO: ADD DASHBOARD ELEMENT
+					router.navigate('/lobby')
 				} else {
 					router.navigate('/login');
 				}
@@ -72,7 +72,7 @@ class YakMainContainer extends MetaContainer {
 			},
 			'/': () => {
 				this.innerHTML = '';
-				if (!this.requireAuth()) {
+				if (this.auth) {
 					router.navigate('/lobby');
 				} else {
 					router.navigate('/login');
@@ -109,7 +109,7 @@ class YakMainContainer extends MetaContainer {
 				case 5:
 					//client t0
 					console.log('i\'m a client T0');
-					document.location.hash = '#/dashboard';
+					document.location.hash = '#/lobby';
 				break;
 				case 6: 
 					//client t1
@@ -126,11 +126,13 @@ class YakMainContainer extends MetaContainer {
 	handleStoreEvents () {
 		const { storage } = global;
 		storage.on('LOGIN-SUCCESS', (state) => {
-			const {accessLevel, admin} = state.newState;
-			this.createRoleView(accessLevel, admin)
+			const {accessLevel, admin, auth} = state.newState;
+			this.auth = auth;
+			this.createRoleView(accessLevel, admin);
 		});
 
-		storage.on('LOGOUT', () => {
+		storage.on('LOGOUT', (state) => {
+			this.auth = state.newState.auth;
 			// Clean the current content
 			this.innerHTML = '';
 			// Create the login component
