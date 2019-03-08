@@ -19,9 +19,9 @@ install:
 script:
   - npm run build
 deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: d7760280f82ffe6c260eb5bae5f0110034ad34f4
-  local_dir: dist
+  skip-cleanup: true
+  github-token: 13797437948a1e729e6636bf5e97fc01bb8eef5f
+  keep-history: true
+  local-dir: dist
   on:
     branch: develop
