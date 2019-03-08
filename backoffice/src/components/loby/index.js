@@ -2,7 +2,7 @@ import { MetaComponent } from '@rebelstack-io/metaflux';
 import { instanceElement } from '../../utils';
 import cogIcon from '../../css/icons/cog-solid.svg';
 import logoutIcon from '../../css/icons/sign-out-alt-solid.svg';
-import imageURL from '../../../public/images/logo/yakchat.svg';
+import imageURL from '../../images/logo/yakchat.svg';
 import sendIcon from '../../css/icons/chevron-right-solid.svg';
 import '../patchprofile';
 import './index.css';
