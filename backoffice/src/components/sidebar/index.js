@@ -1,5 +1,6 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import { instanceElement } from '../../utils';
+import defaulAvatar from '../../../public/images/user.png';
 import './index.css';
 class Sidebar extends MetaComponent {
 	constructor () {
@@ -8,6 +9,20 @@ class Sidebar extends MetaComponent {
 	// eslint-disable-next-line class-method-use-this
 	render () {
 		const content = document.createElement('div');
+		const uid = localStorage.getItem('fb-hash');
+		const urlImg = localStorage.getItem(uid) ? localStorage.getItem(uid) : defaulAvatar;
+		const profile = instanceElement(
+			'div',
+			['side-profile'],
+			false,
+			`
+				<img src="${urlImg}" class="profile-img"></img>
+			`
+		);
+		profile.querySelector('.profile-img')
+		.addEventListener('click', () => {
+			document.querySelector('#profile-popup').classList.toggle('hide');
+		})
 		const search = instanceElement(
 			'div',
 			['search-box'],
@@ -16,7 +31,7 @@ class Sidebar extends MetaComponent {
 			 <i class="fa fa-search"></i>
 			`
 		);
-		content.appendChild(search);
+		content.append(profile, search);
 		this.createChnlView(content);
 		return content;
 	}

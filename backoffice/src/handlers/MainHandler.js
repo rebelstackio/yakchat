@@ -1,10 +1,20 @@
-import { signInWithEmail, singOut, processInvitation, signUp } from '../controllers/firebase';
+import {
+	signInWithEmail,
+	singOut,
+	processInvitation,
+	signUp,
+	uploadProfileImg,
+	patchProfile
+} from '../controllers/firebase';
 
 const MainDefaultState = {
 	auth: localStorage.getItem('fb-hash') ? true : false,
 	isSoundEnable: true,
 	accessLevel: 0,
+	uid: localStorage.getItem('fb-hash') ? localStorage.getItem('fb-hash') : 0,
 	admin: false,
+	displayName: '',
+	email: '',
 	chnlList : [
 		{
 			title: 'ToursSercers',
@@ -69,12 +79,16 @@ export default {
 			state.auth = true;
 			state.accessLevel = action.accessLevel;
 			state.admin = action.admin;
+			state.uid = action.uid;
+			state.displayName = action.displayName;
+			state.email = action.email;
 			return { newState: state }
 		},
 		'LOGOUT': (action, state) => {
 			singOut();
 			localStorage.removeItem('fb-hash');
 			state.auth = false;
+			state.uid = 0;
 			return { newState: state }
 		},
 		'CHAT-SELECTED': (action, state) => {
@@ -109,6 +123,16 @@ export default {
 		},
 		'ACEPT-INVITATION': (action, state) => {
 			processInvitation(action.data.key, action.data.m, action.data.ps, action.data.un);
+			return { newState: state }
+		},
+		'UPLOAD-PROFILE-IMG': (action, state) => {
+			const {img, uid} = action.data;
+			uploadProfileImg(img, uid);
+			return { newState: state }
+		},
+		'PATCH-PROFILE': (action, state) => {
+			const {email, password, currentPassword, displayName} = action.data;
+			patchProfile(email, password, currentPassword, displayName);
 			return { newState: state }
 		}
 	}
