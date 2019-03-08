@@ -19,6 +19,7 @@ class YakMainContainer extends MetaContainer {
 	render () {
 		this.content = document.createElement('div');
 		this.content.id = 'container';
+		this.auth = global.storage.getState().Main.auth;
 		this.handleRoute();
 		this.handleStoreEvents();
 		return this.content;
@@ -34,8 +35,8 @@ class YakMainContainer extends MetaContainer {
 		el = document.createElement('yak-loby');
 		router.on({
 			'/lobby': () => {
-				console.log('loby', !this.requireAuth())
-				if (!this.requireAuth()) {
+				console.log('loby', this.auth)
+				if (this.auth) {
 					this.innerHTML = '';
 					// Add to the DOM
 					el = document.createElement('yak-loby');
@@ -45,10 +46,10 @@ class YakMainContainer extends MetaContainer {
 				}
 			},
 			'/dashboard': () => {
-				console.log('dashboard',global.storage.getState().Main.auth)
-				if (!this.requireAuth()) {
-					// Add to the DOM
-					this.appendChild(el);
+				console.log('dashboard', this.auth)
+				if (this.auth) {
+					// TODO: ADD DASHBOARD ELEMENT
+					router.navigate('/lobby')
 				} else {
 					router.navigate('/login');
 				}
@@ -72,7 +73,7 @@ class YakMainContainer extends MetaContainer {
 			},
 			'/': () => {
 				this.innerHTML = '';
-				if (!this.requireAuth()) {
+				if (this.auth) {
 					router.navigate('/lobby');
 				} else {
 					router.navigate('/login');
@@ -126,11 +127,13 @@ class YakMainContainer extends MetaContainer {
 	handleStoreEvents () {
 		const { storage } = global;
 		storage.on('LOGIN-SUCCESS', (state) => {
-			const {accessLevel, admin} = state.newState;
-			this.createRoleView(accessLevel, admin)
+			const {accessLevel, admin, auth} = state.newState;
+			this.auth = auth;
+			this.createRoleView(accessLevel, admin);
 		});
 
-		storage.on('LOGOUT', () => {
+		storage.on('LOGOUT', (state) => {
+			this.auth = state.newState.auth;
 			// Clean the current content
 			this.innerHTML = '';
 			// Create the login component
