@@ -18,8 +18,9 @@ install:
 
 script:
   - npm run build
-  - sh scripts/deploy_gh.sh
-  - mv scripts/.env dist/
+  - printf '%s\n' "FB_APIKEY=$FB_APIKEY" "FB_AUTHDOMAIN=${FB_AUTHDOMAIN}" "FB_DATABASEURL=$FB_DATABASEURL" "FB_PROJECTID=${FB_PROJECTID}" "FB_STORAGEBUCKET=$FB_STORAGEBUCKET" "FB_MESSAGINGSENDERID=${FB_MESSAGINGSENDERID}" >.env
+  - cat .env
+  - mv .env dist/
 
 deploy:
   provider: pages
