@@ -75,6 +75,8 @@ img.profile-img {
 	border: 1px solid #d3d3d3;
 	border-radius: 50%;
 	cursor: pointer;
+	background-color: #d3d3d3;
+	width: 120px;
 }
 
 .side-profile {
