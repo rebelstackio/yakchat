@@ -1,6 +1,6 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import { instanceElement } from '../../utils';
-import defaulAvatar from '../../../public/images/user.png';
+import defaulAvatar from '../../images/user.png';
 import cog from '../../css/icons/cog-solid.svg';
 import './index.css';
 class Sidebar extends MetaComponent {
