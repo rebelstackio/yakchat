@@ -1,0 +1,77 @@
+div#channel-popup.hide{
+	opacity: 0;
+	visibility: hidden;
+	display: none;
+}
+
+div#channel-popup {
+	border: 1px solid #d3d3d3;
+	display: grid;
+	grid-template-rows: repeat(5, 1fr);
+	position: fixed;
+	width: 57vw;
+	left: 21vw;
+	margin-right: 500px;
+	height: 67vh;
+	top: 13vh;
+	grid-row-gap: .5em;
+	padding: .5em;
+	box-shadow: 0px 0px 10px 1px;
+	background: #ffffff;
+	opacity: 1;
+}
+
+.profile-title > h2 {
+	text-align: center;
+}
+
+.profile-title {
+	display: grid;
+	grid-template-columns: 1fr 2em;
+}
+
+.profile-title > span {
+	place-self: center;
+	font-family: monospace;
+	font-size: 16px;
+	font-weight: 900;
+	cursor: pointer;
+}
+
+div#channel-popup > input {
+	padding-left: 1em;
+	outline: none;
+	border: 1px solid #d3d3d3;
+	border-radius: 3px;
+}
+
+.prof-pict {
+	margin: .5em;
+	border: 1px solid #d3d3d3;
+	display: grid;
+	grid-template-rows: 6vh auto;
+}
+
+.prof-pict > * {
+	place-self: center;
+}
+
+.prof-pict > .hide {
+	visibility: hiden;
+	opacity: 0;
+}
+.prof-pict > img {
+	height: 90px;
+	border: 1px solid #d3d3d3;
+	border-radius: 50%;
+}
+
+.prof-pict > input[type="file"] {
+	display: none;
+}
+.custom-file-upload {
+	border: 1px solid #ccc;
+	display: inline-block;
+	padding: 6px 12px;
+	cursor: pointer;
+}
