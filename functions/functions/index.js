@@ -183,3 +183,44 @@ exports.inviteOperator = functions.https.onCall((param) => {
 		return false;
 	});
 })
+
+/**
+ * 0 = text
+ * 1 = action
+ * 2 = url_change
+ */
+const _types = ['AA', 'AB', 'AC']
+
+/**
+ * 
+ * @param {String} value 
+ * @param {Int32Array} digis 
+ */
+function base64 (value, digis) {
+	if ( typeof(value) === 'number') {
+		if (digis) {
+			return base64.getChars(value, '').padStart(digis,'A');
+		} else {
+			return base64.getChars(value, '');
+		}
+	}
+	if (typeof(value) === 'string') {
+		if (value === '') { return NaN; }
+		return value.split('').reverse().reduce(function(prev, cur, i) {
+			return prev + base64.chars.indexOf(cur) * Math.pow(64, i);
+		}, 0);
+	}
+}
+base64.chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+base64.getChars = function(num, res) {
+	var mod = num % 64,
+	remaining = Math.floor(num / 64),
+	chars = base64.chars.charAt(mod) + res;
+	if (remaining <= 0) { return chars; }
+	return base64.getChars(remaining, chars);
+};
+
+exports.handleVisitor = functions.https.onRequest((req, resp) => {
+	req = {}
+	resp.send('some route');
+})
