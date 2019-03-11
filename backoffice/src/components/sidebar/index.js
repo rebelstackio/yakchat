@@ -1,15 +1,18 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import { instanceElement } from '../../utils';
 import defaulAvatar from '../../images/user.png';
+import cog from '../../css/icons/cog-solid.svg';
 import './index.css';
 class Sidebar extends MetaComponent {
 	constructor () {
-		super();
+		super(global.storage);
 	}
 	// eslint-disable-next-line class-method-use-this
 	render () {
-		const content = document.createElement('div');
+		const content = instanceElement('div', false, 'sidebar-content');
 		const uid = localStorage.getItem('fb-hash');
+		this.channelList = global.storage.getState().Main.channelList;
+		this.accessLevel = global.storage.getState().Main.accessLevel;
 		const urlImg = localStorage.getItem(uid) ? localStorage.getItem(uid) : defaulAvatar;
 		const profile = instanceElement(
 			'div',
@@ -32,17 +35,48 @@ class Sidebar extends MetaComponent {
 			`
 		);
 		content.append(profile, search);
-		this.createChnlView(content);
 		return content;
 	}
 
 	selectChat (cl) {
 		global.storage.dispatch({ type: 'CHAT-SELECTED', data: cl });
 	}
+	/**
+	 * create the 
+	 * @param {Arrya} channelList 
+	 */
+	createClientView (channelList, domain) {
+		const sidebar = this.querySelector('#sidebar-content');
+		const chnlBox = this.querySelector('#channel-t0')
+			? this.querySelector('#channel-t0')
+			: instanceElement('div', ['channel-box'], 'channel-t0');
+		chnlBox.innerHTML = '';
+		channelList.forEach(chnl => {
+			const chEl = instanceElement('div', ['collapse'], false,
+				`<span class="chnl-title">
+					${chnl.title ? chnl.title : 'add'} 
+				 	<img src="${cog}"></img>
+				 </span>`
+			);
+			chEl.querySelector('img')
+			.addEventListener('click', () => {
+				document.querySelector('#channel-popup').classList.toggle('hide');
+				global.storage.dispatch({
+					type: 'CHANNEL-SELECT',
+					data: {
+						channel: chnl.title ? chnl.title : '',
+						domain
+					}
+				})
+			})
+			chnlBox.appendChild(chEl);
+		});
+		sidebar.appendChild(chnlBox);
+	}
 
 	createChnlView (el) {
 		const { chnlList } = global.storage.getState().Main;
-		const chnlBox = instanceElement('div', ['channel-box'])
+		const chnlBox = instanceElement('div', ['channel-box']);
 		try {
 			chnlList.forEach(chnl => {
 				const chEl = instanceElement('div', ['collapse'], false,
@@ -68,6 +102,13 @@ class Sidebar extends MetaComponent {
 			el.appendChild(chnlBox);
 		} catch (err) {
 			//
+		}
+	}
+	handleStoreEvents () {
+		return {
+			'CHANNEL-ARRIVE': (state) => {
+				this.createClientView(state.newState.channelList, state.newState.domain);
+			}
 		}
 	}
 }

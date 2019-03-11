@@ -182,6 +182,38 @@ export function patchProfile (email, newPassword, currentPassword , displayName)
 		}
 	})
 }
+
+export function getClientChannels(uid) {
+	app.database().ref('/domains/' + uid)
+	.once('value', (value) => {
+		global.storage.dispatch({
+			type: 'CHANNEL-ARRIVE',
+			data: {
+				value: value.val()
+			}
+		});
+	}, (err) => {
+		console.log(err)
+		// error
+	})
+}
+/**
+ * 
+ * @param {*} channelName 
+ * @param {*} domain 
+ * @param {*} uid 
+ */
+export function updateClientChannel (channelName, domain, uid) {
+	app.database().ref('/domains/' + uid)
+	.set({
+		1: domain,
+		2: channelName
+	}).then(() => {
+		console.log('update channel success');
+		getClientChannels(uid);
+	});
+}
+
 /**
  * TODO: make this function to be compatible with singin users
  * @description get the messages and dispatch it
