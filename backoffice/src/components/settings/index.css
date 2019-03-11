@@ -89,3 +89,13 @@ i#set-close {
 	display: grid;
 	grid-row-gap: 1vh;
 }
+
+.pop-title {
+	display: grid;
+	grid-template-columns: 1fr 2vw;
+	color: #666666
+}
+
+.pop-title > h2 {
+	text-align: center;
+}

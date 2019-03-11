@@ -62,7 +62,7 @@ export default {
 			state.uid = action.uid;
 			state.displayName = action.displayName;
 			state.email = action.email;
-			if (action.accessLevel > 1) {
+			if (action.accessLevel >= 5) {
 				//get channels
 				getClientChannels(action.uid);
 			}
