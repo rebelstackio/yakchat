@@ -26,6 +26,10 @@ i#set-close {
 	padding: .5em;
 	align-self: end;
 	cursor: pointer;
+	font-family: monospace;
+	font-style: normal;
+	font-weight: 900;
+	font-size: 16px;
 }
 
 .option-body {
@@ -33,6 +37,7 @@ i#set-close {
 	grid-template-columns: 1fr 1fr;
 	padding: 1em;
 	color: #666666;
+	grid-column-gap: 1vw;
 }
 
 .option-body h2 {
@@ -69,4 +74,18 @@ i#set-close {
 .set-new-pass > button {
 	height: 6vh;
 	font-size: 1em;
+}
+
+.option-body input {
+	height: 6vh;
+}
+
+.client-action-settings {
+	display: grid;
+	grid-row-gap: 1vh;
+}
+
+.client-storage-settings {
+	display: grid;
+	grid-row-gap: 1vh;
 }

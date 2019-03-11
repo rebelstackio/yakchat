@@ -150,7 +150,13 @@ export function uploadProfileImg (img, uuid) {
 		})
 	})
 }
-
+/**
+ * 
+ * @param {*} email 
+ * @param {*} newPassword 
+ * @param {*} currentPassword 
+ * @param {*} displayName 
+ */
 export function patchProfile (email, newPassword, currentPassword , displayName) {
 	let currentUser = app.auth().currentUser;
 	const oldMail = currentUser.email;
@@ -182,7 +188,11 @@ export function patchProfile (email, newPassword, currentPassword , displayName)
 		}
 	})
 }
-
+/**------------------------------------CLIENT---------------------------------- */
+/**
+ * get the client channel, domain and settings
+ * @param {String} uid 
+ */
 export function getClientChannels(uid) {
 	app.database().ref('/domains/' + uid)
 	.once('value', (value) => {
@@ -198,7 +208,7 @@ export function getClientChannels(uid) {
 	})
 }
 /**
- * 
+ * update channel name or domain or both
  * @param {*} channelName 
  * @param {*} domain 
  * @param {*} uid 
@@ -213,7 +223,20 @@ export function updateClientChannel (channelName, domain, uid) {
 		getClientChannels(uid);
 	});
 }
-
+/**
+ * update the firebase and analytics tokens in client settings
+ * @param {Obeject} data 
+ */
+export function saveStorageSetting (data) {
+	const {fbToken, ggleToken, uid} = data;
+	app.database().ref('/domains/' + uid)
+	.child('3').set({
+		[fbToken]: ggleToken
+	}).then(() => {
+		console.log('updated settings storage data');
+	});
+}
+/*--------------------------END-CLIENT------------------------------------------------*/
 /**
  * TODO: make this function to be compatible with singin users
  * @description get the messages and dispatch it

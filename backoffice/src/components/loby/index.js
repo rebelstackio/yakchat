@@ -166,6 +166,7 @@ class Loby extends MetaComponent {
 	toggleSetting () {
 		console.log('toggling the settings');
 		this.querySelector('yak-settings').classList.toggle('hide');
+		this.storage.dispatch({type: 'OPEN-SETTINGS'});
 	}
 	
 	handleStoreEvents () {
