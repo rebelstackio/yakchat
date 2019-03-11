@@ -21,14 +21,22 @@ class Settings extends MetaComponent {
 	// eslint-disable-next-line class-method-use-this
 	render () {
 		const content = instanceElement('div', false, 'setting-box');
-		const closeButton = instanceElement('i', ['fa', 'fa-times'], 'set-close', 'X');
-		closeButton.addEventListener('click', () => {
-			this.classList.toggle('hide');
-		})
-		content.appendChild(closeButton);
-		//this.createOptions(content);
+		const title = instanceElement('div', ['pop-title'], false, 
+		`
+			<h2> Settings </h2>
+			<i id="set-close"> X </i>
+		`
+		);
+		content.appendChild(title);
 		this.accessLevel = this.storage.getState().Main.accessLevel;
 		return content;
+	}
+
+	addListeners () {
+		const closeButton = this.querySelector('#set-close');
+		closeButton.addEventListener('click', () => {
+			this.classList.toggle('hide');
+		});
 	}
 
 	createOptions (box) {
