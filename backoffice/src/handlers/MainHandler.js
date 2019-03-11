@@ -6,7 +6,8 @@ import {
 	uploadProfileImg,
 	patchProfile,
 	getClientChannels,
-	updateClientChannel
+	updateClientChannel,
+	saveStorageSetting
 } from '../controllers/firebase';
 
 const MainDefaultState = {
@@ -121,6 +122,7 @@ export default {
 		'CHANNEL-ARRIVE': (action, state) => {
 			const {value} = action.data;
 			state.domain = value ? value[1] : '';
+			state.storageKeys = value ? value[3]: '';
 			//TODO: MAKE THIS SUPPORT ONE TO MANY CHANNELS
 			state.channelList = [{title: value ? value[2]: ''}];
 			return { newState: state } 
@@ -131,6 +133,11 @@ export default {
 				action.data.domain,
 				action.data.uid
 			);
+			return { newState: state }
+		},
+		'SAVE-STORAGE-SETTING': (action, state) => {
+			action.data.uid = localStorage.getItem('fb-hash');
+			saveStorageSetting(action.data)
 			return { newState: state }
 		}
 	}
