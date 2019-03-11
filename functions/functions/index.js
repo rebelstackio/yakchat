@@ -221,6 +221,9 @@ base64.getChars = function(num, res) {
 };
 
 exports.handleVisitor = functions.https.onRequest((req, resp) => {
-	req = {}
+	
+	const headers = req.headers;
+	console.log(headers)
+	const requestIp = req.connection.remoteAddress;
 	resp.send('some route');
 })
