@@ -1,4 +1,6 @@
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/functions';
 import { getClientInfo } from '../../utils';
 
 /**
@@ -17,7 +19,7 @@ const app = firebase.initializeApp({
 	projectId: process.env.FB_PROJECTID,
 	storageBucket: process.env.FB_STORAGEBUCKET,
 	messagingSenderId: process.env.FB_PROJECTID
-});
+}, 'yakchat-frontscript');
 
 const channel = 'testing';
 var functions = app.functions();
