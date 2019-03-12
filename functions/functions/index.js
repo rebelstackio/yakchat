@@ -219,14 +219,16 @@ base64.getChars = function(num, res) {
 	if (remaining <= 0) { return chars; }
 	return base64.getChars(remaining, chars);
 };
-
-exports.handleVisitor = functions.https.onRequest(async (req, resp) => {
+/**
+ * handle each visitior per domain
+ */
+exports.handleVisitor = functions.https.onRequest((req, resp) => {
 	// the unique user id or the browser fingerprint
-	const uid = req.query.u ? req.query.u : 'ddafb13befe7d0cbd978efa67a0a72b0';
+	const uid = req.query.u;
 	// we get the domain it come from by the headers
 	const host = req.headers.host;
 	console.log(host);
-	const k = await admin
+	admin
 		.database()
 		.ref("/domains/")
 		.orderByChild('1')
@@ -234,24 +236,109 @@ exports.handleVisitor = functions.https.onRequest(async (req, resp) => {
 		.once('value').then((res) => {
 			const val = res.val()
 			const key = Object.keys(val)[0]
-			return key;
-		});
-	//get the last one
-	const domain = admin.database().ref('/domains/' + k)
-	domain
-		.child('4/' + uid)
-		.limitToLast(1)
-		.once('value').then((res) => {
-			console.log('who',res.val())
-			if (!res.val()) {
-				domain.child('4/' + uid)
-				.set({0:''})
-				.then(res => {
-					console.log('me?',res);
-				}).catch(err => {
-					console.log(err);
+				//get the last one
+			const domain = admin.database().ref('/domains/' + key)
+			domain
+				.child('4/' + uid)
+				.limitToLast(1)
+				.once('value').then((res) => {
+					if (!res.val()) {
+						domain.child('4/' + uid)
+						.set({0:''})// here we can put visitor info
+						.then(res => {
+							// saved ok
+							return true
+						}).catch(err => {
+							// something happend
+							console.log(err);
+							return undefined
+						});
+					}
+					return true;
+				}).catch(() => {
+					return false;
 				})
-			}
+			resp.send('/domains/' + key + '/4/' + uid);
+			return key;
+		}).catch(() => {
+			resp.status(500);
+			resp.send('error:' + err);
+			return false
+		});
+});
+
+/**
+ * handle write on client domain thread
+ * the client it's the only who has permison to write in firebase
+ */
+exports.sendMessage = functions.https.onCall((data) => {
+	const {uid, msg, type, thread} = data;
+	const ref = admin.database().ref(thread);
+	const ts = base64(new Date().getTime(), 8);
+	// get the last one
+	const hasMsg = ref.limitToLast(1)
+	.once('value').then(res => {
+		//console.log(res.val());
+		if (res.val() === null || !res.val()) {
+			// it has no message
+			return -1;
+		} else {
+			const val = res.val();
+			// give the last thread id
+			return parsemkey(Object.keys(val)[0]).thid
+		}
+	})
+	const displayName = admin.auth().getUser(uid)
+		.then(function(userRecord) {
+			// See the UserRecord reference doc for the contents of userRecord.
+			//console.log("Successfully fetched user data:", userRecord.toJSON());
+			return userRecord.toJSON().displayName;
 		})
-	resp.send(k);
-})
+		.catch(function(error) {
+			console.log("there's no user with that uid");
+			return false;
+		});
+	console.log(hasMsg);
+	if (hasMsg === -1) {
+		return setMessage(displayName, 0, ts, msg, uid, ref, type);
+	} else {
+		const next = (hasMsg + 1);
+		return setMessage(displayName, next, ts, msg, uid, ref, type);
+	}
+});
+/**
+ * set the messages into database
+ */
+function setMessage(displayName, next, ts, msg, uid, ref, type) {
+	if (!displayName) {
+		// the user it's a visitor
+		return ref.child(type + base64(next, 8) + ts)
+		.set({
+			0: 'VISITOR-' + msg,
+		}).then(() => {
+			return true
+		}).catch(() => {
+			return false
+		});
+	} else {
+		// the user it's an operator
+		return ref.child(type + base64(next, 8) + ts)
+		.set({
+			0: displayName + '-' + msg,
+			1: uid
+		}).then(() => {
+			return true
+		}).catch(() => {
+			return false
+		});
+	}
+}
+function parsemkey(base64safe) {
+	// NOTE: returns object
+	// TODO: validate base64safe
+	return {
+		tid:  base64( base64safe.slice(0,2) ),
+		thid: base64( base64safe.slice(2,10) ),
+		ts:  base64( base64safe.slice(10,8) )
+	};
+}
