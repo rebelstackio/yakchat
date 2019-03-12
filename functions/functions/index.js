@@ -220,13 +220,38 @@ base64.getChars = function(num, res) {
 	return base64.getChars(remaining, chars);
 };
 
-exports.handleVisitor = functions.https.onRequest((req, resp) => {
+exports.handleVisitor = functions.https.onRequest(async (req, resp) => {
 	// the unique user id or the browser fingerprint
 	const uid = req.query.u ? req.query.u : 'ddafb13befe7d0cbd978efa67a0a72b0';
 	// we get the domain it come from by the headers
 	const host = req.headers.host;
 	console.log(host);
-	admin.database().ref('/domains/')
-	.orderByChild('1')
-	resp.send('the route');
+	const k = await admin
+		.database()
+		.ref("/domains/")
+		.orderByChild('1')
+		.equalTo(host)
+		.once('value').then((res) => {
+			const val = res.val()
+			const key = Object.keys(val)[0]
+			return key;
+		});
+	//get the last one
+	const domain = admin.database().ref('/domains/' + k)
+	domain
+		.child('4/' + uid)
+		.limitToLast(1)
+		.once('value').then((res) => {
+			console.log('who',res.val())
+			if (!res.val()) {
+				domain.child('4/' + uid)
+				.set({0:''})
+				.then(res => {
+					console.log('me?',res);
+				}).catch(err => {
+					console.log(err);
+				})
+			}
+		})
+	resp.send(k);
 })
