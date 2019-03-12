@@ -221,9 +221,12 @@ base64.getChars = function(num, res) {
 };
 
 exports.handleVisitor = functions.https.onRequest((req, resp) => {
-	
-	const headers = req.headers;
-	console.log(headers)
-	const requestIp = req.connection.remoteAddress;
-	resp.send('some route');
+	// the unique user id or the browser fingerprint
+	const uid = req.query.u ? req.query.u : 'ddafb13befe7d0cbd978efa67a0a72b0';
+	// we get the domain it come from by the headers
+	const host = req.headers.host;
+	console.log(host);
+	admin.database().ref('/domains/')
+	.orderByChild('1')
+	resp.send('the route');
 })
