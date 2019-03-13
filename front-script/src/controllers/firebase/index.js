@@ -46,30 +46,25 @@ app.auth().onAuthStateChanged(function(user) {
  * @param {String} iniMsg
  * @param {String} name
  */
-export function singUpWithEmail (email, name, iniMsg) {
+export function singUpWithEmail (email, name) {
 	const hash = email.md5Encode();
-	const createThread = functions.httpsCallable('crateThread');
-	createThread({
-		id: hash, 
-		type: name,
-		iniMsg: iniMsg,
-		email: email,
-		channel: channel
+	const d = document.location.host;
+	let handler = functions.httpsCallable('handleVisitor');
+	handler({
+		u: hash,
+		d,
+		m: email,
+		n: name
 	}).then(v => {
-		if (v.data) {
-			localStorage.setItem('yak-hash', hash);
-			getMessages(hash);
-			global.storage.dispatch({ type: 'SING-UP-REQ' })
-		}
+		threadRoute = v.data;
+		listenRow(threadRoute);
+		localStorage.setItem('yak-hash', hash);
+		getMessages(threadRoute);
+		global.storage.dispatch({type: 'SING-UP-REQ'})
+		return v.data
+	}).catch(() => {
+		return '';
 	})
-}
-/**
- * TODO: stablish an user email connection
- * @description function that stablish an user email connection with firebase
- * @param {String} email
- */
-export function signInWithEmail (email) {
-	throw 'NOT-IMPLEMENTED';
 }
 /**
  * @description function that stablish an anonymous connection with firebase
@@ -85,6 +80,7 @@ export async function signInAnonymous () {
 		//
 	}
 }
+
 async function handleVisitor() {
 	if (lsTest() && localStorage.getItem('yak-hash')) {
 		hash = localStorage.getItem('yak-hash');
@@ -139,25 +135,6 @@ function listenRow (route) {
 	 });
 }
 /**
- * function util to transform the object into an array
- * @param {String} msg route to the messages
- */
-async function getMsgArray (msg) {
-	const response = [];
-	try {
-		const resp = await app.database()
-		.ref(msg)
-		.once('value');
-		resp.forEach(message => {
-			const val = objectDecompress(message.val(), newPreset);
-			response.push(val);
-		});
-	return response;
-	} catch (er) {
-		//
-	}
-}
-/**
  * handle send with cloud function
  */
 export function send (msg) {
@@ -173,46 +150,6 @@ export function send (msg) {
 			console.log(v);
 		})
 	}
-}
-/**
- * turn Object into an formated plain text, Only support one child
- * @returns String
- * @param {Object} t 
- */
-function objectCompress (t) {
-	const resp = []
-	Object.keys(t).forEach(key => {
-		let pairs = "";
-		if (typeof t[key] === 'object') {
-			pairs = objectCompress(t[key]).split(',').join(':');
-		} else {
-			pairs = t[key];
-		}
-		resp.push(pairs);
-	})
-	return resp.join(',');
-}
-/**
- * turn plain formated text into an object, Only support one child
- * @returns Object
- * @param {String} s
- * @param {Array} preset the keys for the object 
- */
-function objectDecompress (s, preset) {
-	let resp = {};
-	s.split(',').forEach((value, i) => {
-		if (typeof preset[i] === 'object') {
-			Object.keys(preset[i]).forEach(key => {
-				resp[key] = {};
-				value.split(':').forEach((properties, j) => {
-					resp[key][preset[i][key][j]] = properties;
-				})
-			})
-		} else {
-			resp[preset[i]] = value;
-		}
-	})
-	return resp;
 }
 /**
  * @description util function to make a localStorage test
