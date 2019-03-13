@@ -94,6 +94,47 @@ export async function getClientInfo () {
 			return '!0';
 		}
 	}
+
+/**
+ * 
+ * @param {String} value 
+ * @param {Int32Array} digis 
+ */
+function base64 (value, digis) {
+	if ( typeof(value) === 'number') {
+		if (digis) {
+			return base64.getChars(value, '').padStart(digis,'A');
+		} else {
+			return base64.getChars(value, '');
+		}
+	}
+	if (typeof(value) === 'string') {
+		if (value === '') { return NaN; }
+		return value.split('').reverse().reduce(function(prev, cur, i) {
+			return prev + base64.chars.indexOf(cur) * Math.pow(64, i);
+		}, 0);
+	}
+}
+base64.chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+base64.getChars = function(num, res) {
+	var mod = num % 64,
+	remaining = Math.floor(num / 64),
+	chars = base64.chars.charAt(mod) + res;
+	if (remaining <= 0) { return chars; }
+	return base64.getChars(remaining, chars);
+};
+
+	export function parsemkey(base64safe) {
+		// NOTE: returns object
+		// TODO: validate base64safe
+		return {
+			tid:  base64( base64safe.slice(0,2) ),
+			thid: base64( base64safe.slice(2,10) ),
+			ts:  base64( base64safe.slice(10,18) )
+		};
+	}
+
 	export default {
-		getClientInfo: getClientInfo
+		getClientInfo: getClientInfo,
+		parsemkey: parsemkey
 	}

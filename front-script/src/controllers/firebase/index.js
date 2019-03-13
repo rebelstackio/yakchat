@@ -1,8 +1,8 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/functions';
+import 'firebase/database';
 import { getClientInfo } from '../../utils';
-import { async } from '@firebase/util';
 
 /**
  * for testing and string size comparations
@@ -79,7 +79,8 @@ export async function signInAnonymous () {
 		await app.auth().signInAnonymously();
 		let hash = '';
 		const route = await handleVisitor();
-		getMessages(hash);
+		getMessages(route);
+		listenRow(route);
 	} catch (er) {
 		//
 	}
@@ -91,67 +92,38 @@ async function handleVisitor() {
 		hash = await getClientInfo();
 		localStorage.setItem('yak-hash', hash);
 	}
-	// Set up our HTTP request
-	var xhr = new XMLHttpRequest();
-	// Setup our listener to process completed requests
-	xhr.onload = function () {
-		// Process our return data
-		console.log(xhr);
-		if (xhr.status >= 200 && xhr.status < 300) {
-			// What do when the request is successful
-			console.log('success!', xhr);
-		} else {
-			// What do when the request fails
-			console.log('The request failed!');
-		}
-		
-	};
-	const domain = document.location.host;
-	xhr.open(
-		'GET',
-		'https://us-central1-yakchat-20e2a.cloudfunctions.net/handleVisitor?u=' + hash +
-		'&d=' + domain
-	);
-	xhr.send();
+	const d = document.location.host;
+	let handler = functions.httpsCallable('handleVisitor');
+	return await handler({
+		u: hash,
+		d
+	}).then(v => {
+		threadRoute = v.data;
+		return v.data
+	}).catch(() => {
+		return '';
+	})
 }
 /**
  * TODO: make this function to be compatible with singin users
  * @description get the messages and dispatch it
  * @param {String} route the firebase message route
- * @param {String} hash MD5 hash 
  */
-function getMessages (hash) {
+function getMessages (route) {
 	try {
-		app.database().ref('/messages/').once('value').then(res => {
-			let b = true;
-			res.forEach(child => {
-				const keys = atob(child.key).split(':');
-				if (keys[0] === channel && keys[1] === hash) {
-					threadRoute = '/messages/' + child.key;
-					listenRow(threadRoute);
-					getMsgArray(threadRoute).then(res => {
-						global.storage.dispatch({
-							type: 'FB-CONNECT',
-							msgList: res
-						})
-					})
-					b = false;
-				}
-			});
-			if (b) {
-				const createThread = functions.httpsCallable('crateThread');
-				createThread({
-					id: hash, type:'anonymous',
-					iniMsg:undefined,
-					email: undefined,
-					channel: channel
-				}).then(v => {
-					console.log(v);
-				})
-			}
+		app.database()
+		.ref(route)
+		.once('value').then((res) => {
+			global.storage.dispatch({
+				type: 'FB-CONNECT',
+				msgList: res.val()
+			})
+		}).catch(err => {
+			console.log(err)
 		})
 	} catch (err) {
 		///
+		console.log(err)
 	}
 }
 /**
@@ -162,7 +134,7 @@ function listenRow (route) {
 	app.database().ref(route).limitToLast(1).on('child_added', function(snapshot) {
 		global.storage.dispatch({
 			type: 'MSG-ARRIVE',
-			msg: objectDecompress(snapshot.val(), newPreset)
+			msg: {[snapshot.key]:snapshot.val()}
 		})
 	 });
 }
@@ -186,17 +158,20 @@ async function getMsgArray (msg) {
 	}
 }
 /**
- * TODO: public send message function
+ * handle send with cloud function
  */
 export function send (msg) {
 	if (threadRoute !== '') {
-		const t = objectCompress(msg);
-		app.database().ref(threadRoute)
-		.push()
-		.set(t)
-		.catch(err => {
-			console.log(err);
-		});
+		let sendMessage = functions.httpsCallable('sendMessage');
+		//const {uid, msg, type, thread} = data;
+		sendMessage({
+			uid: localStorage.getItem('yak-hash'),
+			msg: msg.message,
+			type: 'AA', // text
+			thread: threadRoute
+		}).then(v => {
+			console.log(v);
+		})
 	}
 }
 /**
