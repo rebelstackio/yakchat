@@ -1,5 +1,5 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
-import { instanceElement } from '../../utils';
+import { instanceElement, parsemkey } from '../../utils';
 import cogIcon from '../../css/icons/cog-solid.svg';
 import logoutIcon from '../../css/icons/sign-out-alt-solid.svg';
 import imageURL from '../../images/logo/yakchat.svg';
@@ -128,22 +128,29 @@ class Loby extends MetaComponent {
 	}
 	/**
 	 * @description create the messages
-	 * @param {Array} msgList 
+	 * @param {Object} msgList 
 	 */
 	createMessages (msgList) {
 		const body = document.querySelector('.msg-body');
 		body.innerHTML = '';
-		msgList.forEach(msg => {
-			const msgBox = instanceElement(
-				'div',
-				[msg.from === 'CLIENT' ? 'yak-view-item-left' : 'yak-view-item-right'],
-				false,
-				`<span class="msg-text">${msg.message}</span>
-				 <span class = "msg-date">${msg.date}</spna>
-				`
-			)
-			body.appendChild(msgBox);
-			body.scrollTop = body.scrollHeight;
+		Object.keys(msgList).forEach((msg, i) => {
+			if (i !== 0) {
+				const dataKey = parsemkey(msg);
+				const date = new Date(dataKey.ts).toDateString();
+				console.log(dataKey)
+				const isOperator = msgList[msg].length > 1;
+				const message = msgList[msg][0].split('-');
+				const msgBox = instanceElement(
+					'div',
+					[!isOperator ? 'yak-view-item-left' : 'yak-view-item-right'],
+					false,
+					`<span class="msg-text">${message[1]}</span>
+					 <span class = "msg-date">${message[0]} - ${date}</spna>
+					`
+				)
+				body.appendChild(msgBox);
+				body.scrollTop = body.scrollHeight;
+			} 
 		});
 	}
 	/**
@@ -173,7 +180,7 @@ class Loby extends MetaComponent {
 		return {
 			'CHAT-SELECTED': (state) => {
 				const {selectedMessages, clientSelected} = state.newState;
-				document.querySelector('#header-channel').innerHTML = '#' + clientSelected.name;
+				document.querySelector('#header-channel').innerHTML = '#' + clientSelected;
 				this.createMessages(selectedMessages);
 			},
 			'SEND-MESSAGE': (state) => {
