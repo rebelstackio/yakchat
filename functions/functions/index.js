@@ -201,14 +201,13 @@ exports.handleVisitor = functions.https.onRequest((req, resp) => {
 	const uid = req.query.u;
 	const name = req.query.n ? (req.query.n + '-') : '';
 	const email = req.query.m ? req.query.m : '';
-	// we get the domain it come from by the headers
-	const host = req.headers.host;
-	console.log(host);
+	const domain = req.query.d
+	console.log(domain);
 	admin
 		.database()
 		.ref("/domains/")
 		.orderByChild('1')
-		.equalTo(host)
+		.equalTo(domain)
 		.once('value').then((res) => {
 			const val = res.val()
 			const key = Object.keys(val)[0]
@@ -228,7 +227,7 @@ exports.handleVisitor = functions.https.onRequest((req, resp) => {
 				})
 			resp.send('/domains/' + key + '/4/' + uid);
 			return key;
-		}).catch(() => {
+		}).catch((err) => {
 			resp.status(500);
 			resp.send('error:' + err);
 			return false
