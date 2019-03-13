@@ -133,25 +133,28 @@ class Loby extends MetaComponent {
 	createMessages (msgList) {
 		const body = document.querySelector('.msg-body');
 		body.innerHTML = '';
-		Object.keys(msgList).forEach((msg, i) => {
-			if (i !== 0) {
-				const dataKey = parsemkey(msg);
-				const date = new Date(dataKey.ts).toDateString();
-				console.log(dataKey)
-				const isOperator = msgList[msg].length > 1;
-				const message = msgList[msg][0].split('-');
-				const msgBox = instanceElement(
-					'div',
-					[!isOperator ? 'yak-view-item-left' : 'yak-view-item-right'],
-					false,
-					`<span class="msg-text">${message[1]}</span>
-					 <span class = "msg-date">${message[0]} - ${date}</spna>
-					`
-				)
-				body.appendChild(msgBox);
-				body.scrollTop = body.scrollHeight;
-			} 
-		});
+		try {
+			Object.keys(msgList).forEach((msg, i) => {
+				if (i !== 0) {
+					const dataKey = parsemkey(msg);
+					const date = new Date(dataKey.ts).toDateString();
+					const isOperator = msgList[msg].length > 1;
+					const message = msgList[msg][0].split('-');
+					const msgBox = instanceElement(
+						'div',
+						[!isOperator ? 'yak-view-item-left' : 'yak-view-item-right'],
+						false,
+						`<span class="msg-text">${atob(message[1])}</span>
+						<span class = "msg-date">${message[0]} - ${date}</spna>
+						`
+					)
+					body.appendChild(msgBox);
+					body.scrollTop = body.scrollHeight;
+				} 
+			});
+		} catch (e) {
+			//
+		}
 	}
 	/**
 	 * handle the toggle sidebar
@@ -179,13 +182,12 @@ class Loby extends MetaComponent {
 	handleStoreEvents () {
 		return {
 			'CHAT-SELECTED': (state) => {
-				const {selectedMessages, clientSelected} = state.newState;
+				const {selectedMessages, clientSelected} = state.newState.Main;
 				document.querySelector('#header-channel').innerHTML = '#' + clientSelected;
 				this.createMessages(selectedMessages);
 			},
-			'SEND-MESSAGE': (state) => {
-				const {selectedMessages, clientSelected} = state.newState;
-				document.querySelector('#header-channel').innerHTML = '#' + clientSelected.name;
+			'MSG-ARRIVE': (state) => {
+				const {selectedMessages} = state.newState.Main;
 				this.createMessages(selectedMessages);
 			}
 		};
