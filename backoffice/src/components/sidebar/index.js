@@ -104,10 +104,33 @@ class Sidebar extends MetaComponent {
 			//
 		}
 	}
+	/**
+	 * list the client threads in his channel
+	 */
+	listClientThreads(msgObject) {
+		const sidebar = this.querySelector('#sidebar-content');
+		const thBox = this.querySelector('#threads')
+			? this.querySelector('#threads')
+			: instanceElement('ol', false, '#threads');
+		Object.keys(msgObject).forEach(uid => {
+			const type = msgObject[uid][0] === '' ? 'Visitor' : msgObject[uid][0];
+			const li = instanceElement('li', ['thread-item'], uid, type);
+			li.addEventListener('click', () => {
+				this.storage.dispatch({type: 'CHAT-SELECTED', data: {
+					clientSelected: type,
+					messages: msgObject[uid]
+				}})
+			})
+			thBox.appendChild(li);
+		});
+		sidebar.appendChild(thBox);
+	}
+
 	handleStoreEvents () {
 		return {
 			'CHANNEL-ARRIVE': (state) => {
 				this.createClientView(state.newState.channelList, state.newState.domain);
+				this.listClientThreads(state.newState.threads);
 			}
 		}
 	}

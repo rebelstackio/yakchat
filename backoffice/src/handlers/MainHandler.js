@@ -76,8 +76,8 @@ export default {
 			return { newState: state }
 		},
 		'CHAT-SELECTED': (action, state) => {
-			state.clientSelected = action.data;
-			state.selectedMessages = demoMessages;
+			state.clientSelected = action.data.clientSelected;
+			state.selectedMessages = action.data.messages;
 			return { newState: state }
 		},
 		'SEND-MESSAGE': (action, state) => {
@@ -123,6 +123,7 @@ export default {
 			const {value} = action.data;
 			state.domain = value ? value[1] : '';
 			state.storageKeys = value ? value[3]: '';
+			state.threads = value ? value[4]: [];
 			//TODO: MAKE THIS SUPPORT ONE TO MANY CHANNELS
 			state.channelList = [{title: value ? value[2]: ''}];
 			return { newState: state } 
