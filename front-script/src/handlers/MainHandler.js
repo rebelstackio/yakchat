@@ -7,7 +7,8 @@ import { signInAnonymous, send, singUpWithEmail } from '../controllers/firebase'
 const MainDefaultState = {
 	list: {},
 	isOpen: true,
-	thread: undefined
+	thread: undefined,
+	isLoading: true
 };
 
 export default {
@@ -24,6 +25,7 @@ export default {
 		},
 		'FB-CONNECT': (action, state) => {
 			state.Main.list = action.msgList;
+			state.Main.isLoading = false;
 			return { newState: state }
 		},
 		'SEND-MESSAGE': (action, state) => {

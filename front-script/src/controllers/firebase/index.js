@@ -147,7 +147,7 @@ export function send (msg) {
 			type: 'AA', // text
 			thread: threadRoute
 		}).then(v => {
-			console.log(v);
+			//
 		})
 	}
 }

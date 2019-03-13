@@ -123,7 +123,7 @@ class Sidebar extends MetaComponent {
 			li.addEventListener('click', () => {
 				this.storage.dispatch({type: 'CHAT-SELECTED', data: {
 					clientSelected: type,
-					messages: msgObject[uid],
+					messages: this.storage.getState().Main.threads[uid],
 					visitorId: uid
 				}})
 			})

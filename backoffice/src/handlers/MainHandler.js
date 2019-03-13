@@ -82,7 +82,8 @@ export default {
 			state.Main.clientSelected = action.data.clientSelected;
 			state.Main.selectedMessages = action.data.messages;
 			if (state.Main.visitorId !== action.data.visitorId) {
-				//
+				// remove listener
+				removeListener('/domains/' + state.Main.uid + '/4/' + state.Main.visitorId)
 			}
 			listenRow('/domains/' + state.Main.uid + '/4/' + action.data.visitorId)
 			state.Main.visitorId = action.data.visitorId;
@@ -91,6 +92,7 @@ export default {
 		'MSG-ARRIVE': (action, state) => {
 			const newList = Object.assign({}, state.Main.selectedMessages, action.msg)
 			state.Main.selectedMessages = newList;
+			state.Main.threads[state.Main.visitorId] = newList;
 			return { newState: state };
 		},
 		'SEND-MESSAGE': (action, state) => {

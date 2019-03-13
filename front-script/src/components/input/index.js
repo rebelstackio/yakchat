@@ -67,19 +67,18 @@ class yakInput extends MetaComponent {
 	 * function handle, dispatch send message action
 	 */
 	handleSend () {
-		if (this.input.value !== '') {
+		const isLoading = global.storage.getState().Main.isLoading;
+		if (this.input.value !== '' && !isLoading) {
 			const msg = {
-				date: new Date().toDateString(),
-				message: btoa(this.input.value),
-				by: 'CLIENT'
+				message: btoa(this.input.value)
 			}
 			global.storage.dispatch({
 				type: 'SEND-MESSAGE',
 				msg: msg
 			})
+			this.input.value = '';
+			this.send.className = 'yak-send-disable';
 		}
-		this.input.value = '';
-		this.send.className = 'yak-send-disable';
 	}
 }
 
