@@ -113,7 +113,12 @@ class Sidebar extends MetaComponent {
 			? this.querySelector('#threads')
 			: instanceElement('ol', false, '#threads');
 		Object.keys(msgObject).forEach(uid => {
-			const type = msgObject[uid][0] === '' ? 'Visitor' : msgObject[uid][0];
+			const type = msgObject[uid][0] === ''
+				? 'Visitor'
+				: `
+					${msgObject[uid][0].split('-')[0]}
+					<span>${msgObject[uid][0].split('-')[1]}</span>
+				`
 			const li = instanceElement('li', ['thread-item'], uid, type);
 			li.addEventListener('click', () => {
 				this.storage.dispatch({type: 'CHAT-SELECTED', data: {

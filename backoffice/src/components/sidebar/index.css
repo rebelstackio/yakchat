@@ -87,10 +87,14 @@ img.profile-img {
 	list-style: none;
 	background: rgba(255,255,255, .3);
 	margin: .5em 0;
-	height: 6vh;
 	color: #666;
 	cursor: pointer;
 	text-align: center;
-	padding-top: .2em;
 	border-radius: 2em;
+	display: grid;
+}
+
+.thread-item > span {
+	font-size: 14px;
+	font-style: italic;
 }
