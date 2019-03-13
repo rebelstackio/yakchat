@@ -196,14 +196,14 @@ base64.getChars = function(num, res) {
  * n is non mandatory name of the registrant
  * m non mandatory email of the registrant
  */
-exports.handleVisitor = functions.https.onRequest((req, resp) => {
+exports.handleVisitor = functions.https.onCall((req) => {
 	// the unique user id or the browser fingerprint
-	const uid = req.query.u;
-	const name = req.query.n ? (req.query.n + '-') : '';
-	const email = req.query.m ? req.query.m : '';
-	const domain = req.query.d
+	const uid = req.u;
+	const name = req.n ? (req.n + '-') : '';
+	const email = req.m ? req.m : '';
+	const domain = req.d
 	console.log(domain);
-	admin
+	return admin
 		.database()
 		.ref("/domains/")
 		.orderByChild('1')
@@ -221,12 +221,8 @@ exports.handleVisitor = functions.https.onRequest((req, resp) => {
 						domain.child('4/' + uid)
 						.set({0: name + email})
 					}
-					return true;
-				}).catch(() => {
-					return false;
-				})
-			resp.send('/domains/' + key + '/4/' + uid);
-			return key;
+				});
+				return '/domains/' + key + '/4/' + uid
 		}).catch((err) => {
 			resp.status(500);
 			resp.send('error:' + err);
