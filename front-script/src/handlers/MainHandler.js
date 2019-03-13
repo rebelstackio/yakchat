@@ -35,8 +35,8 @@ export default {
 			return { newState: state }
 		},
 		'SIGN-UP': (action, state) => {
-			const {email, name, msg} = action
-			singUpWithEmail(email, name, msg);
+			const {email, name} = action
+			singUpWithEmail(email, name);
 			return { newState: state }
 		}
 	}
