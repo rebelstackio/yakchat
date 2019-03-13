@@ -5,7 +5,7 @@ import { signInAnonymous, send, singUpWithEmail } from '../controllers/firebase'
 */
 
 const MainDefaultState = {
-	list: [],
+	list: {},
 	isOpen: true,
 	thread: undefined
 };
@@ -14,10 +14,8 @@ export default {
 	MainDefaultState,
 	MainHandler: {
 		'MSG-ARRIVE': (action, state) => {
-			let tmp = state.Main.list;
-			if (JSON.stringify(tmp[tmp.length - 1]) !== JSON.stringify(action.msg)) {
-				state.Main.list.push(action.msg)
-			}
+			const newList = Object.assign({}, state.Main.list, action.msg)
+			state.Main.list = newList;
 			return { newState: state };
 		},
 		'TOGGLE-CHAT': (action, state) => {

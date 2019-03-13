@@ -202,7 +202,6 @@ exports.handleVisitor = functions.https.onCall((req) => {
 	const name = req.n ? (req.n + '-') : '';
 	const email = req.m ? req.m : '';
 	const domain = req.d
-	console.log(domain);
 	return admin
 		.database()
 		.ref("/domains/")
@@ -216,7 +215,7 @@ exports.handleVisitor = functions.https.onCall((req) => {
 			domain
 				.child('4/' + uid)
 				.limitToLast(1)
-				.once('value').then((res) => {
+				.once('value', (res) => {
 					if (!res.val()) {
 						domain.child('4/' + uid)
 						.set({0: name + email})
@@ -239,35 +238,37 @@ exports.sendMessage = functions.https.onCall((data) => {
 	const ref = admin.database().ref(thread);
 	const ts = base64(new Date().getTime(), 8);
 	// get the last one
-	const hasMsg = ref.limitToLast(1)
+	return ref.limitToLast(1)
 	.once('value').then(res => {
 		//console.log(res.val());
-		if (res.val() === null || !res.val()) {
-			// it has no message
-			return -1;
-		} else {
-			const val = res.val();
-			// give the last thread id
-			return parsemkey(Object.keys(val)[0]).thid
-		}
-	})
-	const displayName = admin.auth().getUser(uid)
+		return admin.auth().getUser(uid)
 		.then(function(userRecord) {
 			// See the UserRecord reference doc for the contents of userRecord.
 			//console.log("Successfully fetched user data:", userRecord.toJSON());
-			return userRecord.toJSON().displayName;
+			const displayName = userRecord.toJSON().displayName;
+			if (res.val() === null || !res.val()) {
+				// it has no message
+				return setMessage(displayName, 0, ts, msg, uid, ref, type);
+			} else {
+				const val = res.val();
+				// give the last thread id
+				const next = isNaN(parsemkey(Object.keys(val)[0]).thid) ? 0 : parsemkey(Object.keys(val)[0]).thid
+				return setMessage(displayName, (next + 1), ts, msg, uid, ref, type);
+			}
 		})
 		.catch(function(error) {
-			console.log("there's no user with that uid");
-			return false;
+			console.log("must be a visitor or registrant");
+			if (res.val() === null || !res.val()) {
+				// it has no message
+				return setMessage(false, 0, ts, msg, uid, ref, type);
+			} else {
+				const val = res.val();
+				// give the last thread id
+				const next = isNaN(parsemkey(Object.keys(val)[0]).thid) ? 0 : parsemkey(Object.keys(val)[0]).thid
+				return setMessage(false, (next + 1), ts, msg, uid, ref, type);
+			}
 		});
-	console.log(hasMsg);
-	if (hasMsg === -1) {
-		return setMessage(displayName, 0, ts, msg, uid, ref, type);
-	} else {
-		const next = (hasMsg + 1);
-		return setMessage(displayName, next, ts, msg, uid, ref, type);
-	}
+	});
 });
 /**
  * set the messages into database
