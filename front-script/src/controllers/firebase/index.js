@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/functions';
 import { getClientInfo } from '../../utils';
+import { async } from '@firebase/util';
 
 /**
  * for testing and string size comparations
@@ -77,16 +78,41 @@ export async function signInAnonymous () {
 	try {
 		await app.auth().signInAnonymously();
 		let hash = '';
-		if (lsTest() && localStorage.getItem('yak-hash')) {
-			hash = localStorage.getItem('yak-hash');
-		} else {
-			hash = await getClientInfo();
-			localStorage.setItem('yak-hash', hash);
-		}
+		const route = await handleVisitor();
 		getMessages(hash);
 	} catch (er) {
 		//
 	}
+}
+async function handleVisitor() {
+	if (lsTest() && localStorage.getItem('yak-hash')) {
+		hash = localStorage.getItem('yak-hash');
+	} else {
+		hash = await getClientInfo();
+		localStorage.setItem('yak-hash', hash);
+	}
+	// Set up our HTTP request
+	var xhr = new XMLHttpRequest();
+	// Setup our listener to process completed requests
+	xhr.onload = function () {
+		// Process our return data
+		console.log(xhr);
+		if (xhr.status >= 200 && xhr.status < 300) {
+			// What do when the request is successful
+			console.log('success!', xhr);
+		} else {
+			// What do when the request fails
+			console.log('The request failed!');
+		}
+		
+	};
+	const domain = document.location.host;
+	xhr.open(
+		'GET',
+		'https://us-central1-yakchat-20e2a.cloudfunctions.net/handleVisitor?u=' + hash +
+		'&d=' + domain
+	);
+	xhr.send();
 }
 /**
  * TODO: make this function to be compatible with singin users
