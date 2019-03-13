@@ -73,7 +73,6 @@ input.bottom-input:focus {
 	cursor: pointer;
 	padding-left: 1em;
 	grid-column-gap: .3em;
-	width: 10vw;
 }
 
 .msg-head-logo > span { 

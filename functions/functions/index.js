@@ -88,36 +88,6 @@ exports.signup = functions.https.onCall((param) => {
 	});
 })
 
-exports.crateThread = functions.https.onCall((data, context) => {
-	let { id, type, iniMsg, email, channel } = data;
-	let from = 'CLIENT';
-	let isNew = true;
-	if (type === 'anonymous') {
-		iniMsg = 'Welcome to Yak-chat, you can signup in your upper right corner';
-		from = 'SERVER'
-		admin
-			.database()
-			.ref("/clients/" + id + ":" + visitor + "/")
-			.set(type + ',' + email);
-	} else {
-		admin.database().ref(`/clients/`)
-		
-		admin
-			.database()
-			.ref("/clients/"  + id + ":" + registrant + "/")
-			.set(type + ',' + email);
-	}
-	admin
-		.database()
-		.ref('/messages/' + Buffer.from(channel + ':' + id).toString('base64'))
-		.push()
-		.set(
-			new Date().toDateString() +
-			',' + Buffer.from(iniMsg).toString('base64') +
-			',' + from
-		);
-	return true;
-})
 
 var transporter = nodemailer.createTransport({
 	service: 'gmail',
@@ -221,10 +191,16 @@ base64.getChars = function(num, res) {
 };
 /**
  * handle each visitior per domain
+ * recive paramerer /?u=id&m=example@example.com&n=example
+ * u is mandatory visitor finger print or email md5 hashed
+ * n is non mandatory name of the registrant
+ * m non mandatory email of the registrant
  */
 exports.handleVisitor = functions.https.onRequest((req, resp) => {
 	// the unique user id or the browser fingerprint
 	const uid = req.query.u;
+	const name = req.query.n ? (req.query.n + '-') : '';
+	const email = req.query.m ? req.query.m : '';
 	// we get the domain it come from by the headers
 	const host = req.headers.host;
 	console.log(host);
@@ -244,15 +220,7 @@ exports.handleVisitor = functions.https.onRequest((req, resp) => {
 				.once('value').then((res) => {
 					if (!res.val()) {
 						domain.child('4/' + uid)
-						.set({0:''})// here we can put visitor info
-						.then(res => {
-							// saved ok
-							return true
-						}).catch(err => {
-							// something happend
-							console.log(err);
-							return undefined
-						});
+						.set({0: name + email})
 					}
 					return true;
 				}).catch(() => {
@@ -339,6 +307,6 @@ function parsemkey(base64safe) {
 	return {
 		tid:  base64( base64safe.slice(0,2) ),
 		thid: base64( base64safe.slice(2,10) ),
-		ts:  base64( base64safe.slice(10,8) )
+		ts:  base64( base64safe.slice(10,18) )
 	};
 }
