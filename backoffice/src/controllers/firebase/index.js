@@ -237,64 +237,38 @@ export function saveStorageSetting (data) {
 	});
 }
 /*--------------------------END-CLIENT------------------------------------------------*/
-/**
- * TODO: make this function to be compatible with singin users
- * @description get the messages and dispatch it
- * @param {String} route the firebase message route
- * @param {String} hash MD5 hash 
- */
-function getMessages (route, hash) {
-	try {
-		app.database().ref(route).once('value').then(res => {
-			let b = true
-			res.forEach(chld => {
-				const keys = atob(chld.key).split(':');
-				if (keys[0] === hash) {
-					const mssgs = chld.child('2');
-					threadRoute = route + chld.key;
-					listenRow(threadRoute);
-					global.storage.dispatch({
-						type: 'FB-CONNECT',
-						msgList: getMsgArray(mssgs)
-					})
-					console.log('has-threads');
-					b = false;
-				}
-			})
-			if (b) {
-				createThread(route, hash);
-			}
+
+export function send (data) {
+	const uid = localStorage.getItem('fb-hash');
+	const chnlUid = data.chnlUid;
+	const visitorId = data.visitorId
+	let sendMessage = functions.httpsCallable('sendMessage');
+		//const {uid, msg, type, thread} = data;
+		sendMessage({
+			uid: uid,
+			msg: data.message,
+			type: 'AA', // text
+			thread: 'domains/' + chnlUid + '/4/' + visitorId
+		}).then(v => {
+			console.log(v);
 		})
-	} catch (err) {
-		///
-	}
-}
-/**
- * @description create a thread if it's the first time in the plataform
- * @param {String} route route base for the messages
- * @param {String} id 
- */
-function createThread (route, id) {
-	app.database().ref(route)
-	.child(btoa(id + ':null'))
-	.set({
-		1: id
-	}).then(() => {
-		threadRoute = route + btoa(id + ':null');
-		listenRow(threadRoute);
-	})
 }
 /**
  * @description listen to changes in database with the current thread
  * @param {String} route 
  */
-function listenRow (route) {
-	app.database().ref(route + '/2').limitToLast(1).on('child_added', function(snapshot) {
+export function listenRow (route) {
+	app.database().ref(route).limitToLast(1).on('child_added', function(snapshot) {
 		global.storage.dispatch({
 			type: 'MSG-ARRIVE',
-			msg: objectDecompress(snapshot.val(), msgPreset)
+			msg: {[snapshot.key]: snapshot.val()}
 		})
 	 });
+}
+
+export function removeListener (route) {
+	app.database().ref(route)
+	.off('child_added');
 }
 /**
  * function util to transform the object into an array

@@ -123,7 +123,8 @@ class Sidebar extends MetaComponent {
 			li.addEventListener('click', () => {
 				this.storage.dispatch({type: 'CHAT-SELECTED', data: {
 					clientSelected: type,
-					messages: msgObject[uid]
+					messages: msgObject[uid],
+					visitorId: uid
 				}})
 			})
 			thBox.appendChild(li);
@@ -134,8 +135,11 @@ class Sidebar extends MetaComponent {
 	handleStoreEvents () {
 		return {
 			'CHANNEL-ARRIVE': (state) => {
-				this.createClientView(state.newState.channelList, state.newState.domain);
-				this.listClientThreads(state.newState.threads);
+				const channelList = this.storage.getState().Main.channelList;
+				const domain = this.storage.getState().Main.domain;
+				const threads = this.storage.getState().Main.threads;
+				this.createClientView(channelList,domain);
+				this.listClientThreads(threads);
 			}
 		}
 	}
