@@ -214,14 +214,21 @@ export function getClientChannels(uid) {
  * @param {*} uid 
  */
 export function updateClientChannel (channelName, domain, uid) {
-	app.database().ref('/domains/' + uid)
-	.set({
-		1: domain,
-		2: channelName
-	}).then(() => {
-		console.log('update channel success');
-		getClientChannels(uid);
-	});
+	const ref = app.database().ref('/domains/' + uid)
+	if (channelName !== '') {
+		ref.child('2').set(channelName)
+		.then(() => {
+			console.log('update channel success');
+			getClientChannels(uid);
+		});
+	}
+	if (domain !== '') {
+		ref.child('1').set(domain)
+		.then(() => {
+			console.log('update domain success')
+			getClientChannels(uid);
+		})
+	}
 }
 /**
  * update the firebase and analytics tokens in client settings
