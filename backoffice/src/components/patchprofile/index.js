@@ -62,9 +62,11 @@ class PatchProfile extends MetaComponent {
 		.addEventListener('click', () => {
 			this.querySelector('#profile-popup').classList.add('hide');
 		})
-		global.storage.on('LOGIN-SUCCESS', (state) => {
-			this.displayName = state.newState.displayName;
-			this.email = state.newState.email;
+		global.storage.on('OPEN-PROFILE', () => {
+			console.log(global.storage.getState().Main)
+			const {displayName, email} = global.storage.getState().Main;
+			this.displayName = displayName;
+			this.email = email;
 		})
 	}
 
