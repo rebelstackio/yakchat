@@ -10,7 +10,8 @@ import {
 	saveStorageSetting,
 	send,
 	listenRow,
-	removeListener
+	removeListener,
+	getProfileImg
 } from '../controllers/firebase';
 
 const MainDefaultState = {
@@ -65,6 +66,7 @@ export default {
 			state.Main.uid = action.uid;
 			state.Main.displayName = action.displayName;
 			state.Main.email = action.email;
+			getProfileImg(state.Main.uid);
 			if (action.accessLevel >= 5) {
 				//get channels
 				getClientChannels(action.uid);
@@ -151,6 +153,12 @@ export default {
 		'SAVE-STORAGE-SETTING': (action, state) => {
 			action.data.uid = localStorage.getItem('fb-hash');
 			saveStorageSetting(action.data)
+			return { newState: state }
+		},
+		'PROFILE-CHANGED': (action, state) => {
+			const { displayName, email } = action.data
+			state.Main.displayName = displayName ? displayName : state.Main.displayName;
+			state.Main.email = email ? email : state.Main.email;
 			return { newState: state }
 		}
 	}

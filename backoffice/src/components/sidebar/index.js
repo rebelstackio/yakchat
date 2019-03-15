@@ -22,6 +22,7 @@ class Sidebar extends MetaComponent {
 			false,
 			`
 				<img src="${urlImg}" class="profile-img"></img>
+				<span id="user-name"><span>
 			`
 		);
 		profile.querySelector('.profile-img')
@@ -140,6 +141,17 @@ class Sidebar extends MetaComponent {
 				const threads = this.storage.getState().Main.threads;
 				this.createClientView(channelList,domain);
 				this.listClientThreads(threads);
+			},
+			'LOGIN-SUCCESS': () => {
+				this.querySelector('#user-name').innerHTML = this.storage.getState().Main.displayName;
+			},
+			'PROFILE-CHANGED': (state) => {
+				const { displayName } = state.newState.Main;
+				this.querySelector('#user-name').innerHTML = displayName;
+			},
+			'UPLOAD-SUCCESS': () => {
+				const {uid} = this.storage.getState().Main;
+				this.querySelector('.profile-img').src = localStorage.getItem(uid);
 			}
 		}
 	}

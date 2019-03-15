@@ -149,11 +149,10 @@ class Settings extends MetaComponent {
 				}
 			},
 			'LOGIN-SUCCESS': (state) => {
-				this.accessLevel = state.newState.accessLevel;
+				this.accessLevel = state.newState.Main.accessLevel;
 			},
 			'CHANNEL-ARRIVE': (state) => {
-				console.log(state);
-				this.storageKeys = state.newState.storageKeys;
+				this.storageKeys = state.newState.Main.storageKeys;
 			}
 		}
 	}
