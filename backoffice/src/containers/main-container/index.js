@@ -126,7 +126,7 @@ class YakMainContainer extends MetaContainer {
 	handleStoreEvents () {
 		const { storage } = global;
 		storage.on('LOGIN-SUCCESS', (state) => {
-			const {accessLevel, admin, auth} = state.newState;
+			const {accessLevel, admin, auth} = state.newState.Main;
 			this.auth = auth;
 			this.createRoleView(accessLevel, admin);
 		});

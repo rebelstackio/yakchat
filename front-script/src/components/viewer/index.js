@@ -1,4 +1,5 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
+import { parsemkey } from '../../utils'
 import './index.css';
 
 class Viewer extends MetaComponent {
@@ -23,17 +24,22 @@ class Viewer extends MetaComponent {
 		this.listContent.innerHTML = '';
 		this.listContent.className = 'yak-viewer-list';
 		try {
-			list.map((l) => {
-				const listItem = document.createElement('div');
-				const msg = document.createElement('span');
-				const from = document.createElement('span');
-				listItem.className = l.by === 'CLIENT' ? 'yak-view-item-right' : 'yak-view-item-left';
-				msg.className = 'yak-view-msg';
-				from.className = 'yak-view-from';
-				msg.textContent = atob(l.message);
-				from.textContent = l.date;
-				listItem.append(msg, from);
-				this.listContent.appendChild(listItem);
+			Object.keys(list).map((l, i) => {
+				if (i !== 0) {
+					const listItem = document.createElement('div');
+					const msg = document.createElement('span');
+					const from = document.createElement('span');
+					const msgData = list[l][0].split('-');
+					const isOperator = list[l].length > 1;
+					const keyData = parsemkey(l);
+					listItem.className = !isOperator ? 'yak-view-item-right' : 'yak-view-item-left';
+					msg.className = 'yak-view-msg';
+					from.className = 'yak-view-from';
+					msg.textContent = atob(msgData[1]);
+					from.textContent = msgData[0] + ' ' + new Date(keyData.ts).toDateString()
+					listItem.append(msg, from);
+					this.listContent.appendChild(listItem);
+				}
 			})
 		} catch (er) {
 			///

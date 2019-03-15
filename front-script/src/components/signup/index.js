@@ -34,13 +34,11 @@ class Signup extends MetaComponent {
 		submit.innerHTML = 'Submit';
 		submit.addEventListener('click', () => {
 			if (nameInput.value !== '' &&
-				emailInput.value !== '' &&
-				msgTextArea.value !== '') {
+				emailInput.value !== '') {
 					global.storage.dispatch({
 						type: 'SIGN-UP',
 						email: emailInput.value,
-						name: nameInput.value,
-						msg: msgTextArea.value
+						name: nameInput.value
 					});
 			}
 		})
