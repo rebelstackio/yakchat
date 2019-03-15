@@ -8,7 +8,7 @@ class PatchProfile extends MetaComponent {
 	 * MetaComponent constructor needs storage.
 	 */
 	constructor () {
-		super();
+		super(global.storage);
 	}
 
 	get email() {
@@ -62,12 +62,6 @@ class PatchProfile extends MetaComponent {
 		.addEventListener('click', () => {
 			this.querySelector('#profile-popup').classList.add('hide');
 		})
-		global.storage.on('OPEN-PROFILE', () => {
-			console.log(global.storage.getState().Main)
-			const {displayName, email} = global.storage.getState().Main;
-			this.displayName = displayName;
-			this.email = email;
-		})
 	}
 
 	render () {
@@ -115,6 +109,19 @@ class PatchProfile extends MetaComponent {
 				uid: global.storage.getState().Main.uid
 			}
 		})
+	}
+
+	handleStoreEvents () {
+		return {
+			'OPEN-PROFILE': () => {
+				const {displayName, email} = global.storage.getState().Main;
+				this.displayName = displayName;
+				this.email = email;
+			},
+			'PROFILE-CHANGED': () => {
+				this.querySelector('#profile-popup').classList.add('hide');
+			}
+		}
 	}
 
 }
