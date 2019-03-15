@@ -151,6 +151,20 @@ export function uploadProfileImg (img, uuid) {
 	})
 }
 /**
+ * fetch the firebase url for your profile image
+ * @param {*} uid 
+ */
+export function getProfileImg(uid) {
+	var storageRef = storage.ref(uid + "/profile.jpg");
+	if (!localStorage.getItem(uid)) {
+		storageRef.getDownloadURL().then(function(url) {
+				localStorage.setItem(uid, url)
+				global.storage.dispatch({ type: 'UPLOAD-SUCCESS' });
+			}).catch(function(error) {
+		});
+	}
+}
+/**
  * 
  * @param {*} email 
  * @param {*} newPassword 
@@ -168,14 +182,18 @@ export function patchProfile (email, newPassword, currentPassword , displayName)
 			// if not empty and not the same
 			user.updateEmail(email)
 			.then(() => {
-				console.log('email changed');
+				global.storage.dispatch({ type: 'PROFILE-CHANGED', data:{
+					email
+				}});
 			})
 		}
 		if (displayName !== '' && displayName !== oldName) {
 			// if not empty and not the same
 			user.updateProfile({displayName: displayName})
 			.then(() => {
-				console.log('display name changed');
+				global.storage.dispatch({ type: 'PROFILE-CHANGED', data:{
+					displayName
+				}});
 			})
 		}
 		if(newPassword !== '' && newPassword !== currentPassword) {
@@ -195,7 +213,7 @@ export function patchProfile (email, newPassword, currentPassword , displayName)
  */
 export function getClientChannels(uid) {
 	app.database().ref('/domains/' + uid)
-	.once('value', (value) => {
+	.on('value', (value) => {
 		global.storage.dispatch({
 			type: 'CHANNEL-ARRIVE',
 			data: {

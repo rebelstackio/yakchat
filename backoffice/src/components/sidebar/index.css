@@ -2,7 +2,7 @@ yak-sidebar.loby-side-menu > div {
 	display: grid;
 	grid-template-rows: 20vh 8vh 1fr;
 	padding: 1em;
-	grid-row-gap: 1em;
+	grid-row-gap: 1.3em;
 	font-size: 1.5em;
 }
 
@@ -81,6 +81,11 @@ img.profile-img {
 
 .side-profile {
 	display: grid;
+}
+
+span#user-name {
+	text-align: center;
+	color: #fff;
 }
 
 .thread-item {
