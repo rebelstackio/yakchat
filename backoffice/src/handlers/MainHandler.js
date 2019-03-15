@@ -7,7 +7,10 @@ import {
 	patchProfile,
 	getClientChannels,
 	updateClientChannel,
-	saveStorageSetting
+	saveStorageSetting,
+	send,
+	listenRow,
+	removeListener
 } from '../controllers/firebase';
 
 const MainDefaultState = {
@@ -56,12 +59,12 @@ export default {
 			return { newState: state };
 		},
 		'LOGIN-SUCCESS': (action, state) => {
-			state.auth = true;
-			state.accessLevel = action.accessLevel;
-			state.admin = action.admin;
-			state.uid = action.uid;
-			state.displayName = action.displayName;
-			state.email = action.email;
+			state.Main.auth = true;
+			state.Main.accessLevel = action.accessLevel;
+			state.Main.admin = action.admin;
+			state.Main.uid = action.uid;
+			state.Main.displayName = action.displayName;
+			state.Main.email = action.email;
 			if (action.accessLevel >= 5) {
 				//get channels
 				getClientChannels(action.uid);
@@ -71,29 +74,38 @@ export default {
 		'LOGOUT': (action, state) => {
 			singOut();
 			localStorage.removeItem('fb-hash');
-			state.auth = false;
-			state.uid = 0;
+			state.Main.auth = false;
+			state.Main.uid = 0;
 			return { newState: state }
 		},
 		'CHAT-SELECTED': (action, state) => {
-			state.clientSelected = action.data;
-			state.selectedMessages = demoMessages;
+			state.Main.clientSelected = action.data.clientSelected;
+			state.Main.selectedMessages = action.data.messages;
+			if (state.Main.visitorId !== action.data.visitorId) {
+				// remove listener
+				removeListener('/domains/' + state.Main.uid + '/4/' + state.Main.visitorId)
+			}
+			listenRow('/domains/' + state.Main.uid + '/4/' + action.data.visitorId)
+			state.Main.visitorId = action.data.visitorId;
 			return { newState: state }
 		},
+		'MSG-ARRIVE': (action, state) => {
+			const newList = Object.assign({}, state.Main.selectedMessages, action.msg)
+			state.Main.selectedMessages = newList;
+			state.Main.threads[state.Main.visitorId] = newList;
+			return { newState: state };
+		},
 		'SEND-MESSAGE': (action, state) => {
-			/**
-			 * TODO: make a real api call
-			 */
-			if (!state.selectedMessages) state.selectedMessages = []
-			state.selectedMessages.push({
-				date: new Date().toDateString(),
-				message: action.data,
-				from: 'SERVER'
-			});
+			
+			send({
+				visitorId: state.Main.visitorId,
+				chnlUid: state.Main.uid,
+				message: btoa(action.data)
+			})
 			return { newState: state }
 		},
 		'TOGGLE-SOUND': (action, state) => {
-			state.isSoundEnable = !state.isSoundEnable;
+			state.Main.isSoundEnable = !state.isSoundEnable;
 			return { newState: state }
 		},
 		'CHNG-PASS': (action, state) => {
@@ -121,10 +133,11 @@ export default {
 		},
 		'CHANNEL-ARRIVE': (action, state) => {
 			const {value} = action.data;
-			state.domain = value ? value[1] : '';
-			state.storageKeys = value ? value[3]: '';
+			state.Main.domain = value ? value[1] : '';
+			state.Main.storageKeys = value ? value[3]: '';
+			state.Main.threads = value ? value[4]: [];
 			//TODO: MAKE THIS SUPPORT ONE TO MANY CHANNELS
-			state.channelList = [{title: value ? value[2]: ''}];
+			state.Main.channelList = [{title: value ? value[2]: ''}];
 			return { newState: state } 
 		},
 		'UPDATE-CHANNEL': (action, state) => {

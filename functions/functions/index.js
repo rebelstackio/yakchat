@@ -88,36 +88,6 @@ exports.signup = functions.https.onCall((param) => {
 	});
 })
 
-exports.crateThread = functions.https.onCall((data, context) => {
-	let { id, type, iniMsg, email, channel } = data;
-	let from = 'CLIENT';
-	let isNew = true;
-	if (type === 'anonymous') {
-		iniMsg = 'Welcome to Yak-chat, you can signup in your upper right corner';
-		from = 'SERVER'
-		admin
-			.database()
-			.ref("/clients/" + id + ":" + visitor + "/")
-			.set(type + ',' + email);
-	} else {
-		admin.database().ref(`/clients/`)
-		
-		admin
-			.database()
-			.ref("/clients/"  + id + ":" + registrant + "/")
-			.set(type + ',' + email);
-	}
-	admin
-		.database()
-		.ref('/messages/' + Buffer.from(channel + ':' + id).toString('base64'))
-		.push()
-		.set(
-			new Date().toDateString() +
-			',' + Buffer.from(iniMsg).toString('base64') +
-			',' + from
-		);
-	return true;
-})
 
 var transporter = nodemailer.createTransport({
 	service: 'gmail',
@@ -183,3 +153,156 @@ exports.inviteOperator = functions.https.onCall((param) => {
 		return false;
 	});
 })
+
+/**
+ * 0 = text
+ * 1 = action
+ * 2 = url_change
+ */
+const _types = ['AA', 'AB', 'AC']
+
+/**
+ * 
+ * @param {String} value 
+ * @param {Int32Array} digis 
+ */
+function base64 (value, digis) {
+	if ( typeof(value) === 'number') {
+		if (digis) {
+			return base64.getChars(value, '').padStart(digis,'A');
+		} else {
+			return base64.getChars(value, '');
+		}
+	}
+	if (typeof(value) === 'string') {
+		if (value === '') { return NaN; }
+		return value.split('').reverse().reduce(function(prev, cur, i) {
+			return prev + base64.chars.indexOf(cur) * Math.pow(64, i);
+		}, 0);
+	}
+}
+base64.chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+base64.getChars = function(num, res) {
+	var mod = num % 64,
+	remaining = Math.floor(num / 64),
+	chars = base64.chars.charAt(mod) + res;
+	if (remaining <= 0) { return chars; }
+	return base64.getChars(remaining, chars);
+};
+/**
+ * handle each visitior per domain
+ * recive paramerer /?u=id&m=example@example.com&n=example
+ * u is mandatory visitor finger print or email md5 hashed
+ * n is non mandatory name of the registrant
+ * m non mandatory email of the registrant
+ */
+exports.handleVisitor = functions.https.onCall((req) => {
+	// the unique user id or the browser fingerprint
+	const uid = req.u;
+	const name = req.n ? (req.n + '-') : '';
+	const email = req.m ? req.m : '';
+	const domain = req.d
+	return admin
+		.database()
+		.ref("/domains/")
+		.orderByChild('1')
+		.equalTo(domain)
+		.once('value').then((res) => {
+			const val = res.val()
+			const key = Object.keys(val)[0]
+				//get the last one
+			const domain = admin.database().ref('/domains/' + key)
+			domain
+				.child('4/' + uid)
+				.limitToLast(1)
+				.once('value', (res) => {
+					if (!res.val()) {
+						domain.child('4/' + uid)
+						.set({0: name + email})
+					}
+				});
+				return '/domains/' + key + '/4/' + uid
+		}).catch((err) => {
+			resp.status(500);
+			resp.send('error:' + err);
+			return false
+		});
+});
+
+/**
+ * handle write on client domain thread
+ * the client it's the only who has permison to write in firebase
+ */
+exports.sendMessage = functions.https.onCall((data) => {
+	const {uid, msg, type, thread} = data;
+	const ref = admin.database().ref(thread);
+	const ts = base64(new Date().getTime(), 8);
+	// get the last one
+	return ref.limitToLast(1)
+	.once('value').then(res => {
+		//console.log(res.val());
+		return admin.auth().getUser(uid)
+		.then(function(userRecord) {
+			// See the UserRecord reference doc for the contents of userRecord.
+			//console.log("Successfully fetched user data:", userRecord.toJSON());
+			const displayName = userRecord.toJSON().displayName;
+			if (res.val() === null || !res.val()) {
+				// it has no message
+				return setMessage(displayName, 0, ts, msg, uid, ref, type);
+			} else {
+				const val = res.val();
+				// give the last thread id
+				const next = isNaN(parsemkey(Object.keys(val)[0]).thid) ? 0 : parsemkey(Object.keys(val)[0]).thid
+				return setMessage(displayName, (next + 1), ts, msg, uid, ref, type);
+			}
+		})
+		.catch(function(error) {
+			console.log("must be a visitor or registrant");
+			if (res.val() === null || !res.val()) {
+				// it has no message
+				return setMessage(false, 0, ts, msg, uid, ref, type);
+			} else {
+				const val = res.val();
+				// give the last thread id
+				const next = isNaN(parsemkey(Object.keys(val)[0]).thid) ? 0 : parsemkey(Object.keys(val)[0]).thid
+				return setMessage(false, (next + 1), ts, msg, uid, ref, type);
+			}
+		});
+	});
+});
+/**
+ * set the messages into database
+ */
+function setMessage(displayName, next, ts, msg, uid, ref, type) {
+	if (!displayName) {
+		// the user it's a visitor
+		return ref.child(type + base64(next, 8) + ts)
+		.set({
+			0: 'VISITOR-' + msg,
+		}).then(() => {
+			return true
+		}).catch(() => {
+			return false
+		});
+	} else {
+		// the user it's an operator
+		return ref.child(type + base64(next, 8) + ts)
+		.set({
+			0: displayName + '-' + msg,
+			1: uid
+		}).then(() => {
+			return true
+		}).catch(() => {
+			return false
+		});
+	}
+}
+function parsemkey(base64safe) {
+	// NOTE: returns object
+	// TODO: validate base64safe
+	return {
+		tid:  base64( base64safe.slice(0,2) ),
+		thid: base64( base64safe.slice(2,10) ),
+		ts:  base64( base64safe.slice(10,18) )
+	};
+}

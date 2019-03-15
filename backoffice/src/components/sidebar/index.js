@@ -14,6 +14,8 @@ class Sidebar extends MetaComponent {
 		this.channelList = global.storage.getState().Main.channelList;
 		this.accessLevel = global.storage.getState().Main.accessLevel;
 		const urlImg = localStorage.getItem(uid) ? localStorage.getItem(uid) : defaulAvatar;
+		const chnlBox = instanceElement('div', ['channel-box'], 'channel-t0');
+		const thBox = instanceElement('ol', false, 'threads');
 		const profile = instanceElement(
 			'div',
 			['side-profile'],
@@ -24,6 +26,7 @@ class Sidebar extends MetaComponent {
 		);
 		profile.querySelector('.profile-img')
 		.addEventListener('click', () => {
+			global.storage.dispatch({ type: 'OPEN-PROFILE' })
 			document.querySelector('#profile-popup').classList.toggle('hide');
 		})
 		const search = instanceElement(
@@ -34,7 +37,7 @@ class Sidebar extends MetaComponent {
 			 <i class="fa fa-search"></i>
 			`
 		);
-		content.append(profile, search);
+		content.append(profile, search, chnlBox, thBox);
 		return content;
 	}
 
@@ -48,8 +51,6 @@ class Sidebar extends MetaComponent {
 	createClientView (channelList, domain) {
 		const sidebar = this.querySelector('#sidebar-content');
 		const chnlBox = this.querySelector('#channel-t0')
-			? this.querySelector('#channel-t0')
-			: instanceElement('div', ['channel-box'], 'channel-t0');
 		chnlBox.innerHTML = '';
 		channelList.forEach(chnl => {
 			const chEl = instanceElement('div', ['collapse'], false,
@@ -104,10 +105,41 @@ class Sidebar extends MetaComponent {
 			//
 		}
 	}
+	/**
+	 * list the client threads in his channel
+	 */
+	listClientThreads(msgObject) {
+		const sidebar = this.querySelector('#sidebar-content');
+		const thBox = this.querySelector('#threads');
+		thBox.innerHTML = '';
+		Object.keys(msgObject).forEach(uid => {
+			const type = msgObject[uid][0] === ''
+				? 'Visitor'
+				: `
+					${msgObject[uid][0].split('-')[0]}
+					<span>${msgObject[uid][0].split('-')[1]}</span>
+				`
+			const li = instanceElement('li', ['thread-item'], uid, type);
+			li.addEventListener('click', () => {
+				this.storage.dispatch({type: 'CHAT-SELECTED', data: {
+					clientSelected: type,
+					messages: this.storage.getState().Main.threads[uid],
+					visitorId: uid
+				}})
+			})
+			thBox.appendChild(li);
+		});
+		sidebar.appendChild(thBox);
+	}
+
 	handleStoreEvents () {
 		return {
 			'CHANNEL-ARRIVE': (state) => {
-				this.createClientView(state.newState.channelList, state.newState.domain);
+				const channelList = this.storage.getState().Main.channelList;
+				const domain = this.storage.getState().Main.domain;
+				const threads = this.storage.getState().Main.threads;
+				this.createClientView(channelList,domain);
+				this.listClientThreads(threads);
 			}
 		}
 	}

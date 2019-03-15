@@ -5,19 +5,18 @@ import { signInAnonymous, send, singUpWithEmail } from '../controllers/firebase'
 */
 
 const MainDefaultState = {
-	list: [],
+	list: {},
 	isOpen: true,
-	thread: undefined
+	thread: undefined,
+	isLoading: true
 };
 
 export default {
 	MainDefaultState,
 	MainHandler: {
 		'MSG-ARRIVE': (action, state) => {
-			let tmp = state.Main.list;
-			if (JSON.stringify(tmp[tmp.length - 1]) !== JSON.stringify(action.msg)) {
-				state.Main.list.push(action.msg)
-			}
+			const newList = Object.assign({}, state.Main.list, action.msg)
+			state.Main.list = newList;
 			return { newState: state };
 		},
 		'TOGGLE-CHAT': (action, state) => {
@@ -26,6 +25,7 @@ export default {
 		},
 		'FB-CONNECT': (action, state) => {
 			state.Main.list = action.msgList;
+			state.Main.isLoading = false;
 			return { newState: state }
 		},
 		'SEND-MESSAGE': (action, state) => {
@@ -37,8 +37,8 @@ export default {
 			return { newState: state }
 		},
 		'SIGN-UP': (action, state) => {
-			const {email, name, msg} = action
-			singUpWithEmail(email, name, msg);
+			const {email, name} = action
+			singUpWithEmail(email, name);
 			return { newState: state }
 		}
 	}
