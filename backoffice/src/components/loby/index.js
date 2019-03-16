@@ -133,16 +133,18 @@ class Loby extends MetaComponent {
 	createMessages (msgList) {
 		const body = document.querySelector('.msg-body');
 		body.innerHTML = '';
+		const uid = this.storage.getState().Main.uid;
 		try {
 			Object.keys(msgList).forEach((msg, i) => {
 				if (i !== 0) {
 					const dataKey = parsemkey(msg);
 					const date = new Date(dataKey.ts).toDateString();
-					const isOperator = msgList[msg].length > 1;
+					const isYou = msgList[msg][1] === uid;
+					//const isOperator = msgList[msg].length > 1;
 					const message = msgList[msg][0].split('-');
 					const msgBox = instanceElement(
 						'div',
-						[!isOperator ? 'yak-view-item-left' : 'yak-view-item-right'],
+						[!isYou ? 'yak-view-item-left' : 'yak-view-item-right'],
 						false,
 						`<span class="msg-text">${atob(message[1])}</span>
 						<span class = "msg-date">${message[0]} - ${date}</spna>

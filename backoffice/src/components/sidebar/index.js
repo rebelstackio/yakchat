@@ -76,36 +76,36 @@ class Sidebar extends MetaComponent {
 		sidebar.appendChild(chnlBox);
 	}
 
-	createChnlView (el) {
-		const { chnlList } = global.storage.getState().Main;
-		const chnlBox = instanceElement('div', ['channel-box']);
-		try {
-			chnlList.forEach(chnl => {
-				const chEl = instanceElement('div', ['collapse'], false,
-				`<span class="chnl-title">
-					${chnl.title} 
-				 	<i class="fa fa-caret-right"></i>
-				 </span>`
-				 );
-				chEl.querySelector('.chnl-title').addEventListener('click', () => {
-					chEl.classList.toggle('collapse');
+	createOperatorView (channelList) {
+		const chnlBox = this.querySelector('#channel-t0');
+		chnlBox.innerHTML = '';
+		const selector = instanceElement('select', false, 'channel-select',
+			`
+				<option value="0"> Select Channel </option>
+			`
+		);
+		Object.keys(channelList).forEach((key) => {
+			const option = instanceElement('option', false, key,
+				channelList[key][2] ? channelList[key][2] : 'NOT-SET',
+				[{value: key}]
+			);
+			selector.appendChild(option);
+		});
+		selector.addEventListener('change', () => {
+			if (this.selectChannel != 1) {
+				const threads = this.storage.getState().Main.channelList[selector.value];
+				this.storage.dispatch({
+					type: 'THREAD-SELECTED',
+					threads: threads[4] ? threads[4] : {},
+					DID: selector.value
 				})
-				const ul = instanceElement('ul');
-				chnl.clientList.forEach(cl => {
-					const li = instanceElement('li', false, cl.id, cl.name);
-					li.addEventListener('click', () => {
-						this.selectChat(cl);
-					})
-					ul.appendChild(li);
-				})
-				chEl.appendChild(ul);
-				chnlBox.appendChild(chEl);
-			});
-			el.appendChild(chnlBox);
-		} catch (err) {
-			//
-		}
+				document.querySelector('.msg-body').innerHTML = '';
+				this.listClientThreads(threads[4] ? threads[4] : {});
+			}
+		})
+		chnlBox.appendChild(selector);
 	}
+
 	/**
 	 * list the client threads in his channel
 	 */
@@ -152,6 +152,10 @@ class Sidebar extends MetaComponent {
 			'UPLOAD-SUCCESS': () => {
 				const {uid} = this.storage.getState().Main;
 				this.querySelector('.profile-img').src = localStorage.getItem(uid);
+			},
+			'OPERATOR-DATA': () => {
+				const { channelList } = this.storage.getState().Main;
+				this.createOperatorView(channelList);
 			}
 		}
 	}
