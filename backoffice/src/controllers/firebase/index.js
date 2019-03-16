@@ -1,5 +1,4 @@
 import * as firebase from 'firebase';
-import { getClientInfo } from '../../utils';
 
 /**
  * for testing and string size comparations
@@ -262,7 +261,21 @@ export function saveStorageSetting (data) {
 	});
 }
 /*--------------------------END-CLIENT------------------------------------------------*/
-
+/**-------------------------OPERATORS------------------------------------------------ */
+export function getOperatorChannels () {
+	app.database().ref('domains/')
+	.on('value', (res) => {
+		let chArray = {}
+		res.forEach((d) => {
+			chArray[d.key] = d.toJSON();
+		})
+		global.storage.dispatch({ type: 'OPERATOR-DATA',
+		data: {
+			value: chArray
+		}})
+	})
+}
+/**-------------------------END-OPERATORS-------------------------------------------- */
 export function send (data) {
 	const uid = localStorage.getItem('fb-hash');
 	const chnlUid = data.chnlUid;
@@ -294,72 +307,4 @@ export function listenRow (route) {
 export function removeListener (route) {
 	app.database().ref(route)
 	.off('child_added');
-}
-/**
- * function util to transform the object into an array
- * @param {Object} msg 
- */
-function getMsgArray (msg) {
-	const resp = [];
-	const val = msg.val();
-	if (val!== null) {
-		Object.keys(val).forEach(key => {
-			resp.push(objectDecompress(val[key], msgPreset));
-		})
-	}
-	return resp
-}
-
-/**
- * turn Object into an formated plain text, Only support one child
- * @returns String
- * @param {Object} t 
- */
-function objectCompress (t) {
-	const resp = []
-	Object.keys(t).forEach(key => {
-		let pairs = "";
-		if (typeof t[key] === 'object') {
-			pairs = objectCompress(t[key]).split(',').join(':');
-		} else {
-			pairs = t[key];
-		}
-		resp.push(pairs);
-	})
-	return resp.join(',');
-}
-/**
- * turn plain formated text into an object, Only support one child
- * @returns Object
- * @param {String} s
- * @param {Array} preset the keys for the object 
- */
-function objectDecompress (s, preset) {
-	let resp = {};
-	s.split(',').forEach((value, i) => {
-		if (typeof preset[i] === 'object') {
-			Object.keys(preset[i]).forEach(key => {
-				resp[key] = {};
-				value.split(':').forEach((properties, j) => {
-					resp[key][preset[i][key][j]] = properties;
-				})
-			})
-		} else {
-			resp[preset[i]] = value;
-		}
-	})
-	return resp;
-}
-/**
- * @description util function to make a localStorage test
- */
-function lsTest() {
-	var test = 'test';
-	try {
-		localStorage.setItem(test, test);
-		localStorage.removeItem(test);
-		return true;
-	} catch(e) {
-		return false;
-	}
 }

@@ -11,7 +11,8 @@ import {
 	send,
 	listenRow,
 	removeListener,
-	getProfileImg
+	getProfileImg,
+	getOperatorChannels
 } from '../controllers/firebase';
 
 const MainDefaultState = {
@@ -24,32 +25,10 @@ const MainDefaultState = {
 	email: '',
 	domain: '',
 	channelList: [],
-	chnlList : [
-		{
-			title: 'ToursSercers',
-			clientList: [
-				{
-					name: 'Dummie',
-					id: 'random-hash'
-				}
-			]
-		}
-	],
-	selectedMessages: []
+	selectedMessages: [],
+	chnlUid: 0
 };
 
-const demoMessages = [
-	{
-		date: new Date().toDateString(),
-		message: 'hello, i\'m Lenny and i know every thing of that tour',
-		from: 'SERVER'
-	},
-	{
-		date: new Date().toDateString(),
-		message: 'Hi Lenny Paracas sounds like a great place, but is good in this time of the year?',
-		from: 'CLIENT'
-	}
-]
 export default {
 	MainDefaultState,
 	MainHandler: {
@@ -68,8 +47,11 @@ export default {
 			state.Main.email = action.email;
 			getProfileImg(state.Main.uid);
 			if (action.accessLevel >= 5) {
-				//get channels
+				//client
 				getClientChannels(action.uid);
+			} else if (action.accessLevel === 3) {
+				//operator
+				getOperatorChannels();
 			}
 			return { newState: state }
 		},
@@ -83,11 +65,12 @@ export default {
 		'CHAT-SELECTED': (action, state) => {
 			state.Main.clientSelected = action.data.clientSelected;
 			state.Main.selectedMessages = action.data.messages;
+			const chnlUid = state.Main.accessLevel > 3 ? state.Main.uid : state.Main.chnlUid
 			if (state.Main.visitorId !== action.data.visitorId) {
 				// remove listener
-				removeListener('/domains/' + state.Main.uid + '/4/' + state.Main.visitorId)
+				removeListener('/domains/' + chnlUid + '/4/' + state.Main.visitorId)
 			}
-			listenRow('/domains/' + state.Main.uid + '/4/' + action.data.visitorId)
+			listenRow('/domains/' + chnlUid + '/4/' + action.data.visitorId)
 			state.Main.visitorId = action.data.visitorId;
 			return { newState: state }
 		},
@@ -98,10 +81,9 @@ export default {
 			return { newState: state };
 		},
 		'SEND-MESSAGE': (action, state) => {
-			
 			send({
 				visitorId: state.Main.visitorId,
-				chnlUid: state.Main.uid,
+				chnlUid: state.Main.accessLevel > 3 ? state.Main.uid : state.Main.chnlUid,
 				message: btoa(action.data)
 			})
 			return { newState: state }
@@ -159,6 +141,17 @@ export default {
 			const { displayName, email } = action.data
 			state.Main.displayName = displayName ? displayName : state.Main.displayName;
 			state.Main.email = email ? email : state.Main.email;
+			return { newState: state }
+		},
+		'OPERATOR-DATA': (action, state) => {
+			const { value } = action.data
+			state.Main.channelList = value;
+			return { newState: state }
+		},
+		'THREAD-SELECTED': (action, state) => {
+			const { DID, threads } = action;
+			state.Main.chnlUid = DID;
+			state.Main.threads = threads;
 			return { newState: state }
 		}
 	}
