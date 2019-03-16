@@ -7,5 +7,5 @@ String.prototype.md5Encode = function(){
 
 document.addEventListener('DOMContentLoaded', () => {
 	const container = document.createElement('yak-main-container');
-	document.body.appendChild(container);
+	document.querySelector('#yak-chat-embended').appendChild(container);
 })
