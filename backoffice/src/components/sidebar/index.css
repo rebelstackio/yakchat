@@ -103,3 +103,13 @@ span#user-name {
 	font-size: 14px;
 	font-style: italic;
 }
+
+select#channel-select {
+	height: 6vh;
+	background: rgba(255, 255, 255, .6);
+	outline: none;
+	border: none;
+	color: #666;
+	padding: .5em 1em;
+	border-radius: 3px;
+}
