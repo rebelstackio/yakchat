@@ -29,8 +29,13 @@ class EditChannel extends MetaComponent {
 	set embendCode (code) {
 		this.querySelector('#embend-code').value = code;
 	}
+
+	set embendTag (code) {
+		this.querySelector('#embend-tag').value = code;
+	}
 	addListeners() {
 		const embendInput = this.querySelector('#embend-code');
+		const embendTag = this.querySelector('#embend-tag');
 		this.querySelector('#update-channel')
 		.addEventListener('click', () => {
 			this.handleSend(this.channelName, this.domain);
@@ -49,6 +54,16 @@ class EditChannel extends MetaComponent {
 				embendInput.value =  value;
 			}, 400);
 		});
+		embendTag.addEventListener('click', () => {
+			embendTag.select();
+			/* Copy the text inside the text field */
+			document.execCommand("copy");
+			const value = embendTag.value;
+			embendTag.value = 'copied to the clipboard';
+			setTimeout(() => {
+				embendTag.value =  value;
+			}, 400);
+		});
 	}
 
 	render () {
@@ -61,6 +76,7 @@ class EditChannel extends MetaComponent {
 			<input type="text" placeholder="channel name" id="channel-name"/>
 			<input type="text" placeholder="change domain" id="domain"/>
 			<input type="text" placeholder="Embend code" id="embend-code" readonly/>
+			<input type="text" id="embend-tag" readonly />
 			<input type="submit" id="update-channel" value="save"/>
 		</div>
 		`;
@@ -81,7 +97,10 @@ class EditChannel extends MetaComponent {
 			'CHANNEL-SELECT': (action) => {
 				this.domain = action.data.domain;
 				this.channelName = action.data.channel;
-				this.embendCode = `<iframe src="our-source/?d=${action.data.domain}&c=${action.data.channel}"></iframe>`;
+				this.embendCode = `<script src="https://rebelstackio.github.io/yakchat/main.101ffba0.js"></script><link rel="stylesheet" href="https://rebelstackio.github.io/yakchat/main.b73881b6.css">`;
+				this.embendTag = `
+					<div id="yak-chat-embended"><!-- the chat will be generated inside this --></div>
+				`
 			},
 			'CHANNEL-ARRIVE': () => {
 				this.querySelector('#channel-popup').classList.add('hide');
