@@ -18,7 +18,7 @@ input.search-input {
 
 .search-box {
 	background: rgba(255,255,255,.3);
-	border-radius: 2em;
+	border-radius: 4px;
 	color: #666;
 }
 
@@ -47,19 +47,25 @@ input.search-input {
 
 span.chnl-title {
 	cursor: pointer;
-	color: #666;
+	color: rgba(0, 0, 0, 0.5);
 	display: grid;
-	grid-template-columns: 1fr 1em;
+	grid-template-columns: auto auto;
+}
+
+.chnl-title:hover {
+	color: black;
 }
 
 span.chnl-title > i {
 	padding-left: .5em;
 }
 
+.chnl-title img {
+	height: 20px;
+	align-self: center;
+}
+
 .channel-box > div {
-	background: rgba(255,255,255, .6);
-	border-radius: 1em;
-	padding: .5em;
 }
 
 .channel-box {
@@ -67,15 +73,15 @@ span.chnl-title > i {
 	grid-row-gap: 1em;
 	overflow-y: auto;
 	overflow-x: hidden;
+	grid-area: 3;
 }
 
 img.profile-img {
-	height: 100%;
-	place-self: center;
-	border: 1px solid #d3d3d3;
+	height: auto;
+	justify-self: center;
+	align-self: center;
 	border-radius: 50%;
 	cursor: pointer;
-	background-color: #d3d3d3;
 	width: 120px;
 }
 
@@ -88,20 +94,42 @@ span#user-name {
 	color: #fff;
 }
 
+ol#threads {
+	max-height: 300px;
+	overflow-y: auto;
+}
+
 .thread-item {
 	list-style: none;
-	background: rgba(255,255,255, .3);
 	margin: .5em 0;
-	color: #666;
+	color: rgba(0, 0, 0, 0.5);
 	cursor: pointer;
-	text-align: center;
-	border-radius: 2em;
+	text-align: left;
 	display: grid;
+	font-size: 20px;
+	border-radius: 4px;
+}
+
+.thread-item:not(:last-child) > span {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.thread-item:hover {
+	color: rgba(255, 255, 255, 0.7);
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.thread-item:not(:last-child):hover > span {
+	border-bottom: 1px solid rgba(255, 255, 255, 0.7);
 }
 
 .thread-item > span {
+	display: inline-block;
+	width: 100%;
+	padding: 0 0 0 10px;
 	font-size: 14px;
 	font-style: italic;
+	margin-bottom: 2px;
 }
 
 select#channel-select {

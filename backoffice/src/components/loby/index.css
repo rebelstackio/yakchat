@@ -24,28 +24,35 @@ yak-loby > div.toggled {
 
 .loby-msg-body {
 	display: grid;
-	grid-template-rows: 8vh 1fr 8vh;
+	grid-template-rows: 60px 1fr 60px;
 }
-
+.msg-body-container {
+	position: relative;
+}
 .msg-body {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	display: grid;
-	padding: 4vh 5vw;
+	padding: 0 50px 0 50px;
 	overflow-y: auto;
-	max-height: 76vh;
-	grid-row-gap: 2vh;
+	grid-row-gap: 15px;
 }
 
 .msg-input {
 	display: grid;
-	grid-template-columns: 1fr 7vh;
-	padding-bottom: 4px;
-	padding: 0 10px 4px;
+	grid-template-columns: auto 50px;
 }
 
 input.bottom-input {
 	outline: none;
-	padding: 10px;
 	border: none;
+	height: 40px;
+	width: calc(100% - 10px);
+	align-self: center;
+	justify-self: center;
 	background: transparent;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.5);
 	font-size: 1rem;
@@ -135,4 +142,13 @@ span.msg-date {
 
 img {
 	height: 1em;
+}
+.send-message-icon {
+	display: grid;
+	align-items: center;
+	justify-items: center;
+}
+.send-message-icon img {
+	height: 30px;
+	cursor: pointer;
 }

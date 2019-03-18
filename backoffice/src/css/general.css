@@ -1,8 +1,17 @@
 @import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 @import url('./responsive.css');
 
+@font-face {
+	font-family: 'Lato Regular';
+	src: url('../../../assets/fonts/Lato/Lato-Regular.ttf');
+}
+
 :root {
   --error-validation-color: #ff8080;
+}
+
+* {
+	font-family: 'Lato Regular';
 }
 
 html, body {
