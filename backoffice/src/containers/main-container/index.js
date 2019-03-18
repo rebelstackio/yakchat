@@ -1,7 +1,5 @@
 import { MetaContainer } from '@rebelstack-io/metaflux';
 import Navigo from 'navigo';
-import '../../css/general.css';
-import '../../css/buttons.css';
 import '../../handlers';
 import '../../components/loby'
 import '../../components/login';
