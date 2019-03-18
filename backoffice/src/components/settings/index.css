@@ -1,43 +1,6 @@
-yak-settings {
-	position: fixed;
-	width: 60vw;
-	height: 60vh;
-	background: #fff;
-	top: 20vh;
-	left: 20vw;
-	border-radius: .5em;
-	box-shadow: 0px 0px 131px 1px #d3d3d3;
-	opacity: 1;
-	transition: opacity .2s cubic-bezier(0.82, 0.15, 0.76, 0.81);
-}
-
-yak-settings.hide {
-	visibility: hidden;
-	opacity: 0;
-}
-
-yak-settings > div {
-	display: grid;
-	grid-template-rows: 2em 1fr;
-}
-
-i#set-close {
-	place-self: end;
-	padding: .5em;
-	align-self: end;
-	cursor: pointer;
-	font-family: monospace;
-	font-style: normal;
-	font-weight: 900;
-	font-size: 16px;
-}
-
 .option-body {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	padding: 1em;
+	padding: 10px;
 	color: #666666;
-	grid-column-gap: 1vw;
 }
 
 .option-body h2 {
@@ -52,11 +15,6 @@ i#set-close {
 
 .option-body i:hover {
 	color: #40a9ff;
-}
-
-.chat-settings > div {
-	display: grid;
-	grid-auto-flow: column;
 }
 
 .set-new-pass {
@@ -76,26 +34,13 @@ i#set-close {
 	font-size: 1em;
 }
 
-.option-body input {
-	height: 6vh;
-}
-
 .client-action-settings {
 	display: grid;
-	grid-row-gap: 1vh;
+	grid-row-gap: 10px;
+	margin-bottom: 10px;
 }
 
 .client-storage-settings {
 	display: grid;
-	grid-row-gap: 1vh;
-}
-
-.pop-title {
-	display: grid;
-	grid-template-columns: 1fr 2vw;
-	color: #666666
-}
-
-.pop-title > h2 {
-	text-align: center;
+	grid-row-gap: 10px;
 }

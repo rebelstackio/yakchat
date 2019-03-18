@@ -1,6 +1,6 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import { instanceElement } from '../../utils';
-import defaulAvatar from '../../images/user.png';
+import defaulAvatar from '../../images/user.svg';
 import cog from '../../css/icons/cog-solid.svg';
 import './index.css';
 class Sidebar extends MetaComponent {
@@ -28,7 +28,7 @@ class Sidebar extends MetaComponent {
 		profile.querySelector('.profile-img')
 		.addEventListener('click', () => {
 			global.storage.dispatch({ type: 'OPEN-PROFILE' })
-			document.querySelector('#profile-popup').classList.toggle('hide');
+			document.querySelector('.profile-popup-container-container').classList.remove('hide');
 		})
 		const search = instanceElement(
 			'div',
@@ -62,7 +62,7 @@ class Sidebar extends MetaComponent {
 			);
 			chEl.querySelector('img')
 			.addEventListener('click', () => {
-				document.querySelector('#channel-popup').classList.toggle('hide');
+				document.querySelector('#channel-popup-container.profile-popup-container').classList.toggle('hide');
 				global.storage.dispatch({
 					type: 'CHANNEL-SELECT',
 					data: {
@@ -115,7 +115,10 @@ class Sidebar extends MetaComponent {
 		thBox.innerHTML = '';
 		Object.keys(msgObject).forEach(uid => {
 			const type = msgObject[uid][0] === ''
-				? 'Visitor'
+				? `
+					New User
+					<span>unknown</span>
+				`
 				: `
 					${msgObject[uid][0].split('-')[0]}
 					<span>${msgObject[uid][0].split('-')[1]}</span>
