@@ -3,7 +3,7 @@
 
 @font-face {
 	font-family: 'Lato Regular';
-	src: url('../../../assets/fonts/Lato/Lato-Regular.ttf');
+	src: url('../fonts/Lato/Lato-Regular.ttf');
 }
 
 :root {
@@ -49,4 +49,17 @@ html, body {
 	color: #fff;
 	background-color: #40a9ff;
 	border-color: #40a9ff;
+}
+
+.btn, .inp {
+	border-radius: 4px;
+	text-align: center;
+	padding: 10px;
+	min-width: 100px;
+	cursor: pointer;
+}
+.btn.light, .inp.light {
+	background: #fff;
+	border: 1px solid #ccc;
+	color: gray;
 }

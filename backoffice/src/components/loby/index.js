@@ -1,9 +1,9 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import { instanceElement, parsemkey } from '../../utils';
-import cogIcon from '../../css/icons/cog-solid.svg';
-import logoutIcon from '../../css/icons/sign-out-alt-solid.svg';
-import imageURL from '../../images/logo/yakchat.svg';
-import sendIcon from '../../css/icons/chevron-right-solid.svg';
+import cogIcon from '../../assets/icons/cog-solid.svg';
+import logoutIcon from '../../assets/icons/sign-out-alt-solid.svg';
+import imageURL from '../../assets/images/logo/yakchat.svg';
+import sendIcon from '../../assets/icons/chevron-right-solid.svg';
 import '../patchprofile';
 import '../editchannel';
 import './index.css';
