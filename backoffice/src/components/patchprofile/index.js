@@ -1,5 +1,5 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
-import defaulAvatar from '../../images/user.png';
+import defaulAvatar from '../../images/user.svg';
 import './index.css';
 
 class PatchProfile extends MetaComponent {
@@ -60,7 +60,7 @@ class PatchProfile extends MetaComponent {
 		});
 		this.querySelector('#close-profile')
 		.addEventListener('click', () => {
-			this.querySelector('#profile-popup').classList.add('hide');
+			document.querySelector('.profile-popup-container-container').classList.add('hide');
 		})
 	}
 
@@ -69,25 +69,26 @@ class PatchProfile extends MetaComponent {
 		const profileUrl = localStorage.getItem(uid)
 		? localStorage.getItem(uid)
 		: defaulAvatar;
-		return /*html*/`
-		<div class="hide" id="profile-popup">
-			<div class="profile-title">
-				<h2> edit profile </h2>
-				<span id="close-profile">X</span>
+		return `
+		<div class="profile-popup-container-container profile-popup-container hide">
+			<div id="profile-popup">
+				<div class="profile-title">
+					<div>Edit profile</div>
+					<span id="close-profile">X</span>
+				</div>
+				<div class="prof-pict">
+					<img src="${profileUrl}" height="200" alt="Image preview...">
+					<label for="upload" class="btn custom-file-upload light">
+						Upload Image
+					</label>
+					<input id="upload" type="file">
+				</div>
+				<input type="text" placeholder="change name" id="display-name"/>
+				<input type="password" placeholder="Current Password" id="current-password"/>
+				<input type="password" placeholder="change password" id="password"/>
+				<input type="email" placeholder="change email" id="email"/>
+				<div class="btn primary" id="patch">Save Changes</div>
 			</div>
-			<div class="prof-pict">
-				<label for="upload" class="custom-file-upload">
-					Upload
-				</label>
-				<input id="upload" type="file">
-				<img src="${profileUrl}" height="200" alt="Image preview...">
-				<!--an image tag-->
-			</div>
-			<input type="text" placeholder="change name" id="display-name"/>
-			<input type="password" placeholder="Current Password" id="current-password"/>
-			<input type="password" placeholder="change password" id="password"/>
-			<input type="email" placeholder="change email" id="email"/>
-			<input type="submit" id="patch" value="save"/>
 		</div>
 		`;
 	}
@@ -119,7 +120,7 @@ class PatchProfile extends MetaComponent {
 				this.email = email;
 			},
 			'PROFILE-CHANGED': () => {
-				this.querySelector('#profile-popup').classList.add('hide');
+				this.querySelector('.profile-popup-container').classList.add('hide');
 			}
 		}
 	}

@@ -20,14 +20,14 @@ class Settings extends MetaComponent {
 	}
 	// eslint-disable-next-line class-method-use-this
 	render () {
-		const content = instanceElement('div', false, 'setting-box');
-		const title = instanceElement('div', ['pop-title'], false, 
-		`
-			<h2> Settings </h2>
-			<i id="set-close"> X </i>
-		`
-		);
-		content.appendChild(title);
+		const content = instanceElement('div', ['profile-popup-container', 'hide'], 'setting-box-container', `
+			<div id="setting-box">
+				<div class="profile-title">
+					<div>Settings</div>
+					<span id="set-close"> X </span>
+				</div>
+			</div>
+		`);
 		this.accessLevel = this.storage.getState().Main.accessLevel;
 		return content;
 	}
@@ -35,7 +35,7 @@ class Settings extends MetaComponent {
 	addListeners () {
 		const closeButton = this.querySelector('#set-close');
 		closeButton.addEventListener('click', () => {
-			this.classList.toggle('hide');
+			this.querySelector('.profile-popup-container').classList.toggle('hide');
 		});
 	}
 
@@ -101,15 +101,15 @@ class Settings extends MetaComponent {
 		optionBox.innerHTML = '';
 		const actionSettings = instanceElement('div', ['client-action-settings'], false,
 		`
-			<input type="submit" id="mail-history" value="Send Chat history to email"/>
-			<input type="submit" id="dashboard" value="Dashboard"/>
+			<div id="mail-history" class="btn light">Send Chat history to email</div>
+			<div id="dashboard" class="btn light">Dashboard</div>
 		`
 		);
 		const storageSetting = instanceElement('div', ['client-storage-settings'], false,
 		`
-			<input type="text" id="fb-token" placeholder="Firebase Token"/>
-			<input type="text" id="ggle-token" placeholder="Analytics Token"/>
-			<input type="submit" id="save-settings" value="Save"/>
+			<input class="inp light" type="text" id="fb-token" placeholder="Firebase Token"/>
+			<input class="inp light" type="text" id="ggle-token" placeholder="Analytics Token"/>
+			<div id="save-settings"class="btn primary">Save</div>
 		`
 		);
 		storageSetting.querySelector('#save-settings')

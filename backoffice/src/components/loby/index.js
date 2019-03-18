@@ -44,7 +44,7 @@ class Loby extends MetaComponent {
 		const msgBody = instanceElement('div', ['loby-msg-body']);
 		this.createMsgArea(msgBody);
 		content.append(sideBar, msgBody);
-		const settingsPopUp = instanceElement('yak-settings', ['hide']);
+		const settingsPopUp = instanceElement('yak-settings');
 		const profilePopUp = instanceElement('yak-patchprofile');
 		const editchannelPopUp = instanceElement('yak-editchannel');
 		this.append(settingsPopUp, profilePopUp, editchannelPopUp);
@@ -56,11 +56,13 @@ class Loby extends MetaComponent {
 	 */
 	createMsgArea (box) {
 		const msgHeader = instanceElement('div', ['msg-head']);
+		const msgBodyContainer = instanceElement('div', ['msg-body-container']);
 		const msgBody = instanceElement('div', ['msg-body']);
+		msgBodyContainer.appendChild(msgBody);
 		const msgInput = instanceElement('div', ['msg-input']);
 		this.createMsgHeader(msgHeader);
 		this.createInputs(msgInput);
-		box.append(msgHeader, msgBody, msgInput);
+		box.append(msgHeader, msgBodyContainer, msgInput);
 	}
 	/**
 	 * @description create the header
@@ -104,7 +106,7 @@ class Loby extends MetaComponent {
 			 [{type: 'text'}, {placeholder: 'Enter your message'}]
 		);
 		const inputButton = instanceElement(
-			'div', ['btn', 'icon'],
+			'div', ['icon', 'send-message-icon'],
 			'input-button',
 			`<img src="${sendIcon}"></img>`,
 			[{type: 'text'}, {placeholder: 'Enter your message'}]
@@ -177,7 +179,7 @@ class Loby extends MetaComponent {
 	 */
 	toggleSetting () {
 		console.log('toggling the settings');
-		this.querySelector('yak-settings').classList.toggle('hide');
+		document.querySelector('#setting-box-container.profile-popup-container').classList.toggle('hide');
 		this.storage.dispatch({type: 'OPEN-SETTINGS'});
 	}
 	
