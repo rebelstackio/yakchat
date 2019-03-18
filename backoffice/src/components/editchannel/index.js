@@ -42,7 +42,7 @@ class EditChannel extends MetaComponent {
 		});
 		this.querySelector('#close-channel')
 		.addEventListener('click', () => {
-			this.querySelector('#channel-popup').classList.add('hide');
+			this.querySelector('#channel-popup-container').classList.add('hide');
 		});
 		embendInput.addEventListener('click', () => {
 			embendInput.select();
@@ -67,17 +67,19 @@ class EditChannel extends MetaComponent {
 	}
 
 	render () {
-		return /*html*/`
-		<div class="hide" id="channel-popup">
-			<div class="profile-title">
-				<h2> edit channel </h2>
-				<span id="close-channel">X</span>
+		return `
+		<div id="channel-popup-container" class="profile-popup-container hide">
+			<div id="channel-popup">
+				<div class="profile-title">
+					<div>Edit channel</div>
+					<span id="close-channel">X</span>
+				</div>
+				<input type="text" placeholder="channel name" id="channel-name"/>
+				<input type="text" placeholder="change domain" id="domain"/>
+				<input type="text" placeholder="Embend code" id="embend-code" readonly/>
+				<input type="text" id="embend-tag" readonly />
+				<div class="btn primary" id="update-channel">Save</div>
 			</div>
-			<input type="text" placeholder="channel name" id="channel-name"/>
-			<input type="text" placeholder="change domain" id="domain"/>
-			<input type="text" placeholder="Embend code" id="embend-code" readonly/>
-			<input type="text" id="embend-tag" readonly />
-			<input type="submit" id="update-channel" value="save"/>
 		</div>
 		`;
 	}
@@ -103,7 +105,7 @@ class EditChannel extends MetaComponent {
 				`
 			},
 			'CHANNEL-ARRIVE': () => {
-				this.querySelector('#channel-popup').classList.add('hide');
+				this.querySelector('#channel-popup-container').classList.add('hide');
 			}
 		}
 	}
