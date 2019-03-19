@@ -27,9 +27,6 @@ class Signup extends MetaComponent {
 		return this.querySelector("#display-name").value;
 	}
 
-	get type () {
-		return this.querySelector('#type').value;
-	}
 
 	addListeners() {
 		this.querySelector('#signup-btn').addEventListener('click', (e) => {
@@ -43,12 +40,24 @@ class Signup extends MetaComponent {
 				this.domain
 			);
 		});
-		this.querySelector('#type').addEventListener('change', () => {
-			this.querySelector('#domain').classList.toggle('hide');
-		})
+		const operator = this.querySelector('#operator-opt');
+		const client = this.querySelector('#client-opt')
+		operator.addEventListener('click', () => {
+			this.type = 'operator';
+			client.classList.remove('selected');
+			operator.classList.add('selected');
+			this.querySelector('#domain').classList.add('hide');
+		});
+		client.addEventListener('click', () => {
+			this.type = 'client';
+			operator.classList.remove('selected');
+			client.classList.add('selected');
+			this.querySelector('#domain').classList.remove('hide');
+		});
 	}
 
 	render () {
+		this.type = 'operator';
 		return /*html*/`
 			<div class="login__container">
 				<form class="signup__form">
@@ -61,10 +70,10 @@ class Signup extends MetaComponent {
 					</h1>
 					
 					<div class="login__formcontent">
-						<select id="type">
-							<option value="operator"> Operator</option>
-							<option value="client"> Client</option> 
-						</select>
+						<div class="account-type">
+							<span class="selected" id="operator-opt">Operator</span>
+							<span id="client-opt">Client</span>
+						</div>
 						<input id="display-name" type="text" placeholder="Display name"/>
 						<input id="email" name="email" placeholder="Email" type="text" />
 						<input id="password" name="password" placeholder="Password" type="password" /><br />
