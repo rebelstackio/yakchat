@@ -56,7 +56,9 @@ class Settings extends MetaComponent {
 		);
 		const storageSetting = instanceElement('div', ['client-storage-settings'], false,
 		`
+			<label>Firebase token</label>
 			<input class="inp light" type="text" id="fb-token" placeholder="Firebase Token"/>
+			<label>Google Analytics token</label>
 			<input class="inp light" type="text" id="ggle-token" placeholder="Analytics Token"/>
 			<div id="save-settings"class="btn primary">Save</div>
 		`
