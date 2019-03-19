@@ -96,7 +96,6 @@ class YakMainContainer extends MetaContainer {
 	 * @param {Boolean} admin 
 	 */
 	createRoleView (accessLevel, admin) {
-		
 		if (admin && accessLevel === 10) {
 			// admin login
 			console.log('i\'m admin');

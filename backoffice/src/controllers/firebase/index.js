@@ -87,7 +87,11 @@ export function singOut () {
  * @param {String} password
  */
 export function signInWithEmail (email, password) {
-	app.auth().signInWithEmailAndPassword(email, password).catch((error) => {
+	app.auth().signInWithEmailAndPassword(email, password)
+	.then(() => {
+		document.location.reload();
+	})
+	.catch((error) => {
 		global.storage.dispatch({
 			type: 'LOGIN-FAIL',
 			error
@@ -199,6 +203,7 @@ export function patchProfile (email, newPassword, currentPassword , displayName)
 			user.updatePassword(newPassword).then(() => {
 				// Update successful.
 				console.log('password changed');
+				global.storage.dispatch({ type: 'PROFILE-CHANGED', data:{}});
 			}, (error) => {
 				// An error happened.
 			});
@@ -236,6 +241,7 @@ export function updateClientChannel (channelName, domain, uid) {
 		ref.child('2').set(channelName)
 		.then(() => {
 			console.log('update channel success');
+			global.storage.dispatch({ type: 'CHANNEL-CHANGED' });
 			getClientChannels(uid);
 		});
 	}
@@ -243,6 +249,7 @@ export function updateClientChannel (channelName, domain, uid) {
 		ref.child('1').set(domain)
 		.then(() => {
 			console.log('update domain success')
+			global.storage.dispatch({ type: 'CHANNEL-CHANGED' });
 			getClientChannels(uid);
 		})
 	}
@@ -257,6 +264,7 @@ export function saveStorageSetting (data) {
 	.child('3').set({
 		[fbToken]: ggleToken
 	}).then(() => {
+		global.storage.dispatch({ type: 'SETTINGS-CHANGED' });
 		console.log('updated settings storage data');
 	});
 }

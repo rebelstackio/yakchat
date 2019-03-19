@@ -40,6 +40,7 @@ class PatchProfile extends MetaComponent {
 		const preview = this.querySelector('.prof-pict > img');
 		this.querySelector('#patch')
 		.addEventListener('click', () => {
+			this.querySelector('.profile-popup-container').classList.add('loading');
 			this.handleSend(this.email, this.password, this.currentPassword , this.displayName)
 		})
 		input
@@ -103,6 +104,7 @@ class PatchProfile extends MetaComponent {
 	}
 
 	handleUpload (img) {
+		this.querySelector('.profile-popup-container').classList.add('loading');
 		global.storage.dispatch({
 			type: 'UPLOAD-PROFILE-IMG',
 			data: {
@@ -120,7 +122,10 @@ class PatchProfile extends MetaComponent {
 				this.email = email;
 			},
 			'PROFILE-CHANGED': () => {
-				this.querySelector('.profile-popup-container').classList.add('hide');
+				this.querySelector('.profile-popup-container').classList.remove('loading');
+			},
+			'UPLOAD-SUCCESS': () => {
+				this.querySelector('.profile-popup-container').classList.remove('loading');
 			}
 		}
 	}
