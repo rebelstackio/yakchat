@@ -2,10 +2,14 @@ import { MetaComponent } from '@rebelstack-io/metaflux';
 import { instanceElement } from '../../utils';
 import defaulAvatar from '../../images/user.svg';
 import cog from '../../css/icons/cog-solid.svg';
+import searchIcon from '../../css/icons/search-solid.svg';
 import './index.css';
 class Sidebar extends MetaComponent {
 	constructor () {
 		super(global.storage);
+	}
+	get searchValue () {
+		return this.querySelector('.search-input').value;
 	}
 	// eslint-disable-next-line class-method-use-this
 	render () {
@@ -35,11 +39,24 @@ class Sidebar extends MetaComponent {
 			['search-box'],
 			false,
 			`<input type="text" class="search-input"></input>
-			 <i class="fa fa-search"></i>
+			 <img src="${searchIcon}"></img>
 			`
 		);
 		content.append(profile, search, chnlBox, thBox);
 		return content;
+	}
+
+	addListeners () {
+		this.querySelector('.search-input')
+		.addEventListener('keydown', () => {
+			if (this.searchValue === '') {
+				// full array
+				const { threads } = this.storage.getState().Main;
+				this.listClientThreads(threads);
+			} else {
+				this.handleSearch();
+			}
+		})
 	}
 
 	selectChat (cl) {
@@ -134,6 +151,24 @@ class Sidebar extends MetaComponent {
 			thBox.appendChild(li);
 		});
 		sidebar.appendChild(thBox);
+	}
+	/**
+	 * handle search
+	 */
+	handleSearch () {
+		const { threads } = this.storage.getState().Main;
+		let newObject = {};
+		Object.keys(threads).forEach(key => {
+			const userdata = threads[key][0] !== '' ? threads[key][0] : 'New User-unknown';
+			const name = userdata.split('-')[0];
+			const email = userdata.split('-')[1];
+			if (name.toUpperCase().startsWith(this.searchValue.toUpperCase()) || 
+				email.toUpperCase().startsWith(this.searchValue.toUpperCase())
+			) {
+				newObject[key] = threads[key]
+			}
+		});
+		this.listClientThreads(newObject);
 	}
 
 	handleStoreEvents () {
