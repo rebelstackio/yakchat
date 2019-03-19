@@ -39,60 +39,9 @@ class Settings extends MetaComponent {
 		});
 	}
 
-	createOptions (box) {
-		const optionBox = instanceElement('div', ['option-body']);
-		this.createChatSettings(optionBox);
-		this.createUserSettings(optionBox);
-		box.appendChild(optionBox);
-	}
-
-	createUserSettings (box) {
-		const userBox = instanceElement('div', ['user-settings'], false, '<h2>User settings</h2>');
-		const crrntPass = instanceElement('input',
-			false, false, false,
-			[{type: 'password', placeholder: 'Current Password'}]
-		);
-		const newPass = instanceElement('input',
-			false, false, false,
-			[{type: 'password', placeholder: 'New Password'}]
-		);
-		const newPassRP = instanceElement('input',
-			false, false, false,
-			[{type: 'password', placeholder: 'Repeat your password'}]
-		);
-		const Submit = instanceElement('button', ['btn', 'primary'], false, 'Submit')
-		const chngPassBox = instanceElement('div', ['set-new-pass']);
-		chngPassBox.append(crrntPass, newPass, newPassRP, Submit);
-		Submit.addEventListener('click', () => {
-			if (crrntPass.value !== '' && newPass.value !== '' && newPassRP.value !== '') {
-				if (newPass.value === newPassRP.value) {
-					this.storage.dispatch({
-						type: 'CHNG-PASS', 
-						data: {newPass: newPass.value, oldPass: crrntPass.value}
-					})
-				} else {
-					console.error('error the password dont match')
-				}
-			} else {
-				console.error('all the fields are mandatory')
-			}
-		})
-		userBox.appendChild(chngPassBox);
-		box.appendChild(userBox);
-	}
-
-	createChatSettings (box) {
-		const enableBox = instanceElement('div', false, false, '<h3>Enable sounds</h3>');
-		const enableSound = instanceElement('i', ['fa', 'fa-check-square']);
-		const chatOptions = instanceElement('div', ['chat-settings'], false, '<h2>Chat settings</h2>');
-		enableSound.addEventListener('click', () => {
-			this.storage.dispatch({ type: 'TOGGLE-SOUND' });
-		})
-		chatOptions.appendChild(enableBox);
-		enableBox.appendChild(enableSound);
-		box.append(chatOptions);
-	}
-
+	/**
+	 * create the view for the clients
+	 */
 	createClientSettings () {
 		const body = this.querySelector('#setting-box');
 		const optionBox = this.querySelector('.option-body')
@@ -115,6 +64,7 @@ class Settings extends MetaComponent {
 		storageSetting.querySelector('#save-settings')
 		.addEventListener('click', () => {
 			// dispatch the save event
+			this.querySelector('#setting-box-container').classList.add('loading');
 			const fbToken = this.fbToken;
 			const ggleToken = this.ggleToken;
 			this.storage.dispatch({type: 'SAVE-STORAGE-SETTING', data: {
@@ -144,8 +94,6 @@ class Settings extends MetaComponent {
 					this.ggleToken = this.storageKeys[fbToken];
 				} else {
 					// operator
-					const body = this.querySelector('#setting-box');
-					this.createOptions(body);
 				}
 			},
 			'LOGIN-SUCCESS': (state) => {
@@ -153,6 +101,9 @@ class Settings extends MetaComponent {
 			},
 			'CHANNEL-ARRIVE': (state) => {
 				this.storageKeys = state.newState.Main.storageKeys;
+			},
+			'SETTINGS-CHANGED': (state) => {
+				this.querySelector('#setting-box-container').classList.remove('loading');
 			}
 		}
 	}

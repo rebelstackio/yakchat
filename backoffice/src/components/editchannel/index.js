@@ -38,6 +38,7 @@ class EditChannel extends MetaComponent {
 		const embendTag = this.querySelector('#embend-tag');
 		this.querySelector('#update-channel')
 		.addEventListener('click', () => {
+			this.querySelector('#channel-popup-container').classList.add('loading');
 			this.handleSend(this.channelName, this.domain);
 		});
 		this.querySelector('#close-channel')
@@ -102,8 +103,8 @@ class EditChannel extends MetaComponent {
 				this.embendCode = `<script src="https://rebelstackio.github.io/yakchat/main.101ffba0.js"></script><link rel="stylesheet" href="https://rebelstackio.github.io/yakchat/main.b73881b6.css">`;
 				this.embendTag = `<div id="yak-chat-embended"><!-- the chat will be generated inside this --></div>`
 			},
-			'CHANNEL-ARRIVE': () => {
-				this.querySelector('#channel-popup-container').classList.add('hide');
+			'CHANNEL-CHANGED': () => {
+				this.querySelector('#channel-popup-container').classList.remove('loading');
 			}
 		}
 	}
