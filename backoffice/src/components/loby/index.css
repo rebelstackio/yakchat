@@ -109,6 +109,11 @@ img.rblstck-logo {
 	color: rgba(0,0,0,.5);
 	cursor: pointer;
 }
+
+.msg-head-actions > img#logout {
+	grid-area: 1 / 4
+}
+
 .msg-head-actions > img:hover {
 	color: rgba(0,0,0,.7);
 }
