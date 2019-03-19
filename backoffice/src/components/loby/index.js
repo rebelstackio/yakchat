@@ -193,6 +193,13 @@ class Loby extends MetaComponent {
 			'MSG-ARRIVE': (state) => {
 				const {selectedMessages} = state.newState.Main;
 				this.createMessages(selectedMessages);
+			},
+			'LOGIN-SUCCESS': (state) => {
+				const {accessLevel} = this.storage.getState().Main;
+				if (accessLevel === 3) {
+					// if it's an operator hide the settings
+					this.querySelector('#settings').style.display = 'none';
+				}
 			}
 		};
 	}
