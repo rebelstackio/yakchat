@@ -46,51 +46,32 @@
 	width: 100%;
 }
 
-.login__formcontent {
-	margin-top: 1rem;
+.account-type {
+	height: 40px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	color: rgba(0, 0, 0, 0.4);
+	margin-bottom: 5px;
 }
 
-.login__formcontent  input[type="submit"] {
-	background-color: #1890ff;
-	color: #eee;
-	font-weight: bold;
-	text-transform: uppercase;
+.account-type > span{
+	line-height: 40px;
 	cursor: pointer;
-}
-
-.login__formcontent input[type="submit"]:focus, .login__formcontent input[type="submit"]:hover {
-	background-color: #065eaf;
-}
-
-.login__forgot-box {
 	text-align: center;
 }
 
-.login__forgot-box a:link, .login__forgot-box a:visited {
-	color: #fff;
-	text-decoration: none;
-	border-bottom: 1px solid #fff;
-	cursor: pointer;
-	display: inline-block; 
-	padding: 3px;
-	transition: all .2s;
+.account-type > span.selected:first-child {
+	box-shadow: 4px 0px 5px -5px rgba(0,0,0,0.75)
 }
 
-.login__forgot-box a:hover{
-	transform: translateY(-2px);
-	box-shadow: 0 1rem 2rem rgba(0, 0, 0, .15);
+.account-type > span.selected:nth-child(2) {
+	box-shadow: -4px 0px 5px -5px rgba(0,0,0,0.75);
 }
 
-.login__forgot-box a:active  {
-	box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
-	transform: translateY(0);
+.account-type > span.selected {
+	color: black;
+	background-color: transparent;
 }
-
-
-.login__formcontent  input:focus {
-	outline: none;
-}
-
 
 .signup__form .hide {
 	display: none;
