@@ -4,23 +4,29 @@ const dotenv = require('dotenv');
 const webpack = require('webpack'); 
 const CopyPlugin = require('copy-webpack-plugin');
 
+// TODO: Make performances for production ( minified, uglify ..etc)
 
 module.exports = () => {
-	 // Call dotenv and it will return an Object with a parsed key 
-	 const env = dotenv.config({
-		 path: path.resolve(process.cwd(), '../', '.env')
-	 }).parsed;
+	let filename = 'index.html';
+	// Call dotenv and it will return an Object with a parsed key 
+	const env = dotenv.config({
+		path: path.resolve(process.cwd(), '../', '.env')
+	}).parsed;
 
-	 // Reduce it to a nice object, the same as before
-	 const envKeys = Object.keys(env).reduce((prev, next) => {
+	if ( process.env.NODE_MODE == 'build' ) {
+		filename = 'backoffice.html';
+	}
+
+	// Reduce it to a nice object, the same as before
+	const envKeys = Object.keys(env).reduce((prev, next) => {
 		 prev[`process.env.${next}`] = JSON.stringify(env[next]);
 		 return prev;
 	 }, {});
 
-	 const defaultobject = {
+	const defaultobject = {
 		entry: './src/main/index.js',
 		output: {
-			path: path.resolve(__dirname, 'build'),
+			path: path.resolve(__dirname, '..', 'dist'),
 			filename: 'main.js'
 		},
 		devServer: {
@@ -67,7 +73,7 @@ module.exports = () => {
 			new HtmlWebpackPlugin({
 				template: path.resolve(__dirname, 'public/index.html'),
 				hash: false,
-				filename: 'index.html',
+				filename: filename,
 				inject: 'body'
 			}),
 			new webpack.DefinePlugin(envKeys),
@@ -75,9 +81,8 @@ module.exports = () => {
 				{ from: 'public/css', to: 'css' },
 				{ from: 'public/fonts', to: 'fonts' },
 				{ from: 'public/images', to: 'images' },
-				{ from: 'public/manifest.json', to: 'manifest.json' },
+				{ from: 'public/manifest.json', to: 'manifest.json' }
 			]),
-
 		],
 		devtool: 'source-map'
 	}
