@@ -1,6 +1,6 @@
 yak-input {
 	grid-area: 3 / 1;
-	border-radius: 1.5em;
+	border-radius: 4px;
 	display: grid;
 	grid-template-rows: 100%;
 	background-color: rgba(0,0,0,.1);
@@ -8,7 +8,7 @@ yak-input {
 	margin-right: 0.5em;
 }
 yak-input[class^="focus"] .yak-input-content {
-	border-radius: 1.6em;
+	border-radius: 4px;
 	box-shadow: 0px 0px 3px 2px rgba(24,144,255,0.6);
 	background-color: #fff;
 }
@@ -20,7 +20,7 @@ yak-input[class^="focus"] .yak-input-content {
 .main-input {
 	background-color: rgba(0,0,0,0);
 	border: none;
-	border-radius: 2.5em;
+	border-radius: 4px;
 	padding: 0.8em;
 	color: #666;
 	height: 2em;
@@ -36,7 +36,7 @@ div[class^="yak-send"] {
 	border-left: 1px solid #d3d3d3;
 	display: grid;
 	color: #666;
-	border-radius: 0em 1.6em 1.6em 0em;
+	border-radius: 0em 4px 4px 0em;
 }
 
 div[class^="yak-send"] p {
