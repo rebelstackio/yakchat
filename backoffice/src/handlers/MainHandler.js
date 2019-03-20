@@ -149,6 +149,9 @@ export default {
 		},
 		'OPERATOR-DATA': (action, state) => {
 			const { value } = action.data
+			state.Main.oldThreads = state.Main.channelList[state.Main.chnlUid]
+			? state.Main.channelList[state.Main.chnlUid][4]
+			: [];
 			state.Main.channelList = value;
 			return { newState: state }
 		},
