@@ -148,9 +148,9 @@ class Sidebar extends MetaComponent {
 					<span>${msgObject[uid][0].split('-')[1]}</span>
 					<img src="${enevelope}" class="${isNew ? '' : 'hide'}"></img>
 				`
-			const li = instanceElement('li', ['thread-item'], uid, type);
+			const li = instanceElement('li', ['thread-item'], 'id-' + uid, type);
 			li.addEventListener('click', () => {
-				const envelope = this.querySelector('#' + uid + '>img');
+				const envelope = document.querySelector('#id-' + uid + '>img');
 				if (!envelope.classList.contains('hide')) {
 					envelope.classList.add('hide');
 				}
