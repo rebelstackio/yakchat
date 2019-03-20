@@ -116,6 +116,7 @@ ol#threads {
 	display: grid;
 	font-size: 20px;
 	border-radius: 4px;
+	position: relative;
 }
 
 .thread-item:not(:last-child) > span {
@@ -138,6 +139,12 @@ ol#threads {
 	font-size: 14px;
 	font-style: italic;
 	margin-bottom: 2px;
+}
+
+.thread-item > img {
+	position: absolute;
+	top: 0;
+	right: 0;
 }
 
 select#channel-select {
