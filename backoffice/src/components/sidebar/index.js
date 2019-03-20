@@ -1,7 +1,9 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import { instanceElement } from '../../utils';
-import defaulAvatar from '../../assets/images/user.png';
-import cog from '../../assets/icons/cog-solid.svg';
+import defaulAvatar from '../../images/user.svg';
+import cog from '../../css/icons/cog-solid.svg';
+import searchIcon from '../../css/icons/search-solid.svg';
+import enevelope from '../../css/icons/envelope-solid.svg';
 import './index.css';
 class Sidebar extends MetaComponent {
 	constructor () {
@@ -51,7 +53,7 @@ class Sidebar extends MetaComponent {
 			if (this.searchValue === '') {
 				// full array
 				const { threads } = this.storage.getState().Main;
-				this.listClientThreads(threads);
+				this.listSelectedThreads(threads);
 			} else {
 				this.handleSearch();
 			}
@@ -116,28 +118,35 @@ class Sidebar extends MetaComponent {
 					DID: selector.value
 				})
 				document.querySelector('.msg-body').innerHTML = '';
-				this.listClientThreads(threads[4] ? threads[4] : {});
+				this.listSelectedThreads(threads[4] ? threads[4] : {});
 			}
 		})
 		chnlBox.appendChild(selector);
 	}
 
 	/**
-	 * list the client threads in his channel
+	 * list the selected threads into view
 	 */
-	listClientThreads(msgObject) {
+	listSelectedThreads(msgObject) {
 		const sidebar = this.querySelector('#sidebar-content');
 		const thBox = this.querySelector('#threads');
+		const { oldThreads } = this.storage.getState().Main;
 		thBox.innerHTML = '';
 		Object.keys(msgObject).forEach(uid => {
+			let isNew = false;
+			if (oldThreads[uid]) {
+				isNew = JSON.stringify(oldThreads[uid]) !== JSON.stringify(msgObject[uid])
+			}
 			const type = msgObject[uid][0] === ''
 				? `
 					New User
 					<span>unknown</span>
+					${isNew ? '<img src="'+ enevelope +'"></img>': ''}
 				`
 				: `
 					${msgObject[uid][0].split('-')[0]}
 					<span>${msgObject[uid][0].split('-')[1]}</span>
+					${isNew ? '<img src="'+ enevelope +'"></img>': ''}
 				`
 			const li = instanceElement('li', ['thread-item'], uid, type);
 			li.addEventListener('click', () => {
@@ -167,7 +176,7 @@ class Sidebar extends MetaComponent {
 				newObject[key] = threads[key]
 			}
 		});
-		this.listClientThreads(newObject);
+		this.listSelectedThreads(newObject);
 	}
 
 	handleStoreEvents () {
@@ -177,7 +186,7 @@ class Sidebar extends MetaComponent {
 				const domain = this.storage.getState().Main.domain;
 				const threads = this.storage.getState().Main.threads;
 				this.createClientView(channelList,domain);
-				this.listClientThreads(threads);
+				this.listSelectedThreads(threads);
 			},
 			'LOGIN-SUCCESS': () => {
 				this.querySelector('#user-name').innerHTML = this.storage.getState().Main.displayName;
