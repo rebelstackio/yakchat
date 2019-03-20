@@ -141,15 +141,19 @@ class Sidebar extends MetaComponent {
 				? `
 					New User
 					<span>unknown</span>
-					${isNew ? '<img src="'+ enevelope +'"></img>': ''}
+					<img src="${enevelope}" class="${isNew ? '' : 'hide'}"></img>
 				`
 				: `
 					${msgObject[uid][0].split('-')[0]}
 					<span>${msgObject[uid][0].split('-')[1]}</span>
-					${isNew ? '<img src="'+ enevelope +'"></img>': ''}
+					<img src="${enevelope}" class="${isNew ? '' : 'hide'}"></img>
 				`
 			const li = instanceElement('li', ['thread-item'], uid, type);
 			li.addEventListener('click', () => {
+				const envelope = this.querySelector('#' + uid + '>img');
+				if (!envelope.classList.contains('hide')) {
+					envelope.classList.add('hide');
+				}
 				this.storage.dispatch({type: 'CHAT-SELECTED', data: {
 					clientSelected: type,
 					messages: this.storage.getState().Main.threads[uid],
@@ -200,8 +204,11 @@ class Sidebar extends MetaComponent {
 				this.querySelector('.profile-img').src = localStorage.getItem(uid);
 			},
 			'OPERATOR-DATA': () => {
-				const { channelList } = this.storage.getState().Main;
+				const { channelList, chnlUid } = this.storage.getState().Main;
 				this.createOperatorView(channelList);
+				if (chnlUid !== 0) {
+					this.listSelectedThreads(channelList[chnlUid][4]);
+				}
 			}
 		}
 	}
