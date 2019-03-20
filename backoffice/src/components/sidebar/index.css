@@ -140,6 +140,11 @@ ol#threads {
 	margin-bottom: 2px;
 }
 
+.thread-item > img {
+	grid-area: 1 / 2 / span 2;
+	place-self: center;
+}
+
 select#channel-select {
 	height: 6vh;
 	background: rgba(255, 255, 255, .6);

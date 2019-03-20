@@ -24,6 +24,9 @@ const MainDefaultState = {
 	displayName: '',
 	email: '',
 	domain: '',
+	oldChannelList: [],
+	oldThreads: [],
+	threads: [],
 	channelList: [],
 	selectedMessages: [],
 	chnlUid: 0
@@ -119,6 +122,7 @@ export default {
 			const {value} = action.data;
 			state.Main.domain = value ? value[1] : '';
 			state.Main.storageKeys = value ? value[3]: '';
+			state.Main.oldThreads = state.Main.threads;
 			state.Main.threads = value ? value[4]: [];
 			//TODO: MAKE THIS SUPPORT ONE TO MANY CHANNELS
 			state.Main.channelList = [{title: value ? value[2]: ''}];
