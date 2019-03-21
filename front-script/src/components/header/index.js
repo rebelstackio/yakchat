@@ -23,7 +23,6 @@ class Header extends MetaComponent {
 		title.textContent = 'Yak Chat';
 		this.headerContent.appendChild(title);
 		this.createOptions(this.headerContent)
-		this.createCloseButton();
 	}
 	/**
 	 * function that set the option type
@@ -104,27 +103,10 @@ class Header extends MetaComponent {
 	}
 	
 	/**
-	 * create the toggle chat
-	 */
-	createCloseButton () {
-		this.closeButton = document.createElement('div')
-		this.closeButton.className = 'yak-min-open';
-		this.closeButton.addEventListener('click', () => {
-			this.closeButton.classList.toggle('yak-min-close');
-			this.storage.dispatch({ type: 'TOGGLE-CHAT' })
-		})
-		this.headerContent.appendChild(this.closeButton);
-	}
-	/**
 	 * Handle Events in a organized way.
 	 */
 	handleStoreEvents () {
 		return {
-			'TOGGLE-CHAT': () => {
-				this.className = this.storage.getState().Main.isOpen
-					? 'header-up'
-					: 'header-down';
-			}
 		};
 	}
 }
