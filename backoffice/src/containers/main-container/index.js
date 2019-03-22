@@ -45,6 +45,26 @@ class YakMainContainer extends MetaContainer {
 					router.navigate('/login');
 				}
 			},
+			'/lobby/:channel/:id': (params) => {
+				const {channelList} = global.storage.getState().Main;
+				const chnlSelected = channelList[params.channel];
+				if (chnlSelected) {
+					let threadsSelect = chnlSelected[4][params.id];
+					if (this.accessLevel === 3) {
+						global.storage.dispatch({
+							type: 'THREAD-SELECTED',
+							threads: chnlSelected[4],
+							DID: params.channel
+						});
+					}
+					global.storage.dispatch({type: 'CHAT-SELECTED', data: {
+						clientSelected: threadsSelect[0] !== '' ? threadsSelect[0] : 'New User<span>unknown</span>',
+						messages: chnlSelected[4][params.id],
+						visitorId: params.id
+					}})
+					console.log(chnlSelected[4][params.id], params.id);
+				}
+			},
 			'/dashboard': () => {
 				console.log('dashboard', this.auth)
 				if (this.auth) {
@@ -122,6 +142,7 @@ class YakMainContainer extends MetaContainer {
 		storage.on('LOGIN-SUCCESS', (state) => {
 			const {accessLevel, admin, auth} = state.newState.Main;
 			this.auth = auth;
+			this.accessLevel = accessLevel;
 			this.createRoleView(accessLevel, admin);
 		});
 
