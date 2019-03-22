@@ -23,7 +23,9 @@ class YakMainContainer extends MetaContainer {
 		this.handleStoreEvents();
 		return this.content;
 	}
-
+	/**
+	 * handle the routes with navigo
+	 */
 	handleRoute () {
 		let el;
 		var root = null;
@@ -80,14 +82,6 @@ class YakMainContainer extends MetaContainer {
 		})
 		.resolve();
 	}
-	
-	/**
-	 * TODO: make a real require auth
-	 */
-	requireAuth () {
-		return !global.storage.getState().Main.auth;
-		//return true;
-	}
 	/**
 	 * @description create the view depending on your user role
 	 * @param {Integer} accessLevel 
@@ -120,7 +114,9 @@ class YakMainContainer extends MetaContainer {
 			}
 		}
 	}
-	
+	/**
+	 * handle storage events
+	 */
 	handleStoreEvents () {
 		const { storage } = global;
 		storage.on('LOGIN-SUCCESS', (state) => {
