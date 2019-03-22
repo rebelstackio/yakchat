@@ -46,8 +46,10 @@ class YakMainContainer extends MetaContainer {
 				}
 			},
 			'/lobby/:channel/:id': (params) => {
-				const {channelList} = global.storage.getState().Main;
-				const chnlSelected = channelList[params.channel];
+				const {channelList, threads} = global.storage.getState().Main;
+				const chnlSelected = this.accessLevel > 3
+					? {4: threads}
+					: channelList[params.channel];
 				if (chnlSelected) {
 					let threadsSelect = chnlSelected[4][params.id];
 					if (this.accessLevel === 3) {
