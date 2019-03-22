@@ -54,8 +54,14 @@ class Sidebar extends MetaComponent {
 		.addEventListener('keydown', () => {
 			if (this.searchValue === '') {
 				// full array
-				const { threads } = this.storage.getState().Main;
-				this.listSelectedThreads(threads);
+				const { threads, allThreads } = this.storage.getState().Main;
+				const selector = document.querySelector('#channel-select')
+					? document.querySelector('#channel-select').value
+					: '*';
+				const currentThread = selector == '0'
+					? allThreads
+					: threads;
+				this.listSelectedThreads(currentThread);
 			} else {
 				this.handleSearch();
 			}
@@ -106,7 +112,7 @@ class Sidebar extends MetaComponent {
 		chnlBox.innerHTML = '';
 		const selector = instanceElement('select', false, 'channel-select',
 			`
-				<option value="0"> Select Channel </option>
+				<option value="0"> All </option>
 			`
 		);
 		Object.keys(channelList).forEach((key) => {
@@ -117,7 +123,7 @@ class Sidebar extends MetaComponent {
 			selector.appendChild(option);
 		});
 		selector.addEventListener('change', () => {
-			if (this.selectChannel != 1) {
+			if (selector.value != 0) {
 				const threads = this.storage.getState().Main.channelList[selector.value];
 				this.storage.dispatch({
 					type: 'THREAD-SELECTED',
@@ -126,6 +132,9 @@ class Sidebar extends MetaComponent {
 				})
 				document.querySelector('.msg-body').innerHTML = '';
 				this.listSelectedThreads(threads[4] ? threads[4] : {});
+			} else {
+				const { allThreads } = this.storage.getState().Main;
+				this.listSelectedThreads(allThreads)
 			}
 		})
 		chnlBox.appendChild(selector);
@@ -172,41 +181,27 @@ class Sidebar extends MetaComponent {
 		sidebar.appendChild(thBox);
 	}
 
-	listAllThreads (list) {
-		const sidebar = this.querySelector('#sidebar-content');
-		const thBox = this.querySelector('#threads');
-		list.forEach(chnl => {
-			
-			const type = msgObject[uid][0] === ''
-				? `
-					New User
-					<span>unknown</span>
-					<img src="${enevelope}" class="hide"></img>
-				`
-				: `
-					${msgObject[uid][0].split('-')[0]}
-					<span>${msgObject[uid][0].split('-')[1]}</span>
-					<img src="${enevelope}" class="${isNew ? '' : 'hide'}"></img>
-				`
-			const li = instanceElement('li', ['thread-item'], 'id-' + uid, type);
-			
-		})
-	}
 
 	/**
 	 * handle search
 	 */
 	handleSearch () {
-		const { threads } = this.storage.getState().Main;
+		const { threads, allThreads } = this.storage.getState().Main;
+		const selector = document.querySelector('#channel-select')
+			? document.querySelector('#channel-select').value
+			: '*';
+		const currentThread = selector == '0'
+			? allThreads
+			: threads;
 		let newObject = {};
-		Object.keys(threads).forEach(key => {
-			const userdata = threads[key][0] !== '' ? threads[key][0] : 'New User-unknown';
+		Object.keys(currentThread).forEach(key => {
+			const userdata = currentThread[key][0] !== '' ? currentThread[key][0] : 'New User-unknown';
 			const name = userdata.split('-')[0];
 			const email = userdata.split('-')[1];
 			if (name.toUpperCase().startsWith(this.searchValue.toUpperCase()) || 
 				email.toUpperCase().startsWith(this.searchValue.toUpperCase())
 			) {
-				newObject[key] = threads[key]
+				newObject[key] = currentThread[key]
 			}
 		});
 		this.listSelectedThreads(newObject);
@@ -235,12 +230,12 @@ class Sidebar extends MetaComponent {
 				this.querySelector('.profile-img').src = localStorage.getItem(uid);
 			},
 			'OPERATOR-DATA': () => {
-				const { channelList, chnlUid, allThreds } = this.storage.getState().Main;
+				const { channelList, chnlUid, allThreads } = this.storage.getState().Main;
 				this.createOperatorView(channelList);
 				if (chnlUid !== 0) {
 					this.listSelectedThreads(channelList[chnlUid][4]);
 				} else {
-					this.listAllThreads(allThreds);
+					this.listSelectedThreads(allThreads);
 				}
 			}
 		}

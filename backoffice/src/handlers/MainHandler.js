@@ -215,9 +215,11 @@ export default {
 			: [];
 			checkDifferences(state.Main.channelList, value);
 			state.Main.channelList = value;
-			state.Main.allThreds = Object.keys(value).map(key => {
-				return { [value[key][2] !== '' ? value[key][2]: 'NOT-SET']: value[key][4] }
-			})
+			let allThreads = {}
+			Object.keys(value).forEach(key => {
+				allThreads = Object.assign(allThreads, value[key][4])
+			});
+			state.Main.allThreads = allThreads;
 			return { newState: state }
 		},
 		'THREAD-SELECTED': (action, state) => {
