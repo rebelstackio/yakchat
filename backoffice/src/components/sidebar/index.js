@@ -19,8 +19,11 @@ class Sidebar extends MetaComponent {
 		this.channelList = global.storage.getState().Main.channelList;
 		this.accessLevel = global.storage.getState().Main.accessLevel;
 		const urlImg = localStorage.getItem(uid) ? localStorage.getItem(uid) : defaulAvatar;
+		// where the channels or channel will be deplayed
 		const chnlBox = instanceElement('div', ['channel-box'], 'channel-t0');
+		// list of trheads
 		const thBox = instanceElement('ol', false, 'threads');
+		// profile img and name
 		const profile = instanceElement(
 			'div',
 			['side-profile'],
@@ -30,11 +33,7 @@ class Sidebar extends MetaComponent {
 				<span id="user-name"><span>
 			`
 		);
-		profile.querySelector('.profile-img')
-		.addEventListener('click', () => {
-			global.storage.dispatch({ type: 'OPEN-PROFILE' })
-			document.querySelector('.profile-popup-container-container').classList.remove('hide');
-		})
+		// search input
 		const search = instanceElement(
 			'div',
 			['search-box'],
@@ -46,8 +45,11 @@ class Sidebar extends MetaComponent {
 		content.append(profile, search, chnlBox, thBox);
 		return content;
 	}
-
+	/**
+	 * add DOM listeners
+	 */
 	addListeners () {
+		// search
 		this.querySelector('.search-input')
 		.addEventListener('keydown', () => {
 			if (this.searchValue === '') {
@@ -57,14 +59,16 @@ class Sidebar extends MetaComponent {
 			} else {
 				this.handleSearch();
 			}
-		})
-	}
-
-	selectChat (cl) {
-		global.storage.dispatch({ type: 'CHAT-SELECTED', data: cl });
+		});
+		// profile image
+		this.querySelector('.profile-img')
+		.addEventListener('click', () => {
+			global.storage.dispatch({ type: 'OPEN-PROFILE' })
+			document.querySelector('.profile-popup-container-container').classList.remove('hide');
+		});
 	}
 	/**
-	 * create the 
+	 * create the view for the client t0-MVP
 	 * @param {Arrya} channelList 
 	 */
 	createClientView (channelList, domain) {
@@ -93,7 +97,10 @@ class Sidebar extends MetaComponent {
 		});
 		sidebar.appendChild(chnlBox);
 	}
-
+	/**
+	 * create the view for the operator
+	 * @param {Object} channelList 
+	 */
 	createOperatorView (channelList) {
 		const chnlBox = this.querySelector('#channel-t0');
 		chnlBox.innerHTML = '';
@@ -156,7 +163,7 @@ class Sidebar extends MetaComponent {
 				}
 				this.storage.dispatch({type: 'CHAT-SELECTED', data: {
 					clientSelected: type,
-					messages: this.storage.getState().Main.threads[uid],
+					messages: msgObject[uid],
 					visitorId: uid
 				}})
 			})
@@ -204,7 +211,9 @@ class Sidebar extends MetaComponent {
 		});
 		this.listSelectedThreads(newObject);
 	}
-
+	/**
+	 * handle the storage events
+	 */
 	handleStoreEvents () {
 		return {
 			'CHANNEL-ARRIVE': (state) => {
