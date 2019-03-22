@@ -46,17 +46,37 @@ function checkDifferences (oldState, newState) {
 				const newCount = 
 					Object.keys(newState[chnlId][4] ? newState[chnlId][4] : {}).length;
 				if (newCount > oldCount) {
-					notify('There is new visitor on channel: ' + newState[chnlId][2]);
+					const thid = getChildAdded(oldState[chnlId][4], newState[chnlId][4])
+					notify(
+						'There is new visitor on channel: ' + newState[chnlId][2],// message
+						chnlId, // channel id
+						thid // thread id
+					);
 				}
 			})
 		}
 	}
 }
 /**
+ * get the just added visitor / registrant in the list
+ * @param {*} oldVisitorList 
+ * @param {*} newVisitorList 
+ */
+function getChildAdded (oldVisitorList, newVisitorList) {
+	let resp = '';
+	Object.keys(newVisitorList).map(key => {
+		if (!oldVisitorList[key]){
+			// it's the new
+			resp = key;
+		}
+	})
+	return resp;
+}
+/**
  * send browser notification
  * @param {String} msg 
  */
-function notify (msg) {
+function notify (msg, chid, thid) {
 	if (Notification) {
 		if (Notification.permission === "granted") {
 			// if the user allowed notifications
@@ -65,11 +85,8 @@ function notify (msg) {
 				body: msg,
 			});
 			notification.onclick = function () {
-				window.open(
-					document.location.protocol 
-					+ '//' +
-					document.location.host + "/#/lobby"
-				);
+				document.location.hash = '#/lobby/' + chid + '/' + thid
+				notification.close();
 			};
 		}
 	}
