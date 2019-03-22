@@ -142,7 +142,6 @@ class Loby extends MetaComponent {
 					const dataKey = parsemkey(msg);
 					const date = new Date(dataKey.ts).toDateString();
 					const isYou = msgList[msg][1] === uid;
-					//const isOperator = msgList[msg].length > 1;
 					const message = msgList[msg][0].split('-');
 					const msgBox = instanceElement(
 						'div',
@@ -178,7 +177,6 @@ class Loby extends MetaComponent {
 	 * handle the toggle pop up settings
 	 */
 	toggleSetting () {
-		console.log('toggling the settings');
 		document.querySelector('#setting-box-container.profile-popup-container').classList.toggle('hide');
 		this.storage.dispatch({type: 'OPEN-SETTINGS'});
 	}
