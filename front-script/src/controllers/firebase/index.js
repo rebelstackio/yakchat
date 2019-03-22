@@ -140,7 +140,6 @@ function listenRow (route) {
 export function send (msg) {
 	if (threadRoute !== '') {
 		let sendMessage = functions.httpsCallable('sendMessage');
-		//const {uid, msg, type, thread} = data;
 		sendMessage({
 			uid: localStorage.getItem('yak-hash'),
 			msg: msg.message,
