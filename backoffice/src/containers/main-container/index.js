@@ -62,7 +62,6 @@ class YakMainContainer extends MetaContainer {
 						messages: chnlSelected[4][params.id],
 						visitorId: params.id
 					}})
-					console.log(chnlSelected[4][params.id], params.id);
 				}
 			},
 			'/dashboard': () => {
