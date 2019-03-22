@@ -164,6 +164,28 @@ class Sidebar extends MetaComponent {
 		});
 		sidebar.appendChild(thBox);
 	}
+
+	listAllThreads (list) {
+		const sidebar = this.querySelector('#sidebar-content');
+		const thBox = this.querySelector('#threads');
+		list.forEach(chnl => {
+			
+			const type = msgObject[uid][0] === ''
+				? `
+					New User
+					<span>unknown</span>
+					<img src="${enevelope}" class="hide"></img>
+				`
+				: `
+					${msgObject[uid][0].split('-')[0]}
+					<span>${msgObject[uid][0].split('-')[1]}</span>
+					<img src="${enevelope}" class="${isNew ? '' : 'hide'}"></img>
+				`
+			const li = instanceElement('li', ['thread-item'], 'id-' + uid, type);
+			
+		})
+	}
+
 	/**
 	 * handle search
 	 */
@@ -204,10 +226,12 @@ class Sidebar extends MetaComponent {
 				this.querySelector('.profile-img').src = localStorage.getItem(uid);
 			},
 			'OPERATOR-DATA': () => {
-				const { channelList, chnlUid } = this.storage.getState().Main;
+				const { channelList, chnlUid, allThreds } = this.storage.getState().Main;
 				this.createOperatorView(channelList);
 				if (chnlUid !== 0) {
 					this.listSelectedThreads(channelList[chnlUid][4]);
+				} else {
+					this.listAllThreads(allThreds);
 				}
 			}
 		}

@@ -153,6 +153,9 @@ export default {
 			? state.Main.channelList[state.Main.chnlUid][4]
 			: [];
 			state.Main.channelList = value;
+			state.Main.allThreds = Object.keys(value).map(key => {
+				return { [value[key][2] !== '' ? value[key][2]: 'NOT-SET']: value[key][4] }
+			})
 			return { newState: state }
 		},
 		'THREAD-SELECTED': (action, state) => {
