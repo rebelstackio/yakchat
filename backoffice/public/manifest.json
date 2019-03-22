@@ -4,7 +4,7 @@
 	"background_color": "#5c8c98",
 	"theme_color": "#5c8c98",
 	"display": "standalone",
-	"start_url": "index.html",
+	"start_url": "index.html/#/login",
 	"icons": [
 		{
 			"src": "./images/manifest/yakchat_128.png",

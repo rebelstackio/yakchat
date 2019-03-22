@@ -8,5 +8,16 @@
 		<link rel="stylesheet" href="css/responsive.css">
 	</head>
 	<body>
+			<script>
+				if ('serviceWorker' in navigator) {
+					navigator.serviceWorker.register('firebase-messaging-sw.js').then(function() {
+						return navigator.serviceWorker.ready;
+					}).then(function(serviceWorkerRegistration) {
+						console.log('Service Worker is ready', serviceWorkerRegistration);
+					}).catch(function(error) {
+						console.log('Service Worker Error:', error);
+					});
+				}
+			</script>
 	</body>
 </html>
