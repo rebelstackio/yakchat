@@ -58,7 +58,7 @@ class YakMainContainer extends MetaContainer {
 						});
 					}
 					global.storage.dispatch({type: 'CHAT-SELECTED', data: {
-						clientSelected: threadsSelect[0] !== '' ? threadsSelect[0] : 'New User<span>unknown</span>',
+						clientSelected: threadsSelect[0] !== '' ? threadsSelect[0] : 'New User <span>unknown</span>',
 						messages: chnlSelected[4][params.id],
 						visitorId: params.id
 					}})
