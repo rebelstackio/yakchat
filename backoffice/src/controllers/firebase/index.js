@@ -289,15 +289,16 @@ export function send (data) {
 	const chnlUid = data.chnlUid;
 	const visitorId = data.visitorId
 	let sendMessage = functions.httpsCallable('sendMessage');
-		//const {uid, msg, type, thread} = data;
-		sendMessage({
-			uid: uid,
-			msg: data.message,
-			type: 'AA', // text
-			thread: 'domains/' + chnlUid + '/4/' + visitorId
-		}).then(v => {
-			console.log(v);
-		})
+		if (uid && chnlUid && visitorId) {
+			sendMessage({
+				uid: uid,
+				msg: data.message,
+				type: 'AA', // text
+				thread: 'domains/' + chnlUid + '/4/' + visitorId
+			}).then(v => {
+				console.log(v);
+			})
+		}
 }
 /**
  * @description listen to changes in database with the current thread

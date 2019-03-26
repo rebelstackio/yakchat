@@ -19,8 +19,11 @@ class Sidebar extends MetaComponent {
 		this.channelList = global.storage.getState().Main.channelList;
 		this.accessLevel = global.storage.getState().Main.accessLevel;
 		const urlImg = localStorage.getItem(uid) ? localStorage.getItem(uid) : defaulAvatar;
+		// where the channels or channel will be deplayed
 		const chnlBox = instanceElement('div', ['channel-box'], 'channel-t0');
+		// list of trheads
 		const thBox = instanceElement('ol', false, 'threads');
+		// profile img and name
 		const profile = instanceElement(
 			'div',
 			['side-profile'],
@@ -30,11 +33,7 @@ class Sidebar extends MetaComponent {
 				<span id="user-name"><span>
 			`
 		);
-		profile.querySelector('.profile-img')
-		.addEventListener('click', () => {
-			global.storage.dispatch({ type: 'OPEN-PROFILE' })
-			document.querySelector('.profile-popup-container-container').classList.remove('hide');
-		})
+		// search input
 		const search = instanceElement(
 			'div',
 			['search-box'],
@@ -46,25 +45,36 @@ class Sidebar extends MetaComponent {
 		content.append(profile, search, chnlBox, thBox);
 		return content;
 	}
-
+	/**
+	 * add DOM listeners
+	 */
 	addListeners () {
+		// search
 		this.querySelector('.search-input')
 		.addEventListener('keydown', () => {
 			if (this.searchValue === '') {
 				// full array
-				const { threads } = this.storage.getState().Main;
-				this.listSelectedThreads(threads);
+				const { threads, allThreads } = this.storage.getState().Main;
+				const selector = document.querySelector('#channel-select')
+					? document.querySelector('#channel-select').value
+					: '*';
+				const currentThread = selector == '0'
+					? allThreads
+					: threads;
+				this.listSelectedThreads(currentThread);
 			} else {
 				this.handleSearch();
 			}
-		})
-	}
-
-	selectChat (cl) {
-		global.storage.dispatch({ type: 'CHAT-SELECTED', data: cl });
+		});
+		// profile image
+		this.querySelector('.profile-img')
+		.addEventListener('click', () => {
+			global.storage.dispatch({ type: 'OPEN-PROFILE' })
+			document.querySelector('.profile-popup-container-container').classList.remove('hide');
+		});
 	}
 	/**
-	 * create the 
+	 * create the view for the client t0-MVP
 	 * @param {Arrya} channelList 
 	 */
 	createClientView (channelList, domain) {
@@ -93,13 +103,16 @@ class Sidebar extends MetaComponent {
 		});
 		sidebar.appendChild(chnlBox);
 	}
-
+	/**
+	 * create the view for the operator
+	 * @param {Object} channelList 
+	 */
 	createOperatorView (channelList) {
 		const chnlBox = this.querySelector('#channel-t0');
 		chnlBox.innerHTML = '';
 		const selector = instanceElement('select', false, 'channel-select',
 			`
-				<option value="0"> Select Channel </option>
+				<option value="0"> All </option>
 			`
 		);
 		Object.keys(channelList).forEach((key) => {
@@ -110,7 +123,7 @@ class Sidebar extends MetaComponent {
 			selector.appendChild(option);
 		});
 		selector.addEventListener('change', () => {
-			if (this.selectChannel != 1) {
+			if (selector.value != 0) {
 				const threads = this.storage.getState().Main.channelList[selector.value];
 				this.storage.dispatch({
 					type: 'THREAD-SELECTED',
@@ -119,6 +132,9 @@ class Sidebar extends MetaComponent {
 				})
 				document.querySelector('.msg-body').innerHTML = '';
 				this.listSelectedThreads(threads[4] ? threads[4] : {});
+			} else {
+				const { allThreads } = this.storage.getState().Main;
+				this.listSelectedThreads(allThreads)
 			}
 		})
 		chnlBox.appendChild(selector);
@@ -156,7 +172,7 @@ class Sidebar extends MetaComponent {
 				}
 				this.storage.dispatch({type: 'CHAT-SELECTED', data: {
 					clientSelected: type,
-					messages: this.storage.getState().Main.threads[uid],
+					messages: msgObject[uid],
 					visitorId: uid
 				}})
 			})
@@ -164,25 +180,35 @@ class Sidebar extends MetaComponent {
 		});
 		sidebar.appendChild(thBox);
 	}
+
+
 	/**
 	 * handle search
 	 */
 	handleSearch () {
-		const { threads } = this.storage.getState().Main;
+		const { threads, allThreads } = this.storage.getState().Main;
+		const selector = document.querySelector('#channel-select')
+			? document.querySelector('#channel-select').value
+			: '*';
+		const currentThread = selector == '0'
+			? allThreads
+			: threads;
 		let newObject = {};
-		Object.keys(threads).forEach(key => {
-			const userdata = threads[key][0] !== '' ? threads[key][0] : 'New User-unknown';
+		Object.keys(currentThread).forEach(key => {
+			const userdata = currentThread[key][0] !== '' ? currentThread[key][0] : 'New User-unknown';
 			const name = userdata.split('-')[0];
 			const email = userdata.split('-')[1];
 			if (name.toUpperCase().startsWith(this.searchValue.toUpperCase()) || 
 				email.toUpperCase().startsWith(this.searchValue.toUpperCase())
 			) {
-				newObject[key] = threads[key]
+				newObject[key] = currentThread[key]
 			}
 		});
 		this.listSelectedThreads(newObject);
 	}
-
+	/**
+	 * handle the storage events
+	 */
 	handleStoreEvents () {
 		return {
 			'CHANNEL-ARRIVE': (state) => {
@@ -204,10 +230,12 @@ class Sidebar extends MetaComponent {
 				this.querySelector('.profile-img').src = localStorage.getItem(uid);
 			},
 			'OPERATOR-DATA': () => {
-				const { channelList, chnlUid } = this.storage.getState().Main;
+				const { channelList, chnlUid, allThreads } = this.storage.getState().Main;
 				this.createOperatorView(channelList);
 				if (chnlUid !== 0) {
 					this.listSelectedThreads(channelList[chnlUid][4]);
+				} else {
+					this.listSelectedThreads(allThreads);
 				}
 			}
 		}
