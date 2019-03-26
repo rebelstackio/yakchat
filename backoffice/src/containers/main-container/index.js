@@ -23,7 +23,9 @@ class YakMainContainer extends MetaContainer {
 		this.handleStoreEvents();
 		return this.content;
 	}
-
+	/**
+	 * handle the routes with navigo
+	 */
 	handleRoute () {
 		let el;
 		var root = null;
@@ -41,6 +43,27 @@ class YakMainContainer extends MetaContainer {
 					this.appendChild(el);
 				} else {
 					router.navigate('/login');
+				}
+			},
+			'/lobby/:channel/:id': (params) => {
+				const {channelList, threads} = global.storage.getState().Main;
+				const chnlSelected = this.accessLevel > 3
+					? {4: threads}
+					: channelList[params.channel];
+				if (chnlSelected) {
+					let threadsSelect = chnlSelected[4][params.id];
+					if (this.accessLevel === 3) {
+						global.storage.dispatch({
+							type: 'THREAD-SELECTED',
+							threads: chnlSelected[4],
+							DID: params.channel
+						});
+					}
+					global.storage.dispatch({type: 'CHAT-SELECTED', data: {
+						clientSelected: threadsSelect[0] !== '' ? threadsSelect[0] : 'New User <span>unknown</span>',
+						messages: chnlSelected[4][params.id],
+						visitorId: params.id
+					}})
 				}
 			},
 			'/dashboard': () => {
@@ -80,14 +103,6 @@ class YakMainContainer extends MetaContainer {
 		})
 		.resolve();
 	}
-	
-	/**
-	 * TODO: make a real require auth
-	 */
-	requireAuth () {
-		return !global.storage.getState().Main.auth;
-		//return true;
-	}
 	/**
 	 * @description create the view depending on your user role
 	 * @param {Integer} accessLevel 
@@ -120,12 +135,15 @@ class YakMainContainer extends MetaContainer {
 			}
 		}
 	}
-	
+	/**
+	 * handle storage events
+	 */
 	handleStoreEvents () {
 		const { storage } = global;
 		storage.on('LOGIN-SUCCESS', (state) => {
 			const {accessLevel, admin, auth} = state.newState.Main;
 			this.auth = auth;
+			this.accessLevel = accessLevel;
 			this.createRoleView(accessLevel, admin);
 		});
 

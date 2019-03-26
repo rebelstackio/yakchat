@@ -31,6 +31,66 @@ const MainDefaultState = {
 	selectedMessages: [],
 	chnlUid: 0
 };
+/**
+ * check if new visitor has been added
+ * @param {Object} oldState 
+ * @param {Object} newState 
+ */
+function checkDifferences (oldState, newState) {
+	if (JSON.stringify(oldState) !== JSON.stringify(newState)) {
+		if(oldState.length !== 0) {
+			Object.keys(newState).forEach(chnlId => {
+				// count the visitors / registrant per channel
+				const oldCount = 
+					Object.keys(oldState[chnlId][4] ? oldState[chnlId][4] : {}).length;
+				const newCount = 
+					Object.keys(newState[chnlId][4] ? newState[chnlId][4] : {}).length;
+				if (newCount > oldCount) {
+					const thid = getChildAdded(oldState[chnlId][4], newState[chnlId][4])
+					notify(
+						'There is new visitor on channel: ' + newState[chnlId][2],// message
+						chnlId, // channel id
+						thid // thread id
+					);
+				}
+			})
+		}
+	}
+}
+/**
+ * get the just added visitor / registrant in the list
+ * @param {*} oldVisitorList 
+ * @param {*} newVisitorList 
+ */
+function getChildAdded (oldVisitorList, newVisitorList) {
+	let resp = '';
+	Object.keys(newVisitorList).map(key => {
+		if (!oldVisitorList[key]){
+			// it's the new
+			resp = key;
+		}
+	})
+	return resp;
+}
+/**
+ * send browser notification
+ * @param {String} msg 
+ */
+function notify (msg, chid, thid) {
+	if (Notification) {
+		if (Notification.permission === "granted") {
+			// if the user allowed notifications
+			var notification = new Notification('YAK CHAT', {
+				icon: 'https://res.cloudinary.com/dvv4qgnka/image/upload/c_scale,w_158/v1553216418/yakchat_icon_192.png',
+				body: msg,
+			});
+			notification.onclick = function () {
+				document.location.hash = '#/lobby/' + chid + '/' + thid
+				notification.close();
+			};
+		}
+	}
+}
 
 export default {
 	MainDefaultState,
@@ -96,7 +156,6 @@ export default {
 			return { newState: state }
 		},
 		'CHNG-PASS': (action, state) => {
-			console.log(action.type, action.data);
 			return { newState: state }
 		},
 		'SIGNUP': (action, state) => {
@@ -125,6 +184,8 @@ export default {
 			state.Main.oldThreads = state.Main.threads;
 			state.Main.threads = value ? value[4]: [];
 			//TODO: MAKE THIS SUPPORT ONE TO MANY CHANNELS
+			checkDifferences(state.Main.oldChannelList, {'t':value});
+			state.Main.oldChannelList = {'t':value};
 			state.Main.channelList = [{title: value ? value[2]: ''}];
 			return { newState: state } 
 		},
@@ -152,7 +213,13 @@ export default {
 			state.Main.oldThreads = state.Main.channelList[state.Main.chnlUid]
 			? state.Main.channelList[state.Main.chnlUid][4]
 			: [];
+			checkDifferences(state.Main.channelList, value);
 			state.Main.channelList = value;
+			let allThreads = {}
+			Object.keys(value).forEach(key => {
+				allThreads = Object.assign(allThreads, value[key][4])
+			});
+			state.Main.allThreads = allThreads;
 			return { newState: state }
 		},
 		'THREAD-SELECTED': (action, state) => {

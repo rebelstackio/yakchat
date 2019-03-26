@@ -202,6 +202,9 @@ exports.handleVisitor = functions.https.onCall((req) => {
 	const name = req.n ? (req.n + '-') : '';
 	const email = req.m ? req.m : '';
 	const domain = req.d
+	if (!uid) {
+		return false;
+	}
 	return admin
 		.database()
 		.ref("/domains/")

@@ -22,15 +22,7 @@ const app = firebase.initializeApp({
 	messagingSenderId: process.env.FB_PROJECTID
 }, 'yakchat-frontscript');
 
-const channel = 'testing';
 var functions = app.functions();
-/**
- * the reason of this is to map the message into an object,
- * to avoid repeat the keys of the object in each child,
- * SEE: objectCompress(), objectDecompress()
- */
-const msgPreset = ['type', {from: ['name']}, 'msg', 'date'];
-const newPreset = ['date', 'message', 'by'];
 let threadRoute = '';
 
 app.auth().onAuthStateChanged(function(user) {
@@ -49,6 +41,7 @@ app.auth().onAuthStateChanged(function(user) {
 export function singUpWithEmail (email, name) {
 	const hash = email.md5Encode();
 	const d = document.location.host;
+	//TODO: validate the email to not exist in this channel
 	let handler = functions.httpsCallable('handleVisitor');
 	handler({
 		u: hash,
@@ -72,7 +65,6 @@ export function singUpWithEmail (email, name) {
 export async function signInAnonymous () {
 	try {
 		await app.auth().signInAnonymously();
-		let hash = '';
 		const route = await handleVisitor();
 		getMessages(route);
 		listenRow(route);
@@ -80,7 +72,9 @@ export async function signInAnonymous () {
 		//
 	}
 }
-
+/**
+ * handle new visitor or conenct with visitor fingerprint
+ */
 async function handleVisitor() {
 	if (lsTest() && localStorage.getItem('yak-hash')) {
 		hash = localStorage.getItem('yak-hash');
@@ -101,26 +95,20 @@ async function handleVisitor() {
 	})
 }
 /**
- * TODO: make this function to be compatible with singin users
  * @description get the messages and dispatch it
  * @param {String} route the firebase message route
  */
 function getMessages (route) {
-	try {
-		app.database()
-		.ref(route)
-		.once('value').then((res) => {
-			global.storage.dispatch({
-				type: 'FB-CONNECT',
-				msgList: res.val()
-			})
-		}).catch(err => {
-			console.log(err)
+	app.database()
+	.ref(route)
+	.once('value').then((res) => {
+		global.storage.dispatch({
+			type: 'FB-CONNECT',
+			msgList: res.val()
 		})
-	} catch (err) {
-		///
+	}).catch(err => {
 		console.log(err)
-	}
+	});
 }
 /**
  * @description listen to changes in database with the current thread
@@ -140,7 +128,6 @@ function listenRow (route) {
 export function send (msg) {
 	if (threadRoute !== '') {
 		let sendMessage = functions.httpsCallable('sendMessage');
-		//const {uid, msg, type, thread} = data;
 		sendMessage({
 			uid: localStorage.getItem('yak-hash'),
 			msg: msg.message,
