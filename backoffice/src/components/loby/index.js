@@ -26,7 +26,7 @@ class Loby extends MetaComponent {
 		});
 		this.querySelector('#logout').addEventListener('click', () => {
 			this.storage.dispatch({ type: 'LOGOUT' });
-			document.location.hash = '#/login';
+			document.location.pathname = '/login/';
 		});
 		this.querySelector('#settings').addEventListener('click', () => {
 			this.toggleSetting();

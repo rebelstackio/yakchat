@@ -89,7 +89,7 @@ export function singOut () {
 export function signInWithEmail (email, password) {
 	app.auth().signInWithEmailAndPassword(email, password)
 	.then(() => {
-		document.location.reload();
+		document.location.pathname = '/';
 	})
 	.catch((error) => {
 		global.storage.dispatch({
