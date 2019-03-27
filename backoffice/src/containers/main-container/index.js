@@ -1,5 +1,4 @@
 import { MetaContainer } from '@rebelstack-io/metaflux';
-import Navigo from 'navigo';
 import '../../handlers';
 import '../../components/loby'
 import '../../components/login';
@@ -27,14 +26,11 @@ class YakMainContainer extends MetaContainer {
 	 * handle the routes with navigo
 	 */
 	handleRoute () {
+		const path = document.location.pathname;
 		let el;
-		var root = null;
-		var useHash = true; // Defaults to: false
-		var hash = '#'; // Defaults to: '#'
-		var router = new Navigo(root, useHash, hash);
-		// TODO: CREATE EACH VIEW
-		router.on({
-			'/lobby': () => {
+		switch (path) {
+			case '/':
+				//lobby
 				console.log('loby', this.auth)
 				if (this.auth) {
 					this.innerHTML = '';
@@ -42,66 +38,29 @@ class YakMainContainer extends MetaContainer {
 					el = document.createElement('yak-loby');
 					this.appendChild(el);
 				} else {
-					router.navigate('/login');
+					document.location.pathname = '/login/';
 				}
-			},
-			'/lobby/:channel/:id': (params) => {
-				const {channelList, threads} = global.storage.getState().Main;
-				const chnlSelected = this.accessLevel > 3
-					? {4: threads}
-					: channelList[params.channel];
-				if (chnlSelected) {
-					let threadsSelect = chnlSelected[4][params.id];
-					if (this.accessLevel === 3) {
-						global.storage.dispatch({
-							type: 'THREAD-SELECTED',
-							threads: chnlSelected[4],
-							DID: params.channel
-						});
-					}
-					global.storage.dispatch({type: 'CHAT-SELECTED', data: {
-						clientSelected: threadsSelect[0] !== '' ? threadsSelect[0] : 'New User <span>unknown</span>',
-						messages: chnlSelected[4][params.id],
-						visitorId: params.id
-					}})
-				}
-			},
-			'/dashboard': () => {
-				console.log('dashboard', this.auth)
-				if (this.auth) {
-					// TODO: ADD DASHBOARD ELEMENT
-					router.navigate('/lobby')
-				} else {
-					router.navigate('/login');
-				}
-			},
-			'/login': () => {
+				break;
+			case '/signup/': 
+				// sigup
+				this.innerHTML = '';
+				el = document.createElement('yak-signup');
+				this.appendChild(el);
+				break;
+			case '/invite/': 
+				// sigup
+				this.innerHTML = '';
+				el = document.createElement('confirm-invitation');
+				this.appendChild(el);
+				break;
+			default:
+				//login
 				this.innerHTML = '';
 				// Add to the DOM
 				el = document.createElement('yak-login');
 				this.appendChild(el);
-				
-			},
-			'/invite': () => {
-				this.innerHTML = '';
-				el = document.createElement('confirm-invitation');
-				this.appendChild(el);
-			},
-			'/signup': () => {
-				this.innerHTML = '';
-				el = document.createElement('yak-signup');
-				this.appendChild(el);
-			},
-			'/': () => {
-				this.innerHTML = '';
-				if (this.auth) {
-					router.navigate('/lobby');
-				} else {
-					router.navigate('/login');
-				}
-			}
-		})
-		.resolve();
+				break;
+		}
 	}
 	/**
 	 * @description create the view depending on your user role
@@ -144,7 +103,7 @@ class YakMainContainer extends MetaContainer {
 			const {accessLevel, admin, auth} = state.newState.Main;
 			this.auth = auth;
 			this.accessLevel = accessLevel;
-			this.createRoleView(accessLevel, admin);
+			//this.createRoleView(accessLevel, admin);
 		});
 
 		storage.on('LOGOUT', (state) => {
