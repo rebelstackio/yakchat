@@ -35,8 +35,8 @@ Vagrant.configure("2") do |config|
 		hv.vmname = VMNAME
 	end
 
-	config.vm.define "expressifvm", primary:true do |comlog|
-		comlog.vm.hostname = "expressifvm.test"
+	config.vm.define "pullrequestsdeploys", primary:true do |comlog|
+		comlog.vm.hostname = "pullrequestsdeploys.test"
 		comlog.vm.provision "shell", inline: $script
 		comlog.vm.provision :shell do |s|
 			s.path = "travis.provision.sh"
