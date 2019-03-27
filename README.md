@@ -3,12 +3,6 @@ A chat similar to slack that can be embbeded on your website
 
 ## Pre Requisites
 
-Install `parcel` as global dependecy
-
-```shell
-npm install -g parcel-bundler
-```
-
 then install the dependecies for both projects(backoffice and frontscript) with:
 
 ```shell
