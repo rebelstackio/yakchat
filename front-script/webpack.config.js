@@ -78,6 +78,9 @@ module.exports = () => {
 				inject: 'body'
 			}),
 			new webpack.DefinePlugin(envKeys),
+			new CopyPlugin([
+				{ from: 'public/css', to: 'css' }
+			]),
 		],
 		devtool: 'source-map'
 	}
