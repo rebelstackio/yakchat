@@ -28,8 +28,12 @@ class YakMainContainer extends MetaContainer {
 	handleRoute () {
 		const path = document.location.pathname;
 		let el;
+		let env = '/';
+		if (document.location.pathname.match('yakchat') !== null) {
+			env = '/yakchat/';
+		}
 		switch (path) {
-			case '/':
+			case (env === '/' ? env : env + 'backoffice'):
 				//lobby
 				console.log('loby', this.auth)
 				if (this.auth) {
@@ -38,16 +42,16 @@ class YakMainContainer extends MetaContainer {
 					el = document.createElement('yak-loby');
 					this.appendChild(el);
 				} else {
-					document.location.pathname = '/login/';
+					document.location.pathname = env + 'login/';
 				}
 				break;
-			case '/signup/': 
+			case env + 'signup/': 
 				// sigup
 				this.innerHTML = '';
 				el = document.createElement('yak-signup');
 				this.appendChild(el);
 				break;
-			case '/invite/': 
+			case env + 'invite/': 
 				// sigup
 				this.innerHTML = '';
 				el = document.createElement('confirm-invitation');

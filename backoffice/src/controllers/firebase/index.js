@@ -89,7 +89,11 @@ export function singOut () {
 export function signInWithEmail (email, password) {
 	app.auth().signInWithEmailAndPassword(email, password)
 	.then(() => {
-		document.location.pathname = '/';
+		if (document.location.pathname.match('yakchat') !== null) {
+			document.location.pathname = '/yakchat/backoffice';
+		} else {
+			document.location.pathname = '/'
+		}
 	})
 	.catch((error) => {
 		global.storage.dispatch({

@@ -26,7 +26,11 @@ class Loby extends MetaComponent {
 		});
 		this.querySelector('#logout').addEventListener('click', () => {
 			this.storage.dispatch({ type: 'LOGOUT' });
-			document.location.pathname = '/login/';
+			if (document.location.pathname.match('yakchat') !== null) {
+				document.location.pathname = '/yakchat/login/';
+			} else {
+				document.location.pathname = '/login/';
+			}
 		});
 		this.querySelector('#settings').addEventListener('click', () => {
 			this.toggleSetting();
