@@ -11,7 +11,7 @@
     "build": "npm-run-all build:fs build:bo build:lan ",
     "build:lan": "cp landing/index.html dist/",
     "build:bo": "npm run build --prefix ./backoffice",
-    "build:fs": "parcel build --out-file frontscript.html --public-url /yakchat/ ./front-script/public/index.html",
+    "build:fs": "npm run build --prefix ./front-script",
     "start:fs": "npm start --prefix ./front-script",
     "start:bo": "npm start --prefix ./backoffice",
     "deploy": "node_modules/gh-pages/bin/gh-pages.js -t -d dist"
