@@ -76,9 +76,8 @@ export async function signInAnonymous () {
  * handle new visitor or conenct with visitor fingerprint
  */
 async function handleVisitor() {
-	if (lsTest() && localStorage.getItem('yak-hash')) {
-		hash = localStorage.getItem('yak-hash');
-	} else {
+	let hash = localStorage.getItem('yak-hash');
+	if (!hash) {
 		hash = await getClientInfo();
 		localStorage.setItem('yak-hash', hash);
 	}
@@ -136,18 +135,5 @@ export function send (msg) {
 		}).then(v => {
 			//
 		})
-	}
-}
-/**
- * @description util function to make a localStorage test
- */
-function lsTest() {
-	var test = 'test';
-	try {
-		localStorage.setItem(test, test);
-		localStorage.removeItem(test);
-		return true;
-	} catch(e) {
-		return false;
 	}
 }
