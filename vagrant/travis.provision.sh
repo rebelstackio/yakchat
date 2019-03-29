@@ -18,6 +18,6 @@ set +a
 
 # echo " AWS Credentials created"
 
-
+echo "TRAVIS_PULL_REQUEST---------->$TRAVIS_PULL_REQUEST"
 echo "AWS_ACCESS_KEY_ID-------->$AWS_ACCESS_KEY_ID"
 echo "AWS_SECRET_ACCESS_KEY-------->$AWS_SECRET_ACCESS_KEY"
