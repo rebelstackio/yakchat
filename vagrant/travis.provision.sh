@@ -6,5 +6,18 @@ t_pull_request=${travis_arg:-"$TRAVIS_PULL_REQUEST"}
 set +a
 
 # pull request number to create the bucket
-echo $t_pull_request
+# echo "Create AWS Credentials file..."
 
+# sudo mkdir ~/.aws
+
+# cat <<EOF > ~/.aws/credentials
+# aws_access_key_id = $AWS_ACCESS_KEY_ID
+# aws_secret_access_key = $AWS_SECRET_ACCESS_KEY
+# EOF
+
+
+# echo " AWS Credentials created"
+
+
+echo "AWS_ACCESS_KEY_ID-------->$AWS_ACCESS_KEY_ID"
+echo "AWS_SECRET_ACCESS_KEY-------->$AWS_SECRET_ACCESS_KEY"
