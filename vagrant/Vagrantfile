@@ -4,6 +4,8 @@
 SERVER_MEMORY = "512"
 VMNAME = "pullrequestsdeploys"
 TRAVIS_PULL_REQUEST = "SAMPLE_PULL_REQUEST"
+AWS_ACCESS_KEY_ID = "AKIAJWK3XQZF2MUH7LEQ"
+AWS_SECRET_ACCESS_KEY = "F2sP00TkJJT+zQ/tL/Jg53C6vGtff/Wl0Y3GhIDh"
 NODE_VER = "10.x"
 
 $script = <<SCRIPT
@@ -42,6 +44,8 @@ Vagrant.configure("2") do |config|
 			s.path = "travis.provision.sh"
 			s.env = {
 				"TRAVIS_PULL_REQUEST" => TRAVIS_PULL_REQUEST,
+				"AWS_ACCESS_KEY_ID"  => AWS_ACCESS_KEY_ID,
+				"AWS_SECRET_ACCESS_KEY" => AWS_SECRET_ACCESS_KEY
 			}
 		end
 	end
