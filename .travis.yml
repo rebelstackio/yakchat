@@ -17,8 +17,8 @@ install:
   - npm install
 script:
   # The env variables are set in travis config panel
-  - printf '%s\n' "FB_APIKEY=$FB_APIKEY" "FB_AUTHDOMAIN=${FB_AUTHDOMAIN}" "FB_DATABASEURL=$FB_DATABASEURL" "FB_PROJECTID=${FB_PROJECTID}" "FB_STORAGEBUCKET=$FB_STORAGEBUCKET" "FB_MESSAGINGSENDERID=${FB_MESSAGINGSENDERID}" >.env
-  - npm run build
+  # - printf '%s\n' "FB_APIKEY=$FB_APIKEY" "FB_AUTHDOMAIN=${FB_AUTHDOMAIN}" "FB_DATABASEURL=$FB_DATABASEURL" "FB_PROJECTID=${FB_PROJECTID}" "FB_STORAGEBUCKET=$FB_STORAGEBUCKET" "FB_MESSAGINGSENDERID=${FB_MESSAGINGSENDERID}" >.env
+  # - npm run build
   # runs npm test( or anything ) for regular build and run the provision script if it is a pull request
   - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && npm test || sh ./vagrant/travis.provision.sh ${TRAVIS_PULL_REQUEST}'
 
