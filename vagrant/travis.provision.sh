@@ -7,7 +7,7 @@ datestamp=$(date +%s)
 t_pull_request=${travis_arg:-"vagrant-${datestamp}"}
 NODE_VER=${NODE_VER:-10.x}
 policy_file=/tmp/policy.json
-build_dir=dist/
+build_dir=$TRAVIS_BUILD_DIR/dist/
 set +a
 
 if [[ $VAGRANT_PROVISION -eq 1 ]]; then
