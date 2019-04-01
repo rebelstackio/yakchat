@@ -7,6 +7,7 @@ datestamp=$(date +%s)
 t_pull_request=${travis_arg:-"vagrant-${datestamp}"}
 NODE_VER=${NODE_VER:-10.x}
 policy_file=/tmp/policy.json
+build_dir=dist/
 set +a
 
 if [[ $VAGRANT_PROVISION -eq 1 ]]; then
@@ -34,6 +35,9 @@ EOL
   cd /home/vagrant/yakchat
   npm install 
   npm run build
+
+  echo "..........Set build directory.........."
+  build_dir=/home/vagrant/yakchat/dist
 fi
 
 echo "..........Creating Pull Request Deploy.........."
@@ -42,7 +46,7 @@ echo "..........Create a new S3 bucket.........."
 aws s3 mb s3://"yakchat-$t_pull_request" --region us-west-1
 
 echo "..........Copy release into the bucket.........."
-aws s3 sync /home/vagrant/yakchat/dist s3://"yakchat-$t_pull_request/"
+aws s3 sync $build_dir s3://"yakchat-$t_pull_request/"
 
 echo "..........Creating the policy file.........."
 cat > $policy_file <<- EOM
