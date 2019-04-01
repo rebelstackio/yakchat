@@ -2,8 +2,9 @@ dist: xenial
 
 # matrix:
 #   include:
-- language: node_js
-  node_js: "10"
+language: node_js
+
+node_js: "10"
     # - language: python
     #   python: "3.6"
 
