@@ -18,14 +18,14 @@ set +a
 # echo "AWS_ACCESS_KEY_ID-------->$AWS_ACCESS_KEY_ID"
 # echo "AWS_SECRET_ACCESS_KEY-------->$AWS_SECRET_ACCESS_KEY"
 
-echo "Installin Python and PIP"
+echo "Installing Python and PIP"
 
-sudo apt-get -y install software-properties-common
-sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt-get update
-sudo apt-get -y install python3.6
-sudo apt-get -y install python3-pip
-pip3 install awscli --upgrade --user
+# sudo apt-get -y install software-properties-common
+# sudo add-apt-repository ppa:deadsnakes/ppa
+# sudo apt-get update
+# sudo apt-get -y install python3.6
+# sudo apt-get -y install python3-pip
+# pip3 install awscli --upgrade --user
 
 echo "Create a new S3 bucket"
 
