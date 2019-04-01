@@ -1,7 +1,13 @@
+dist: xenial
+
+# matrix:
+#   include:
 language: node_js
-node_js:
-  - "10"
-dist: trusty
+
+node_js: "10"
+    # - language: python
+    #   python: "3.6"
+
 sudo: false
 
 branches:
@@ -12,13 +18,20 @@ cache:
   directories:
     - node_modules
 
+before_install:
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
+
 install:
-  - npm install -g parcel-bundler
   - npm install
+
 script:
-  # The en variables are set in travis config panel
+  # The env variables are set in travis config panel
   - printf '%s\n' "FB_APIKEY=$FB_APIKEY" "FB_AUTHDOMAIN=${FB_AUTHDOMAIN}" "FB_DATABASEURL=$FB_DATABASEURL" "FB_PROJECTID=${FB_PROJECTID}" "FB_STORAGEBUCKET=$FB_STORAGEBUCKET" "FB_MESSAGINGSENDERID=${FB_MESSAGINGSENDERID}" >.env
-  - npm run build
+  - npm run build 
+  # runs npm test( or anything ) for regular build and run the provision script if it is a pull request
+  - export PATH=$PATH:$HOME/.local/bin
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && npm test || sh ./vagrant/travis.provision.sh ${TRAVIS_PULL_REQUEST}'
 
 deploy:
   provider: pages
@@ -28,3 +41,7 @@ deploy:
   local-dir: dist
   on:
     branch: develop
+
+# NOTE: AWS credententials are already set in travis panel as $AWS_ACCESS_KEY_ID and $AWS_SECRET_ACCESS_KEY
+# NOTE: TRAVIS_PULL_REQUEST have the pull request number otherwise will be
+# NOTE: TRAVIS_BRANCH could be usefully
