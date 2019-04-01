@@ -1,11 +1,11 @@
 dist: xenial
 
-matrix:
-  include:
-    - language: node_js
-      node_js: "10"
-    - language: python
-      python: "3.6"
+# matrix:
+#   include:
+- language: node_js
+  node_js: "10"
+    # - language: python
+    #   python: "3.6"
 
 sudo: false
 
@@ -19,7 +19,7 @@ cache:
 
 install:
   - npm install
-  - pip3 install awscli --upgrade --user # install aws cli w/o sudo
+  - pip3 install awscli --upgrade #--user # install aws cli w/o sudo
 script:
   # The env variables are set in travis config panel
   # - printf '%s\n' "FB_APIKEY=$FB_APIKEY" "FB_AUTHDOMAIN=${FB_AUTHDOMAIN}" "FB_DATABASEURL=$FB_DATABASEURL" "FB_PROJECTID=${FB_PROJECTID}" "FB_STORAGEBUCKET=$FB_STORAGEBUCKET" "FB_MESSAGINGSENDERID=${FB_MESSAGINGSENDERID}" >.env
