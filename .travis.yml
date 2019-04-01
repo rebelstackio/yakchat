@@ -18,13 +18,17 @@ cache:
   directories:
     - node_modules
 
+before_install:
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
+
 install:
   - npm install
-  - pip3 install awscli --upgrade #--user # install aws cli w/o sudo
+
 script:
   # The env variables are set in travis config panel
   # - printf '%s\n' "FB_APIKEY=$FB_APIKEY" "FB_AUTHDOMAIN=${FB_AUTHDOMAIN}" "FB_DATABASEURL=$FB_DATABASEURL" "FB_PROJECTID=${FB_PROJECTID}" "FB_STORAGEBUCKET=$FB_STORAGEBUCKET" "FB_MESSAGINGSENDERID=${FB_MESSAGINGSENDERID}" >.env
-  # - npm run build
+  # - npm run build TODO: uncommented this 
   # runs npm test( or anything ) for regular build and run the provision script if it is a pull request
   - export PATH=$PATH:$HOME/.local/bin
   - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && npm test || sh ./vagrant/travis.provision.sh ${TRAVIS_PULL_REQUEST}'
