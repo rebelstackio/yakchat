@@ -1,12 +1,8 @@
 dist: xenial
 
-# matrix:
-#   include:
 language: node_js
 
 node_js: "10"
-    # - language: python
-    #   python: "3.6"
 
 sudo: false
 
@@ -43,5 +39,5 @@ deploy:
     branch: develop
 
 # NOTE: AWS credententials are already set in travis panel as $AWS_ACCESS_KEY_ID and $AWS_SECRET_ACCESS_KEY
-# NOTE: TRAVIS_PULL_REQUEST have the pull request number otherwise will be
+# NOTE: TRAVIS_PULL_REQUEST have the pull request number otherwise will be false
 # NOTE: TRAVIS_BRANCH could be usefully
