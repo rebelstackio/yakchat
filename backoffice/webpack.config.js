@@ -84,7 +84,8 @@ module.exports = () => {
 				{ from: 'public/manifest.json', to: 'manifest.json' },
 				{ from: 'public/login', to: 'login' },
 				{ from: 'public/signup', to: 'signup' },
-				{ from: 'public/invite', to: 'invite' }
+				{ from: 'public/invite', to: 'invite' },
+				{ from: 'public/verification', to: 'verification' }
 			]),
 		],
 		devtool: 'source-map'

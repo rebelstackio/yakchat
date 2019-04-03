@@ -12,7 +12,8 @@ import {
 	listenRow,
 	removeListener,
 	getProfileImg,
-	getOperatorChannels
+	getOperatorChannels,
+	sendVerification
 } from '../controllers/firebase';
 
 const MainDefaultState = {
@@ -29,7 +30,8 @@ const MainDefaultState = {
 	threads: [],
 	channelList: [],
 	selectedMessages: [],
-	chnlUid: 0
+	chnlUid: 0,
+	emailVerified: false
 };
 /**
  * check if new visitor has been added
@@ -134,6 +136,7 @@ export default {
 			state.Main.uid = action.uid;
 			state.Main.displayName = action.displayName;
 			state.Main.email = action.email;
+			state.Main.emailVerified = action.emailVerified;
 			getProfileImg(state.Main.uid);
 			if (action.accessLevel >= 5) {
 				//client
@@ -147,8 +150,7 @@ export default {
 		'LOGOUT': (action, state) => {
 			singOut();
 			localStorage.removeItem('fb-hash');
-			state.Main.auth = false;
-			state.Main.uid = 0;
+			state.Main = MainDefaultState;
 			return { newState: state }
 		},
 		'CHAT-SELECTED': (action, state) => {
@@ -252,6 +254,10 @@ export default {
 			const { DID, threads } = action;
 			state.Main.chnlUid = DID;
 			state.Main.threads = threads;
+			return { newState: state }
+		},
+		'SEND-VERIFICATION': (action, state) => {
+			sendVerification();
 			return { newState: state }
 		}
 	}

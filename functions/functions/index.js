@@ -96,6 +96,21 @@ exports.signup = functions.https.onCall((param) => {
 	});
 })
 /**
+ * send the verification link again
+ */
+exports.reSendVerification = functions.https.onCall((data) => {
+	const { uid, email, displayName } = data;
+	sendEmail(
+		email,
+		'/verification/#' + uid,
+		'https://rebelstackio.github.io/yakchat/',
+		'Yak Chat Email Verification',
+		'Welcome to Yak Chat ' + displayName,
+		'To go verified'
+	);
+	return true;
+})
+/**
  * Handle email code verification
  */
 exports.submitVerification = functions.https.onRequest((req, resp) => {
