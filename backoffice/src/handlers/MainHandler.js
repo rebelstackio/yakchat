@@ -85,10 +85,36 @@ function notify (msg, chid, thid) {
 				body: msg,
 			});
 			notification.onclick = function () {
-				document.location.hash = '#/lobby/' + chid + '/' + thid
+				notificationSelect(chid, thid);
 				notification.close();
 			};
 		}
+	}
+}
+/**
+ * on click the notification dispatch select thath thread
+ * @param {*} channel 
+ * @param {*} id 
+ */
+function notificationSelect (channel, id) {
+	const {channelList, threads, accessLevel} = global.storage.getState().Main;
+	const chnlSelected = accessLevel > 3
+		? {4: threads}
+		: channelList[channel];
+	if (chnlSelected) {
+		let threadsSelect = chnlSelected[4][id];
+		if (accessLevel === 3) {
+			global.storage.dispatch({
+				type: 'THREAD-SELECTED',
+				threads: chnlSelected[4],
+				DID: channel
+			});
+		}
+		global.storage.dispatch({type: 'CHAT-SELECTED', data: {
+			clientSelected: threadsSelect[0] !== '' ? threadsSelect[0] : 'New User <span>unknown</span>',
+			messages: chnlSelected[4][id],
+			visitorId: id
+		}})
 	}
 }
 

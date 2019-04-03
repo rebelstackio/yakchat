@@ -81,7 +81,10 @@ module.exports = () => {
 				{ from: 'public/css', to: 'css' },
 				{ from: 'public/fonts', to: 'fonts' },
 				{ from: 'public/images', to: 'images' },
-				{ from: 'public/manifest.json', to: 'manifest.json' }
+				{ from: 'public/manifest.json', to: 'manifest.json' },
+				{ from: 'public/login', to: 'login' },
+				{ from: 'public/signup', to: 'signup' },
+				{ from: 'public/invite', to: 'invite' }
 			]),
 		],
 		devtool: 'source-map'
