@@ -64,7 +64,7 @@ exports.signup = functions.https.onCall((param) => {
 		sendEmail(
 			email,
 			'/verification/#' + userRecord.uid,
-			'http://localhost:8080',
+			'https://rebelstackio.github.io/yakchat',
 			'Yak Chat Email Verification',
 			'Welcome to Yak Chat ' + displayName,
 			'To go verified'
@@ -103,7 +103,7 @@ exports.reSendVerification = functions.https.onCall((data) => {
 	sendEmail(
 		email,
 		'/verification/#' + uid,
-		'https://rebelstackio.github.io/yakchat/',
+		'https://rebelstackio.github.io/yakchat',
 		'Yak Chat Email Verification',
 		'Welcome to Yak Chat ' + displayName,
 		'To go verified'
