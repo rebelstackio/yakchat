@@ -54,7 +54,8 @@ app.auth().onAuthStateChanged(function(user) {
 					admin: idTokenResult.claims.admin,
 					uid: user.uid,
 					displayName: idTokenResult.claims.name,
-					email: idTokenResult.claims.email
+					email: idTokenResult.claims.email,
+					emailVerified: idTokenResult.claims.email_verified
 				});
 			})
 			.catch((error) => {
@@ -118,6 +119,24 @@ export function processInvitation (key, email, password, name) {
 		type: 1
 	}).then(res => {
 		global.storage.dispatch({type: 'LOGIN-REQ', email: email, password: password});
+	})
+}
+/**
+ * send the email verification link again, if for some reason never get the original
+ */
+export function sendVerification () {
+	const { uid, email, displayName } = global.storage.getState().Main;
+	const reSendVerification = functions.httpsCallable('reSendVerification');
+	reSendVerification({ uid, email, displayName })
+	.then((res) => {
+		// ok
+		console.log(res)
+		if (res.data) {
+			window.alert('Verification sended');
+		}
+	})
+	.catch(err => {
+		console.error(err)
 	})
 }
 /**

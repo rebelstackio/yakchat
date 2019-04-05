@@ -6,6 +6,7 @@ import imageURL from '../../assets/images/logo/yakchat.svg';
 import sendIcon from '../../assets/icons/chevron-right-solid.svg';
 import '../patchprofile';
 import '../editchannel';
+import '../verificationpopup';
 import './index.css';
 
 class Loby extends MetaComponent {
@@ -51,7 +52,8 @@ class Loby extends MetaComponent {
 		const settingsPopUp = instanceElement('yak-settings');
 		const profilePopUp = instanceElement('yak-patchprofile');
 		const editchannelPopUp = instanceElement('yak-editchannel');
-		this.append(settingsPopUp, profilePopUp, editchannelPopUp);
+		const verificaiontPopUp = instanceElement('yak-verification');
+		this.append(settingsPopUp, profilePopUp, editchannelPopUp, verificaiontPopUp);
 		return content;
 	}
 	/**
@@ -197,10 +199,14 @@ class Loby extends MetaComponent {
 				this.createMessages(selectedMessages);
 			},
 			'LOGIN-SUCCESS': (state) => {
-				const {accessLevel} = this.storage.getState().Main;
+				const { accessLevel, emailVerified } = state.newState.Main;
 				if (accessLevel === 3) {
 					// if it's an operator hide the settings
 					this.querySelector('#settings').style.display = 'none';
+				}
+				console.log(emailVerified);
+				if (!emailVerified) {
+					document.querySelector('#verification-popup-container').classList.remove('hide');
 				}
 			}
 		};
