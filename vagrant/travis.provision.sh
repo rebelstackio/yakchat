@@ -7,6 +7,7 @@ datestamp=$(date +%s)
 t_pull_request=${travis_arg:-"vagrant-${datestamp}"}
 NODE_VER=${NODE_VER:-10.x}
 policy_file=/tmp/policy.json
+lifecycle_file=/tmp/lifecycle.json
 build_dir=$TRAVIS_BUILD_DIR/dist/
 set +a
 
@@ -70,6 +71,24 @@ EOM
 
 echo "..........Set policy to the bucket.........."
 aws s3api put-bucket-policy --bucket "yakchat-$t_pull_request" --policy file://$policy_file
+
+echo "..........Creating lifecycle to the bucket.........."
+cat > $lifecycle_file <<- EOM
+{
+  "Rules": [
+    {
+      "Expiration": {
+        "Days": "20"
+      },
+      "ID": "Delete bucket content",
+      "Status": "Enabled"
+    }
+  ]
+}
+EOM
+
+echo "..........Set lifecycle to the bucket.........."
+aws s3api put-bucket-lifecycle --bucket "yakchat-$t_pull_request" --lifecycle-configuration file://$lifecycle_file
 
 echo "..........Making the bucket a host for static websites.........."
 aws s3 website s3://"yakchat-$t_pull_request/" --index-document index.html
