@@ -61,6 +61,14 @@ exports.signup = functions.https.onCall((param) => {
 		disabled: false
 	})
 	.then((userRecord) => {
+		sendEmail(
+			email,
+			'/verification/#' + userRecord.uid,
+			'https://rebelstackio.github.io/yakchat',
+			'Yak Chat Email Verification',
+			'Welcome to Yak Chat ' + displayName,
+			'To go verified'
+		);
 		console.log("Successfully created new user " + displayName, userRecord.uid);
 		const customClaims = getCustomClaims(type);
 		if (type === 2) {
@@ -87,7 +95,38 @@ exports.signup = functions.https.onCall((param) => {
 		console.log("Error creating new user:", error);
 	});
 })
-
+/**
+ * send the verification link again
+ */
+exports.reSendVerification = functions.https.onCall((data) => {
+	const { uid, email, displayName } = data;
+	sendEmail(
+		email,
+		'/verification/#' + uid,
+		'https://rebelstackio.github.io/yakchat',
+		'Yak Chat Email Verification',
+		'Welcome to Yak Chat ' + displayName,
+		'To go verified'
+	);
+	return true;
+})
+/**
+ * Handle email code verification
+ */
+exports.submitVerification = functions.https.onRequest((req, resp) => {
+	const uid = req.query.u;
+	resp.set('Access-Control-Allow-Origin', '*');
+	admin.auth().updateUser(uid, {
+		emailVerified: true
+	}).then(() => {
+		resp.status(200).json({ message: 'User Verified'})
+		return;
+	}).catch(err => {
+		resp.status(500)
+		resp.send('error: ' + uid)
+		throw err;
+	})
+})
 
 var transporter = nodemailer.createTransport({
 	service: 'gmail',
@@ -102,17 +141,16 @@ var transporter = nodemailer.createTransport({
  * @param {String} urlString 
  * @param {String} domain 
  */
-function sendEmail(email, urlString, domain) {
+function sendEmail(email, urlString, domain, subject, title, subtitle) {
 	// 5. Send welcome email to new users
-	console.log(process.env.EMAIL_USER, process.env.EMAIL_PASS)
 	const mailOptions = {
 			from: '<no.reply.yak.chat@gmail.com>',
 			to: email,
-			subject: 'Yak-chat has send you and invitation',
+			subject,
 			html: `
 				<div style="height: 100%; width: 100%; text-align: center;">
-					<h2 style="color: #666666">We want you to become an Operator</h2>
-					click <a href="${domain + urlString}"> here </a> to see the invitation
+					<h2 style="color: #666666">${title}</h2>
+					click <a href="${domain + urlString}"> here </a> ${subtitle}
 				</div>
 			`
 		}
@@ -144,7 +182,13 @@ exports.inviteOperator = functions.https.onCall((param) => {
 		const urlString = '/#/invite/?k=' + res.key + (email ? '&m=' + email : '') + (name ? '&n=' + name : '');
 		if (email) {
 			// dispatch email
-			sendEmail(email, urlString, domain);
+			sendEmail(
+				email,
+				urlString,
+				domain,
+				'Yak-chat has send you and invitation',
+				'We want you to become an Operator',
+				'to see the invitation');
 		}
 		return domain + urlString
 	})
@@ -191,7 +235,6 @@ base64.getChars = function(num, res) {
 };
 /**
  * handle each visitior per domain
- * recive paramerer /?u=id&m=example@example.com&n=example
  * u is mandatory visitor finger print or email md5 hashed
  * n is non mandatory name of the registrant
  * m non mandatory email of the registrant
