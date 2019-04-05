@@ -17,32 +17,32 @@ if [[ $VAGRANT_PROVISION -eq 1 ]]; then
   echo "..........Reading your .env file.........."
   export $(grep -v '^#' /home/vagrant/yakchat/vagrant/.env | xargs)
 
-  echo "..........Get node version.........."
-  curl -sL "https://deb.nodesource.com/setup_$NODE_VER" | sudo -E bash -
+	echo "..........Get node version.........."
+	curl -sL "https://deb.nodesource.com/setup_$NODE_VER" | sudo -E bash -
 
-  echo "..........Create AWS Credentials file.........."
-  sudo mkdir -p /home/vagrant/.aws
-  cat > /home/vagrant/.aws/credentials << EOL
+	echo "..........Create AWS Credentials file.........."
+	sudo mkdir -p /home/vagrant/.aws
+	cat > /home/vagrant/.aws/credentials << EOL
 [default]
 aws_access_key_id = ${AWS_ACCESS_KEY_ID}
 aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}
 EOL
 
-  echo "..........Installing Python and PIP.........."
-  sudo apt-get update
-  sudo apt-get install -y nodejs
-  sudo apt-get install -y python-pip
-  pip install awscli
-  PATH=$HOME/.local/bin:$PATH
+	echo "..........Installing Python and PIP.........."
+	sudo apt-get update
+	sudo apt-get install -y nodejs
+	sudo apt-get install -y python-pip
+	pip install awscli
+	PATH=$HOME/.local/bin:$PATH
 
-  echo "..........Building application.........."
+	echo "..........Building application.........."
 
-  cd /home/vagrant/yakchat
-  npm install 
-  npm run build
+	cd /home/vagrant/yakchat
+	npm install 
+	npm run build
 
-  echo "..........Set build directory.........."
-  build_dir=/home/vagrant/yakchat/dist
+	echo "..........Set build directory.........."
+	build_dir=/home/vagrant/yakchat/dist
 fi
 
 echo "..........Creating Pull Request Deploy.........."
@@ -56,16 +56,16 @@ aws s3 sync $build_dir s3://"yakchat-$t_pull_request/"
 echo "..........Creating the policy file.........."
 cat > $policy_file <<- EOM
 {
-  "Version":"2012-10-17",
-  "Statement":[{
+	"Version":"2012-10-17",
+	"Statement":[{
 	"Sid":"PublicReadGetObject",
-        "Effect":"Allow",
-	  "Principal": "*",
-      "Action":["s3:GetObject"],
-      "Resource":["arn:aws:s3:::yakchat-$t_pull_request/*"
-      ]
-    }
-  ]
+				"Effect":"Allow",
+		"Principal": "*",
+			"Action":["s3:GetObject"],
+			"Resource":["arn:aws:s3:::yakchat-$t_pull_request/*"
+			]
+		}
+	]
 }
 EOM
 
@@ -75,15 +75,15 @@ aws s3api put-bucket-policy --bucket "yakchat-$t_pull_request" --policy file://$
 echo "..........Creating lifecycle to the bucket.........."
 cat > $lifecycle_file <<- EOM
 {
-  "Rules": [
-    {
-      "Expiration": {
-        "Days": "20"
-      },
-      "ID": "Delete bucket content",
-      "Status": "Enabled"
-    }
-  ]
+	"Rules": [
+		{
+			"Expiration": {
+				"Days": "20"
+			},
+			"ID": "Delete bucket content after 20 days",
+			"Status": "Enabled"
+		}
+	]
 }
 EOM
 
@@ -92,6 +92,24 @@ aws s3api put-bucket-lifecycle --bucket "yakchat-$t_pull_request" --lifecycle-co
 
 echo "..........Making the bucket a host for static websites.........."
 aws s3 website s3://"yakchat-$t_pull_request/" --index-document index.html
+
+echo "..........Cleaning old and empty buckets from previous pull requests.........."
+
+for bucketname in $(aws s3 ls| awk '{print $3}');
+do
+	echo "===> Checking the bucket $bucketname"
+	results=`aws s3api list-objects  --bucket $bucketname`
+	if [[ 0 == $? ]] ; then
+		if [[ -z $results ]] ; then
+			echo "No files found for bucket $bucketname...candidate for delete"
+			aws s3api delete-bucket --bucket $bucketname --region us-west-1
+		else
+			echo "Bucket $bucketname still have content... skipping delete"
+		fi
+	else
+		echo "Failed to list content from bucket $bucketname"
+	fi
+done
 
 echo "..........DONE!!!.........."
 
