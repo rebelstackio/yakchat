@@ -102,10 +102,10 @@ for bucketname in $(aws s3 ls| awk '{print $3}');
 do
 	echo "..........Checking the bucket $bucketname"
 
-	if [[ $VAGRANT_PROVISION -eq 1 ]]; then
+	if [ $VAGRANT_PROVISION -eq 1 ]; then
 		results=`aws s3api list-objects  --bucket $bucketname`
 		if [[ 0 == $? ]]; then
-			if [[ -z $results ]]; then
+			if [[ -z "$results" ]]; then
 				echo "..........No files found for bucket $bucketname...candidate for delete"
 				aws s3api delete-bucket --bucket $bucketname --region $REGION
 			else
@@ -117,7 +117,7 @@ do
 	else
 		results=`aws s3api list-objects  --bucket $bucketname`
 		if [ 0 = $? ]; then
-			if [ -z $results ]; then
+			if [ -z "$results" ]; then
 				echo "..........No files found for bucket $bucketname...candidate for delete"
 				aws s3api delete-bucket --bucket $bucketname --region $REGION
 			else
