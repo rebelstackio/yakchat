@@ -100,17 +100,32 @@ echo "..........Cleaning old and empty buckets from previous pull requests......
 
 for bucketname in $(aws s3 ls| awk '{print $3}');
 do
-	echo "..........Checking the bucket $bucketname"9
-	results=`aws s3api list-objects  --bucket $bucketname`
-	if [[ 0 == $? ]] ; then
-		if [[ -z $results ]] ; then
-			echo "..........No files found for bucket $bucketname...candidate for delete"
-			aws s3api delete-bucket --bucket $bucketname --region $REGION
+	echo "..........Checking the bucket $bucketname"
+
+	if [[ $VAGRANT_PROVISION -eq 1 ]]; then
+		results=`aws s3api list-objects  --bucket $bucketname`
+		if [[ 0 == $? ]]; then
+			if [[ -z $results ]]; then
+				echo "..........No files found for bucket $bucketname...candidate for delete"
+				aws s3api delete-bucket --bucket $bucketname --region $REGION
+			else
+				echo "..........Bucket $bucketname still have content... skipping delete"
+			fi
 		else
-			echo "..........Bucket $bucketname still have content... skipping delete"
+			echo "..........Failed to list content from bucket $bucketname"
 		fi
 	else
-		echo "..........Failed to list content from bucket $bucketname"
+		results=`aws s3api list-objects  --bucket $bucketname`
+		if [ 0 = $? ]; then
+			if [ -z $results ]; then
+				echo "..........No files found for bucket $bucketname...candidate for delete"
+				aws s3api delete-bucket --bucket $bucketname --region $REGION
+			else
+				echo "..........Bucket $bucketname still have content... skipping delete"
+			fi
+		else
+			echo "..........Failed to list content from bucket $bucketname"
+		fi
 	fi
 done
 
