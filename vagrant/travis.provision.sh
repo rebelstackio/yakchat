@@ -3,9 +3,11 @@ travis_arg=$1
 set -a
 LOG=${LOG:-/home/vagrant/yakchat/vagrant/tmp/log/boot.log}
 VAGRANT_PROVISION=${VAGRANT_PROVISION:-0}
+NODE_VER=${NODE_VER:-10.x}
+REGION="us-west-1";
+
 datestamp=$(date +%s)
 t_pull_request=${travis_arg:-"vagrant-${datestamp}"}
-NODE_VER=${NODE_VER:-10.x}
 policy_file=/tmp/policy.json
 lifecycle_file=/tmp/lifecycle.json
 build_dir=$TRAVIS_BUILD_DIR/dist/
@@ -48,7 +50,7 @@ fi
 echo "..........Creating Pull Request Deploy.........."
 echo "..........Create a new S3 bucket.........."
 
-aws s3 mb s3://"yakchat-$t_pull_request" --region us-west-1
+aws s3 mb s3://"yakchat-$t_pull_request" --region $REGION
 
 echo "..........Copy release into the bucket.........."
 aws s3 sync $build_dir s3://"yakchat-$t_pull_request/"
@@ -78,8 +80,9 @@ cat > $lifecycle_file <<- EOM
 	"Rules": [
 		{
 			"Expiration": {
-				"Days": "20"
+				"Days": 20
 			},
+			"Prefix": "",
 			"ID": "Delete bucket content after 20 days",
 			"Status": "Enabled"
 		}
@@ -97,17 +100,17 @@ echo "..........Cleaning old and empty buckets from previous pull requests......
 
 for bucketname in $(aws s3 ls| awk '{print $3}');
 do
-	echo "===> Checking the bucket $bucketname"
+	echo "..........Checking the bucket $bucketname"9
 	results=`aws s3api list-objects  --bucket $bucketname`
 	if [[ 0 == $? ]] ; then
 		if [[ -z $results ]] ; then
-			echo "No files found for bucket $bucketname...candidate for delete"
-			aws s3api delete-bucket --bucket $bucketname --region us-west-1
+			echo "..........No files found for bucket $bucketname...candidate for delete"
+			aws s3api delete-bucket --bucket $bucketname --region $REGION
 		else
-			echo "Bucket $bucketname still have content... skipping delete"
+			echo "..........Bucket $bucketname still have content... skipping delete"
 		fi
 	else
-		echo "Failed to list content from bucket $bucketname"
+		echo "..........Failed to list content from bucket $bucketname"
 	fi
 done
 
