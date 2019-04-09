@@ -14,7 +14,7 @@ build_dir=$TRAVIS_BUILD_DIR/dist/
 set +a
 
 # Section for vagrant only
-if [[ $VAGRANT_PROVISION -eq 1 ]]; then
+if [ $VAGRANT_PROVISION -eq 1 ]; then
   # Load aws secrets as env variables
   echo "..........Reading your .env file.........."
   export $(grep -v '^#' /home/vagrant/yakchat/vagrant/.env | xargs)
