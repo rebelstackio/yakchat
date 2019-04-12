@@ -4,8 +4,8 @@ const dotenv = require('dotenv');
 const webpack = require('webpack'); 
 const CopyPlugin = require('copy-webpack-plugin');
 const { InjectManifest } = require('workbox-webpack-plugin');
-
 // TODO: Make performances for production ( minified, uglify ..etc)
+
 
 module.exports = () => {
 	let filename = 'index.html';
@@ -13,10 +13,6 @@ module.exports = () => {
 	const env = dotenv.config({
 		path: path.resolve(process.cwd(), '../', '.env')
 	}).parsed;
-
-	// if ( process.env.NODE_MODE == 'build' ) {
-	// 	filename = 'backoffice.html';
-	// }
 
 	// Reduce it to a nice object, the same as before
 	const envKeys = Object.keys(env).reduce((prev, next) => {
