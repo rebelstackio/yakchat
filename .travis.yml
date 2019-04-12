@@ -43,7 +43,6 @@ notifications:
     rooms:
       - rebelstackio:OeVq0yYn42zquWyut36jPxUz
     template:
-      - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository_slug}@%{branch} by %{author} %{result} in %{duration}"
       - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository_slug}@%{branch} in PR <%{pull_request_url}|#%{pull_request_number}> by %{author} %{result} in %{duration}. Pull request deploy: http://yakchat-%{pull_request_number}.s3-website-us-west-1.amazonaws.com"
     on_success: always
     on_failure: always 
