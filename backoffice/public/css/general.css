@@ -2,27 +2,27 @@
 @import url('./responsive.css');
 /*only for crhome*/
 ::-webkit-scrollbar {
-    width: 8px;
-    background: rgba(0, 0, 0, 0);
-    border-radius: 3px;
+	width: 8px;
+	background: rgba(0, 0, 0, 0);
+	border-radius: 3px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
 	background: rgba(0, 0, 0, 0); 
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
 	background: rgba(0, 0, 0, .5);
 	border: 1px solid #d3d3d3;
 	border-radius: 3px;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
 	background: #555; 
-  }
+}
 
 @font-face {
 	font-family: 'Lato Regular';
@@ -42,6 +42,7 @@ html, body {
 	background-color: #f9f8f8;
 	box-sizing: border-box;
 	font-family: Roboto;
+	overflow: hidden;
 }
 
 *,
