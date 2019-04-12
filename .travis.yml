@@ -41,7 +41,7 @@ deploy:
 notifications:
   slack:
     rooms:
-      - secure: pcCmO1feClqyOqhLXZ9Np4rxUQlCRzzp+ltTbHrcD+nne56bO1SWa/zboD7u+ghHDTvxygFRGbdKYMB9RLu8oPUb2fOgzvIErSLt1hTbwQvF073j7a/PBpv3tTcs6fdRokVpghXdU3BzV9E5QbBxf5ngHcS2cc56nSE0cbbjDZ0E6zg5C+S/D06EumVzpRXd05EvGV6L8BrsNwtGIKVGD3mVgflr2HD02G0XbXDBb/G/MdzolA/7Hg1NA/VBazwgfa/NQC+cE9COWsotTeEapg+oigW0AsMu290D0iONa0TkVDoLQX+cTtYhUJVm/8BfebxGZBgTC0x5xi7kR5wvbCzRV6uvGbh4f8lbgxxzDgwoupUSSiY3Joe2KvbmF45yvS5au9VzFlRPUxarLpdrxjY/jm1CF1EX0ohrCr08Gb5U06IG77ltjgXxUgyy/YRedGkzIETOfRQMIJ8/1k2PPLPmGy+el8PBriF1PT/uMQy8A3atQR1qqNn4r2mdZ2PqLYCGdlu9dd5a30etmOBTHZ3hdqH9UonVddAwM2WUkmiLh6yGisQkLAaGKQdDXFcnlq4h7stD2Z+cDbtyhRJFsuasbnhxHlNs/YYWK38nWpq6ZekzAkps3bb4Vl3YhJ8diD+fyxwItcw11A3HlWIPaGNKs3tRZaxNZDoLLbMIUHM=
+      - rebelstackio:OeVq0yYn42zquWyut36jPxUz
     template:
       - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository_slug}@%{branch} by %{author} %{result} in %{duration}"
       - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository_slug}@%{branch} in PR <%{pull_request_url}|#%{pull_request_number}> by %{author} %{result} in %{duration}. Pull request deploy: http://yakchat-%{pull_request_number}.s3-website-us-west-1.amazonaws.com"
