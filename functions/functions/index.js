@@ -127,7 +127,7 @@ exports.submitVerification = functions.https.onRequest((req, resp) => {
 		throw err;
 	})
 })
-
+// email transporter
 var transporter = nodemailer.createTransport({
 	service: 'gmail',
 	auth: {
