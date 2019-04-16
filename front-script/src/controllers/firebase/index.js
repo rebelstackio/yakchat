@@ -1,18 +1,8 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/functions';
-import 'firebase/database';
 import { getClientInfo } from '../../utils';
 
 /**
- * for testing and string size comparations
+ * initialize app
  */
-String.prototype.lengthInUtf8Bytes = function() {
-	// Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
-	var m = encodeURIComponent(this).match(/%[89ABab]/g);
-	return this.length + (m ? m.length : 0);
-}
-
 const app = firebase.initializeApp({ 
 	apiKey: process.env.FB_APIKEY,
 	authDomain: process.env.FB_AUTHDOMAIN,
@@ -21,7 +11,7 @@ const app = firebase.initializeApp({
 	storageBucket: process.env.FB_STORAGEBUCKET,
 	messagingSenderId: process.env.FB_PROJECTID
 }, 'yakchat-frontscript');
-
+// cloud functions
 var functions = app.functions();
 let threadRoute = '';
 
