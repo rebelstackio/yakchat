@@ -38,6 +38,11 @@ deploy:
   on:
     branch: develop
 
-# NOTE: AWS credententials are already set in travis panel as $AWS_ACCESS_KEY_ID and $AWS_SECRET_ACCESS_KEY
-# NOTE: TRAVIS_PULL_REQUEST have the pull request number otherwise will be false
-# NOTE: TRAVIS_BRANCH could be usefully
+notifications:
+  slack:
+    rooms:
+      - rebelstackio:OeVq0yYn42zquWyut36jPxUz
+    template:
+      - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository_slug}@%{branch} in PR <%{pull_request_url}|#%{pull_request_number}> by %{author} %{result} in %{duration}. Pull request deploy: http://yakchat-%{pull_request_number}.s3-website-us-west-1.amazonaws.com"
+    on_success: always
+    on_failure: always 
