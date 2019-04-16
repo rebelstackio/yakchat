@@ -50,7 +50,6 @@
 	},
 	"dependencies": {
 		"@rebelstack-io/metaflux": "^1.1.2",
-		"firebase": "^5.7.2",
 		"md5": "^2.2.1",
 		"navigo": "^7.1.2"
 	}

@@ -103,7 +103,7 @@ class EditChannel extends MetaComponent {
 			'CHANNEL-SELECT': (action) => {
 				this.domain = action.data.domain;
 				this.channelName = action.data.channel;
-				this.embendCode = `<script src="https://rebelstackio.github.io/yakchat/frontscript.js"></script>`;
+				this.embendCode = `<script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script><script src="https://rebelstackio.github.io/yakchat/frontscript.js"></script>`;
 				this.embendTag = `<div id="yak-chat-embended"><!-- the chat will be generated inside this --></div>`
 			},
 			'CHANNEL-CHANGED': () => {

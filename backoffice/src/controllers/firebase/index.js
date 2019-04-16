@@ -1,14 +1,6 @@
-import * as firebase from 'firebase';
-
 /**
- * for testing and string size comparations
+ * initialize firebase app
  */
-String.prototype.lengthInUtf8Bytes = function() {
-	// Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
-	var m = encodeURIComponent(this).match(/%[89ABab]/g);
-	return this.length + (m ? m.length : 0);
-}
-
 const app = firebase.initializeApp({ 
 	apiKey: process.env.FB_APIKEY,
 	authDomain: process.env.FB_AUTHDOMAIN,
@@ -17,15 +9,10 @@ const app = firebase.initializeApp({
 	storageBucket: process.env.FB_STORAGEBUCKET,
 	messagingSenderId: process.env.FB_PROJECTID
 });
+// cloud functions
 var functions = app.functions();
+// firebase file storage
 const storage = app.storage();
-/**
- * the reason of this is to map the message into an object,
- * to avoid repeat the keys of the object in each child,
- * SEE: objectCompress(), objectDecompress()
- */
-const msgPreset = ['type', {from: ['name']}, 'msg', 'date'];
-let threadRoute = '';
 
 let callback = null;
 let metadataRef = null;
@@ -160,7 +147,10 @@ export function signUp (displayName, email, password, domain, type) {
 		global.storage.dispatch({type: 'LOGIN-REQ', email: email, password: password});
 	})
 }
-
+/*---------------PATCH PROFILE ---------------------------------------------------*/
+/**
+ * upload new profile image
+ */
 export function uploadProfileImg (img, uuid) {
 	var storageRef = storage.ref(uuid + "/profile.jpg");
 	var uploadTask = storageRef.put(img);
@@ -178,7 +168,6 @@ export function uploadProfileImg (img, uuid) {
 }
 /**
  * fetch the firebase url for your profile image
- * @param {*} uid 
  */
 export function getProfileImg(uid) {
 	var storageRef = storage.ref(uid + "/profile.jpg");
@@ -191,11 +180,7 @@ export function getProfileImg(uid) {
 	}
 }
 /**
- * 
- * @param {*} email 
- * @param {*} newPassword 
- * @param {*} currentPassword 
- * @param {*} displayName 
+ * Edit the profile information (email, password or display name)
  */
 export function patchProfile (email, newPassword, currentPassword , displayName) {
 	let currentUser = app.auth().currentUser;
@@ -233,6 +218,7 @@ export function patchProfile (email, newPassword, currentPassword , displayName)
 		}
 	})
 }
+/*-----------------------------END PATCH PROFILE-------------------------------*/
 /**------------------------------------CLIENT---------------------------------- */
 /**
  * get the client channel, domain and settings
