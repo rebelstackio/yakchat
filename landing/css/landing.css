@@ -1,0 +1,40 @@
+img#notification-animation {
+    height: auto;
+    width: 280px;
+}
+
+.easy-editing {
+    max-width: 445px;
+    -webkit-transform: perspective(650px) rotateZ(-10deg) rotateX(5deg) rotateY(30deg);
+    transform: perspective(439px) rotateZ(-3deg) rotateX(3deg) rotateY(30deg);
+    line-height: 0;
+    margin: 50px 0 0 20%;
+}
+
+#reservation-img {
+    width: 250px;
+}
+
+.landing-preview .laptop > img {
+    top: 5%;
+    height: 85%;
+    left: 12%;
+    width: 76%;
+}
+
+.easy-editing.flat > img {
+    width: auto;
+    height: 423px;
+    /* padding: 0; */
+    left: -310px;
+    position: relative;
+    max-width: initial;
+}
+
+.easy-editing.flat {
+    max-width: 445px;
+    -webkit-transform: none;
+    transform: none;
+    line-height: 0;
+    margin: 50px 0 0 20%;
+}
