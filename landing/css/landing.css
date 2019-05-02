@@ -24,9 +24,9 @@ img#notification-animation {
 
 .easy-editing.flat > img {
     width: auto;
-    height: 423px;
+    height: 320px;
     /* padding: 0; */
-    left: -310px;
+    left: -217px;
     position: relative;
     max-width: initial;
 }
