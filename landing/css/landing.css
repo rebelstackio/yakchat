@@ -38,3 +38,37 @@ img#notification-animation {
     line-height: 0;
     margin: 50px 0 0 20%;
 }
+
+.landing-page-content {
+    overflow: hidden;
+}
+
+.easy-editing.right::before, .easy-editing.right::after {
+    content: "";
+    background-color: rgba(0, 0, 0, 0.065);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    -webkit-transform: translateX(20%) translateY(20%);
+    transform: translateX(49%) translateY(-6%);
+}
+
+.easy-editing.right::after {
+    -webkit-transform: translateX(-7%) translateY(12%);
+    transform:  translateX(47%) translateY(12%);
+}
+
+.easy-editing::before, .easy-editing::after {
+    -webkit-transform: translateX(-49%) translateY(0%);
+    transform: translateX(-49%) translateY(0%);
+}
+
+.easy-editing::after {
+    -webkit-transform: translateX(-55%) translateY(12%);
+    transform: translateX(-55%) translateY(12%);
+}
+.pool-img {
+    margin-left: 50px;
+}
