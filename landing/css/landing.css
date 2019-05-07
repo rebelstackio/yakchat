@@ -72,3 +72,7 @@ img#notification-animation {
 .pool-img {
     margin-left: 50px;
 }
+
+.hide {
+    display: none;
+}
