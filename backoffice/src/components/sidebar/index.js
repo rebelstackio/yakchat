@@ -4,6 +4,7 @@ import defaulAvatar from '../../assets/images/user.svg';
 import cog from '../../assets/icons/cog-solid.svg';
 import searchIcon from '../../assets/icons/search-solid.svg';
 import enevelope from '../../assets/icons/envelope-solid.svg';
+import closeIcon from '../../assets/icons/times-solid.svg';
 import './index.css';
 class Sidebar extends MetaComponent {
 	constructor () {
@@ -15,6 +16,7 @@ class Sidebar extends MetaComponent {
 	// eslint-disable-next-line class-method-use-this
 	render () {
 		const content = instanceElement('div', false, 'sidebar-content');
+		const close = instanceElement('img', ['mobile-only'], false, false, [{src: closeIcon}]);
 		const uid = localStorage.getItem('fb-hash');
 		this.channelList = global.storage.getState().Main.channelList;
 		this.accessLevel = global.storage.getState().Main.accessLevel;
@@ -42,7 +44,7 @@ class Sidebar extends MetaComponent {
 			 <img src="${searchIcon}"></img>
 			`
 		);
-		content.append(profile, search, chnlBox, thBox);
+		content.append(close ,profile, search, chnlBox, thBox);
 		return content;
 	}
 	/**
@@ -71,6 +73,18 @@ class Sidebar extends MetaComponent {
 		.addEventListener('click', () => {
 			global.storage.dispatch({ type: 'OPEN-PROFILE' })
 			document.querySelector('.profile-popup-container-container').classList.remove('hide');
+		});
+		//close btn
+		this.querySelector('.mobile-only').addEventListener('click', () => {
+			const sideBar = document.querySelector('.loby-side-menu');
+			const mainContent = document.querySelector('yak-loby > div');
+			if (sideBar.classList.contains('toggled')) {
+				sideBar.classList.remove('toggled');
+				mainContent.classList.remove('toggled');
+			} else {
+				sideBar.classList.add('toggled');
+				setTimeout(() => { mainContent.classList.add('toggled'); }, 400)
+			}
 		});
 	}
 	/**

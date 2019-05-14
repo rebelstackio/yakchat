@@ -156,3 +156,20 @@ select#channel-select {
 	padding: .5em 1em;
 	border-radius: 3px;
 }
+
+#sidebar-content {
+	opacity: 1;
+	transition: opacity .3s ease-out;
+}
+
+yak-sidebar.loby-side-menu.toggled > #sidebar-content {
+	opacity: 0;
+	transition: opacity .3s ease;
+}
+
+img.mobile-only {
+	position: fixed;
+	left: 73%;
+	top: 3%;
+	opacity: 0;
+}
