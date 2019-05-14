@@ -173,7 +173,8 @@ class Sidebar extends MetaComponent {
 				this.storage.dispatch({type: 'CHAT-SELECTED', data: {
 					clientSelected: type,
 					messages: msgObject[uid],
-					visitorId: uid
+					visitorId: uid,
+					chnlId: msgObject[uid].chnlId
 				}})
 			})
 			thBox.appendChild(li);
