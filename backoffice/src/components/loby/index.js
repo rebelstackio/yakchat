@@ -149,20 +149,23 @@ class Loby extends MetaComponent {
 					const date = new Date(dataKey.ts).toDateString();
 					const isYou = msgList[msg][1] === uid;
 					const message = msgList[msg][0].split('-');
-					const msgBox = instanceElement(
-						'div',
-						[!isYou ? 'yak-view-item-left' : 'yak-view-item-right'],
-						false,
-						`<span class="msg-text">${atob(message[1])}</span>
-						<span class = "msg-date">${message[0]} - ${date}</spna>
-						`
-					)
-					body.appendChild(msgBox);
+					if (message[0] != "0"){
+						const msgBox = instanceElement(
+							'div',
+							[!isYou ? 'yak-view-item-left' : 'yak-view-item-right'],
+							false,
+							`<span class="msg-text">${atob(message[1])}</span>
+							<span class = "msg-date">${message[0]} - ${date}</spna>
+							`
+						)
+						body.appendChild(msgBox);
+					}
 					body.scrollTop = body.scrollHeight;
 				} 
 			});
 		} catch (e) {
 			//
+			console.log(e);
 		}
 	}
 	/**
