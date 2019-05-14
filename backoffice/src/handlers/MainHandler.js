@@ -156,7 +156,14 @@ export default {
 		'CHAT-SELECTED': (action, state) => {
 			state.Main.clientSelected = action.data.clientSelected;
 			state.Main.selectedMessages = action.data.messages;
-			const chnlUid = state.Main.accessLevel > 3 ? state.Main.uid : state.Main.chnlUid
+			const { chnlId } = action.data;
+			let chnlUid
+			if ( state.Main.accessLevel > 3) {
+				chnlUid =  state.Main.uid
+			} else {
+				chnlUid = chnlId ? chnlId : state.Main.chnlUid;
+				state.Main.chnlUid = chnlId ? chnlId : state.Main.chnlUid;
+			}
 			if (state.Main.visitorId !== action.data.visitorId) {
 				// remove listener
 				removeListener('/domains/' + chnlUid + '/4/' + state.Main.visitorId)
@@ -245,7 +252,11 @@ export default {
 			state.Main.channelList = value;
 			let allThreads = {}
 			Object.keys(value).forEach(key => {
-				allThreads = Object.assign(allThreads, value[key][4])
+				if (value[key][4])
+					Object.keys(value[key][4]).forEach(vID => {
+						value[key][4][vID].chnlId = key;
+					});
+				allThreads = Object.assign(allThreads, value[key][4]);
 			});
 			state.Main.allThreads = allThreads;
 			return { newState: state }
