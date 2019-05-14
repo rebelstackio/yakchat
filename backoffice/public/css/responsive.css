@@ -1,4 +1,4 @@
-@media only screen and (max-width: 400px) {
+/*@media only screen and (max-width: 400px) {
 	html, body {
 		font-size: 1em !important;
 	}
@@ -7,6 +7,25 @@
 	}
 	yak-loby > div.toggled {
 		grid-template-columns: 1px 1fr !important;
+	}
+	.option-body {
+		grid-template-columns: 1fr !important;
+	}
+}
+*/
+@media only screen and (max-width: 400px) {
+	.profile-popup-container > div {
+		width: 95vw !important;
+	}
+	yak-sidebar.loby-side-menu {
+		width: 83vw;
+		z-index: 2;
+	}
+	img.mobile-only {
+		opacity: 1 !important;
+	}
+	.msg-head-actions {
+		place-self: center !important;
 	}
 	.msg-head {
 		font-size: 1.5em !important;
@@ -17,7 +36,7 @@
 	input.bottom-input {
 		font-size: 1rem !important;
 	}
-	.option-body {
-		grid-template-columns: 1fr !important;
+	span#header-channel {
+		font-size: 14px;
 	}
 }

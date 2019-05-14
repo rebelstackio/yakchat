@@ -1,11 +1,11 @@
 yak-loby > div {
 	height: 100%;
 	display: grid;
-	grid-template-columns: 22vw 1fr;
+	grid-template-columns: 1fr;
 }
 
 yak-loby > div.toggled {
-	grid-template-columns: 1px 1fr;
+	grid-template-columns: 1fr;
 }
 
 .loby-side-menu {
@@ -15,6 +15,9 @@ yak-loby > div.toggled {
 	transition: all 0.5s cubic-bezier(0.74, 0.11, 0.06, 0.75);
 	font-size: 1rem;
 	max-height: 100vh;
+	position: fixed;
+	width: 22vw;
+	box-shadow: 1px 0px 5px 0px #d9d9d9;
 }
 
 .loby-side-menu.toggled {
@@ -25,6 +28,13 @@ yak-loby > div.toggled {
 .loby-msg-body {
 	display: grid;
 	grid-template-rows: 60px 1fr 60px;
+	width: 78vw;
+	margin-left: auto;
+	transition: all .5s cubic-bezier(0.65, 0.07, 0.01, 0.99);
+}
+.toggled > .loby-msg-body {
+	width: 100vw;
+	transition: width .3s cubic-bezier(1, 0.08, 0, 1.07);
 }
 .msg-body-container {
 	position: relative;
