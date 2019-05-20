@@ -83,7 +83,7 @@ class Sidebar extends MetaComponent {
 				mainContent.classList.remove('toggled');
 			} else {
 				sideBar.classList.add('toggled');
-				setTimeout(() => { mainContent.classList.add('toggled'); }, 400)
+				mainContent.classList.add('toggled');
 			}
 		});
 	}

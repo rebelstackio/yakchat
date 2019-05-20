@@ -11,13 +11,13 @@ yak-loby > div.toggled {
 .loby-side-menu {
 	background-repeat: no-repeat;
 	background-image: linear-gradient(rgb(104, 210, 255), rgb(0, 210, 55));
-	width: 100%;
 	transition: all 0.5s cubic-bezier(0.74, 0.11, 0.06, 0.75);
 	font-size: 1rem;
 	max-height: 100vh;
 	position: fixed;
 	width: 22vw;
 	box-shadow: 1px 0px 5px 0px #d9d9d9;
+	height: -webkit-fill-available;
 }
 
 .loby-side-menu.toggled {
@@ -34,7 +34,7 @@ yak-loby > div.toggled {
 }
 .toggled > .loby-msg-body {
 	width: 100vw;
-	transition: width .3s cubic-bezier(1, 0.08, 0, 1.07);
+	transition: width .5s cubic-bezier(1, 0.08, 0, 1.07);
 }
 .msg-body-container {
 	position: relative;
@@ -53,7 +53,7 @@ yak-loby > div.toggled {
 
 .msg-input {
 	display: grid;
-	grid-template-columns: auto 50px;
+	grid-template-columns: auto 2rem 2rem;
 }
 
 input.bottom-input {
@@ -158,13 +158,13 @@ span.msg-date {
 img {
 	height: 1em;
 }
-.send-message-icon {
+.send-message-icon, .shopping-icon {
 	display: grid;
 	align-items: center;
 	justify-items: center;
 }
-.send-message-icon img {
-	height: 30px;
+.send-message-icon img, .shopping-icon img {
+	height: 23px;
 	cursor: pointer;
 }
 

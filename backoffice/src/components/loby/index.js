@@ -3,10 +3,12 @@ import { instanceElement, parsemkey } from '../../utils';
 import cogIcon from '../../assets/icons/cog-solid.svg';
 import logoutIcon from '../../assets/icons/sign-out-alt-solid.svg';
 import imageURL from '../../assets/images/logo/yakchat.svg';
-import sendIcon from '../../assets/icons/chevron-right-solid.svg';
+import sendIcon from '../../assets/icons/paper-plane-solid.svg';
+import shoppingIcon from '../../assets/icons/cart-plus-solid.svg';
 import '../patchprofile';
 import '../editchannel';
 import '../verificationpopup';
+import '../shoppingcart';
 import './index.css';
 
 class Loby extends MetaComponent {
@@ -23,6 +25,7 @@ class Loby extends MetaComponent {
 			this.toggleSidebar();
 		});
 		inputButton.addEventListener('click', () => {
+			const input = document.querySelector('.msg-input > input');
 			this.sendMessage(input);
 		});
 		this.querySelector('#logout').addEventListener('click', () => {
@@ -36,6 +39,12 @@ class Loby extends MetaComponent {
 		this.querySelector('#settings').addEventListener('click', () => {
 			this.toggleSetting();
 		});
+		document.querySelector('.shopping-icon').addEventListener('click', () => {
+			document.querySelector('#shopping-popup-container').classList.toggle('hide');
+		});
+		document.querySelector('#close-shopping').addEventListener('click', ()=> {
+			document.querySelector('#shopping-popup-container').classList.toggle('hide');
+		})
 	}
 	// eslint-disable-next-line class-method-use-this
 	render () {
@@ -53,6 +62,7 @@ class Loby extends MetaComponent {
 		const profilePopUp = instanceElement('yak-patchprofile');
 		const editchannelPopUp = instanceElement('yak-editchannel');
 		const verificaiontPopUp = instanceElement('yak-verification');
+		//const shoppingcart = instanceElement('yak-shoppincart');
 		this.append(settingsPopUp, profilePopUp, editchannelPopUp, verificaiontPopUp);
 		return content;
 	}
@@ -117,12 +127,18 @@ class Loby extends MetaComponent {
 			`<img src="${sendIcon}"></img>`,
 			[{type: 'text'}, {placeholder: 'Enter your message'}]
 		);
+		const shopButtom = instanceElement (
+			'div', ['icon', 'shopping-icon'],
+			false,`
+			<img src="${shoppingIcon}"> </img>
+			`
+		)
 		input.addEventListener('keydown', (e) => {
 			if (e.key === 'Enter') {
 				this.sendMessage(input);
 			}
 		});
-		box.append(input, inputButton);
+		box.append(input, shopButtom, inputButton);
 	}
 	/**
 	 * @description dispatch the send message action
@@ -179,7 +195,7 @@ class Loby extends MetaComponent {
 			mainContent.classList.remove('toggled');
 		} else {
 			sideBar.classList.add('toggled');
-			setTimeout(() => { mainContent.classList.add('toggled'); }, 400)
+			mainContent.classList.add('toggled');
 		}
 	}
 	/**
