@@ -31,7 +31,26 @@ const MainDefaultState = {
 	channelList: [],
 	selectedMessages: [],
 	chnlUid: 0,
-	emailVerified: false
+	emailVerified: false,
+	inCart: {
+		'Thursday, Jan 8, 2017': [
+			{
+				title: 'Tour 01',
+				id: '0001',
+				netPrice: '00.00'
+			},
+			{
+				title: 'Tour 02',
+				id: '0002',
+				netPrice: '00.00'
+			},
+			{
+				title: 'Tour 03',
+				id: '0003',
+				netPrice: '00.00'
+			}
+		]
+	}
 };
 /**
  * check if new visitor has been added

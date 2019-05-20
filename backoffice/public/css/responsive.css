@@ -24,4 +24,7 @@
 	span#header-channel {
 		font-size: 14px;
 	}
+	div[class^="yak-view-item"] {
+		width: 80% !important;
+	}
 }
