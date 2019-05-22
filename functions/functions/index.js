@@ -155,7 +155,7 @@ function sendEmail(email, urlString, domain, subject, title, subtitle) {
 			`
 		}
 	// 6. Process the sending of this email via nodemailer
-	return transporter.sendMail(mailOptions, function (err, info) {
+	return transporter.sendMail(mailOptions,  (err, info) => {
 		if(err) {
 			console.log(err)
 			return false
@@ -289,8 +289,6 @@ exports.sendMessage = functions.https.onCall((data) => {
 		//console.log(res.val());
 		return admin.auth().getUser(uid)
 		.then(function(userRecord) {
-			// See the UserRecord reference doc for the contents of userRecord.
-			//console.log("Successfully fetched user data:", userRecord.toJSON());
 			const displayName = userRecord.toJSON().displayName;
 			if (res.val() === null || !res.val()) {
 				// it has no message
@@ -352,3 +350,8 @@ function parsemkey(base64safe) {
 		ts:  base64( base64safe.slice(10,18) )
 	};
 }
+
+exports.setChannelItems = functions.https.onCall((data, context) => {
+	console.log(context)
+	return data
+})

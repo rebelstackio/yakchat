@@ -293,7 +293,13 @@ export function getOperatorChannels () {
 	})
 }
 /**-------------------------END-OPERATORS-------------------------------------------- */
-export function send (data) {
+/**
+ * 
+ * @param {String} data msg string
+ * @param {String} type AA = text AB= shopping item
+ */
+export function send (data, type) {
+	console.log(data);
 	const uid = localStorage.getItem('fb-hash');
 	const chnlUid = data.chnlUid;
 	const visitorId = data.visitorId
@@ -302,7 +308,7 @@ export function send (data) {
 			sendMessage({
 				uid: uid,
 				msg: data.message,
-				type: 'AA', // text
+				type: type, // text
 				thread: 'domains/' + chnlUid + '/4/' + visitorId
 			}).then(v => {
 				console.log(v);

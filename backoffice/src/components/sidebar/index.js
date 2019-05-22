@@ -169,8 +169,8 @@ class Sidebar extends MetaComponent {
 			}
 			const type = msgObject[uid][0] === ''
 				? `
-					New User
-					<span>unknown</span>
+					Visitor
+					<span></span>
 					<img src="${enevelope}" class="${isNew ? '' : 'hide'}"></img>
 				`
 				: `

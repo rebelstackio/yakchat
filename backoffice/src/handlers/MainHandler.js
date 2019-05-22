@@ -31,26 +31,7 @@ const MainDefaultState = {
 	channelList: [],
 	selectedMessages: [],
 	chnlUid: 0,
-	emailVerified: false,
-	inCart: {
-		'Thursday, Jan 8, 2017': [
-			{
-				title: 'Tour 01',
-				id: '0001',
-				netPrice: '00.00'
-			},
-			{
-				title: 'Tour 02',
-				id: '0002',
-				netPrice: '00.00'
-			},
-			{
-				title: 'Tour 03',
-				id: '0003',
-				netPrice: '00.00'
-			}
-		]
-	}
+	emailVerified: false
 };
 /**
  * check if new visitor has been added
@@ -132,9 +113,10 @@ function notificationSelect (channel, id) {
 			});
 		}
 		global.storage.dispatch({type: 'CHAT-SELECTED', data: {
-			clientSelected: threadsSelect[0] !== '' ? threadsSelect[0] : 'New User <span>unknown</span>',
+			clientSelected: threadsSelect[0] !== '' ? threadsSelect[0] : 'Visitor',
 			messages: chnlSelected[4][id],
-			visitorId: id
+			visitorId: id,
+			chnlId: channel
 		}})
 	}
 }
@@ -193,16 +175,18 @@ export default {
 		},
 		'MSG-ARRIVE': (action, state) => {
 			const newList = Object.assign({}, state.Main.selectedMessages, action.msg)
+			console.log(newList);
 			state.Main.selectedMessages = newList;
 			state.Main.threads[state.Main.visitorId] = newList;
 			return { newState: state };
 		},
 		'SEND-MESSAGE': (action, state) => {
+			console.log("this its not happening");
 			send({
 				visitorId: state.Main.visitorId,
 				chnlUid: state.Main.accessLevel > 3 ? state.Main.uid : state.Main.chnlUid,
 				message: btoa(action.data)
-			})
+			}, 'AA');
 			return { newState: state }
 		},
 		'TOGGLE-SOUND': (action, state) => {
@@ -281,6 +265,7 @@ export default {
 			return { newState: state }
 		},
 		'THREAD-SELECTED': (action, state) => {
+			console.log(action)
 			const { DID, threads } = action;
 			state.Main.chnlUid = DID;
 			state.Main.threads = threads;

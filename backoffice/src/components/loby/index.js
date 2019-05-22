@@ -51,6 +51,10 @@ class Loby extends MetaComponent {
 		const content = document.createElement('div');
 		var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 		const sideBar = instanceElement('yak-sidebar', ['loby-side-menu']);
+		global.TPGstorage.dispatch({
+			type: 'CHANGE-VIEW',
+			viewNumber: 1
+		});
 		if (w <= 400) {
 			content.classList.add('toggled');
 			sideBar.classList.add('toggled');
@@ -62,7 +66,6 @@ class Loby extends MetaComponent {
 		const profilePopUp = instanceElement('yak-patchprofile');
 		const editchannelPopUp = instanceElement('yak-editchannel');
 		const verificaiontPopUp = instanceElement('yak-verification');
-		//const shoppingcart = instanceElement('yak-shoppincart');
 		this.append(settingsPopUp, profilePopUp, editchannelPopUp, verificaiontPopUp);
 		return content;
 	}
@@ -105,7 +108,7 @@ class Loby extends MetaComponent {
 		this.channel = instanceElement(
 			'span',
 			not, 'header-channel',
-			`#Loby`
+			`#Lobby`
 		);
 		toggleButton.append(logo, this.channel);
 		box.append(toggleButton, actions);
