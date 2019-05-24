@@ -27,4 +27,7 @@
 	div[class^="yak-view-item"] {
 		width: 80% !important;
 	}
+	.loby-side-menu {
+		width: 44vh;
+	}
 }
