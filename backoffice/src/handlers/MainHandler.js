@@ -175,18 +175,16 @@ export default {
 		},
 		'MSG-ARRIVE': (action, state) => {
 			const newList = Object.assign({}, state.Main.selectedMessages, action.msg)
-			console.log(newList);
 			state.Main.selectedMessages = newList;
 			state.Main.threads[state.Main.visitorId] = newList;
 			return { newState: state };
 		},
 		'SEND-MESSAGE': (action, state) => {
-			console.log("this its not happening");
 			send({
 				visitorId: state.Main.visitorId,
 				chnlUid: state.Main.accessLevel > 3 ? state.Main.uid : state.Main.chnlUid,
 				message: btoa(action.data)
-			}, 'AA');
+			}, action.msgType);
 			return { newState: state }
 		},
 		'TOGGLE-SOUND': (action, state) => {
@@ -265,7 +263,6 @@ export default {
 			return { newState: state }
 		},
 		'THREAD-SELECTED': (action, state) => {
-			console.log(action)
 			const { DID, threads } = action;
 			state.Main.chnlUid = DID;
 			state.Main.threads = threads;

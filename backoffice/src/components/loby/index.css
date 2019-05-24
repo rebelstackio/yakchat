@@ -171,3 +171,15 @@ img {
 #header-channel>img {
 	display: none;
 }
+
+.msg-itinerary > img {
+	width: 4em;
+	height: auto;
+	padding: 1em;
+	background: rgba(0, 0, 0, .5);
+	border-radius: 50%;
+}
+
+.msg-price {
+	display: grid;
+}
