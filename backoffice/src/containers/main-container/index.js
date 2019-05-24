@@ -102,7 +102,7 @@ class YakMainContainer extends MetaContainer {
 	 * handle storage events
 	 */
 	handleStoreEvents () {
-		const { storage } = global;
+		const { storage, TPGstorage } = global;
 		storage.on('LOGIN-SUCCESS', (state) => {
 			const {accessLevel, admin, auth} = state.newState.Main;
 			this.auth = auth;
@@ -118,6 +118,13 @@ class YakMainContainer extends MetaContainer {
 			const login = document.createElement('yak-login');
 			// Add to the DOM
 			this.appendChild(login);
+		});
+
+		global.TPGstorage.on('ADD-ITINERARY', (state) => {
+			const data = state.newState.Main.lastItinerary;
+			console.log(data);
+			const msg = [data.date, data.title, data.description, data.time, data.icon, data.qty, data.price].join('-')
+			global.storage.dispatch({type: 'SEND-MESSAGE', data: msg, msgType: 'AB'});
 		})
 	}
 
