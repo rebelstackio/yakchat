@@ -31,7 +31,7 @@ module.exports = () => {
 		},
 		devServer: {
 			contentBase: path.resolve(__dirname, 'public'),
-			port: 8081
+			port: 8082
 		},
 		module: {
 			rules: [

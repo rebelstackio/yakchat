@@ -52,6 +52,8 @@ class Header extends MetaComponent {
 	createUserActions (type) {
 		const box = document.createElement('div');
 		const icon = document.createElement('i');
+		const shoppingIcon = document.createElement('i');
+		shoppingIcon.className = 'fa fa-shopping-cart'
 		icon.className = 'fa fa-user';
 		if (type === 0) {
 			box.className = 'user-actions-an'
@@ -59,10 +61,13 @@ class Header extends MetaComponent {
 			box.className = 'user-actions-re';
 			this.createRegisteredActions();
 		}
-		box.addEventListener('click',() => { 
+		icon.addEventListener('click', () => {
 			this.toggleSing();
+		});
+		shoppingIcon.addEventListener('click', () => {
+			this.openShoppingCart();
 		})
-		box.append(icon);
+		box.append(icon, shoppingIcon);
 		return box;
 	}
 
@@ -96,12 +101,22 @@ class Header extends MetaComponent {
 		}
 	}
 	/**
-	 *
+	 * toggle the sign in view
 	 */
 	toggleSing () {
 		this.storage.dispatch({ type: 'SING-UP-REQ'});
 	}
-	
+	/**
+	 * open shopping cart view
+	 */
+	openShoppingCart () {
+		try {
+			const shoppingCart = document.querySelector('#tepago-area');
+			shoppingCart.classList.toggle('hide')
+		} catch (err) {
+			alert('Bad shoppig cart configuaration');
+		}
+	}
 	/**
 	 * Handle Events in a organized way.
 	 */

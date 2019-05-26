@@ -269,8 +269,7 @@ exports.handleVisitor = functions.https.onCall((req) => {
 				});
 				return '/domains/' + key + '/4/' + uid
 		}).catch((err) => {
-			resp.status(500);
-			resp.send('error:' + err);
+			console.error(err);
 			return false
 		});
 });
