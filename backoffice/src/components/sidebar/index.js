@@ -5,6 +5,7 @@ import cog from '../../assets/icons/cog-solid.svg';
 import searchIcon from '../../assets/icons/search-solid.svg';
 import enevelope from '../../assets/icons/envelope-solid.svg';
 import closeIcon from '../../assets/icons/times-solid.svg';
+import peruFlag from '../../assets/icons/flags/PE.svg'
 import './index.css';
 class Sidebar extends MetaComponent {
 	constructor () {
@@ -163,6 +164,7 @@ class Sidebar extends MetaComponent {
 		const { oldThreads } = this.storage.getState().Main;
 		thBox.innerHTML = '';
 		Object.keys(msgObject).forEach(uid => {
+			const random = Math.floor(Math.random()*(999-100+1)+100);
 			let isNew = false;
 			if (oldThreads[uid]) {
 				isNew = JSON.stringify(oldThreads[uid]) !== JSON.stringify(msgObject[uid])
@@ -170,12 +172,18 @@ class Sidebar extends MetaComponent {
 			const type = msgObject[uid][0] === ''
 				? `
 					Visitor
-					<span></span>
+					<span class="bottom">
+						190.234.15.${random} Pisco - Peru
+						<img class="flag" src="${peruFlag}">
+					</span>
 					<img src="${enevelope}" class="${isNew ? '' : 'hide'}"></img>
 				`
 				: `
 					${msgObject[uid][0].split('-')[0]}
-					<span>${msgObject[uid][0].split('-')[1]}</span>
+					<span class="bottom">
+						${msgObject[uid][0].split('-')[1]}
+						<img class="flag" src="${peruFlag}">
+					</span>
 					<img src="${enevelope}" class="${isNew ? '' : 'hide'}"></img>
 				`
 			const li = instanceElement('li', ['thread-item'], 'id-' + uid, type);
