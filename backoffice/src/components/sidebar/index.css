@@ -141,6 +141,11 @@ ol#threads {
 	margin-bottom: 2px;
 }
 
+.thread-item > .bottom {
+	display: grid;
+	grid-template-columns: 1fr 30px;
+}
+
 .thread-item > img {
 	position: absolute;
 	top: 0;
@@ -173,3 +178,11 @@ img.mobile-only {
 	top: 3%;
 	opacity: 0;
 }
+
+img.flag {
+	width: 30px;
+	height: 30px;
+	padding: 5px;
+	border-radius: 50%;
+}
+
