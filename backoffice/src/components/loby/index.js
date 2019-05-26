@@ -141,7 +141,7 @@ class Loby extends MetaComponent {
 				this.sendMessage(input);
 			}
 		});
-		box.append(input, shopButtom, inputButton);
+		box.append(input, inputButton, shopButtom);
 	}
 	/**
 	 * @description dispatch the send message action
