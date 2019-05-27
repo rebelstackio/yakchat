@@ -66,8 +66,8 @@ class Viewer extends MetaComponent {
 			</div>
 			<div class="msg-price">
 				<span>Qty: ${ msgObject.qty }</span>
-				<span>Price: ${ msgObject.price }</span>
-				<span>Total: ${ msgObject.price * msgObject.qty }</span>
+				<span>Price: $${ msgObject.price }</span>
+				<span>Total: $${ msgObject.price * msgObject.qty }</span>
 			</div>
 			<span class = "msg-date">${msgData[0]} added to shopping cart - ${ new Date(keyData.ts).toDateString()}</spna>
 			`;

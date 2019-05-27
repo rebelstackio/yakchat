@@ -213,8 +213,8 @@ class Loby extends MetaComponent {
 				</div>
 				<div class="msg-price">
 					<span>Qty: ${ qty }</span>
-					<span>Price: ${ price }</span>
-					<span>Total: ${ total }</span>
+					<span>Price: $${ price }</span>
+					<span>Total: $${ total }</span>
 				</div>
 				<span class = "msg-date">${mail} added to shopping cart - ${date}</spna>
 				`

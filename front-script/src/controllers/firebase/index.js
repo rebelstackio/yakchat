@@ -30,7 +30,7 @@ app.auth().onAuthStateChanged(function(user) {
  */
 export function singUpWithEmail (email, name) {
 	const hash = email.md5Encode();
-	const d = 'rebelstackio.github.io' //document.location.host;
+	const d = document.location.host;
 	//TODO: validate the email to not exist in this channel
 	let handler = functions.httpsCallable('handleVisitor');
 	handler({
@@ -40,7 +40,6 @@ export function singUpWithEmail (email, name) {
 		n: name
 	}).then(v => {
 		threadRoute = v.data;
-		console.log(v)
 		listenRow(threadRoute);
 		localStorage.setItem('yak-hash', hash);
 		getMessages(threadRoute);
@@ -73,7 +72,7 @@ async function handleVisitor() {
 		hash = await getClientInfo();
 		localStorage.setItem('yak-hash', hash);
 	}
-	const d = 'rebelstackio.github.io'//document.location.host;
+	const d = document.location.host;
 	let handler = functions.httpsCallable('handleVisitor');
 	return await handler({
 		u: hash,
