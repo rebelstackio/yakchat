@@ -319,7 +319,7 @@ exports.sendMessage = functions.https.onCall((data) => {
 function setMessage(displayName, next, ts, msg, uid, ref, type) {
 	if (!displayName) {
 		// the user it's a visitor
-		return ref.child(type + base64(next, 8) + ts)
+		return ref.child(base64(next, 8) + ts + type)
 		.set({
 			0: 'VISITOR-' + msg,
 		}).then(() => {
@@ -329,7 +329,7 @@ function setMessage(displayName, next, ts, msg, uid, ref, type) {
 		});
 	} else {
 		// the user it's an operator
-		return ref.child(type + base64(next, 8) + ts)
+		return ref.child(base64(next, 8) + ts + type)
 		.set({
 			0: displayName + '-' + msg,
 			1: uid
@@ -344,9 +344,9 @@ function parsemkey(base64safe) {
 	// NOTE: returns object
 	// TODO: validate base64safe
 	return {
-		tid:  base64( base64safe.slice(0,2) ),
-		thid: base64( base64safe.slice(2,10) ),
-		ts:  base64( base64safe.slice(10,18) )
+		thid: base64( base64safe.slice(0, 8) ),
+		ts:  base64( base64safe.slice(8,16) ),
+		tid:  base64( base64safe.slice(16,18) )
 	};
 }
 
