@@ -4,6 +4,8 @@ import defaulAvatar from '../../assets/images/user.svg';
 import cog from '../../assets/icons/cog-solid.svg';
 import searchIcon from '../../assets/icons/search-solid.svg';
 import enevelope from '../../assets/icons/envelope-solid.svg';
+import closeIcon from '../../assets/icons/times-solid.svg';
+import peruFlag from '../../assets/icons/flags/PE.svg'
 import './index.css';
 class Sidebar extends MetaComponent {
 	constructor () {
@@ -15,6 +17,7 @@ class Sidebar extends MetaComponent {
 	// eslint-disable-next-line class-method-use-this
 	render () {
 		const content = instanceElement('div', false, 'sidebar-content');
+		const close = instanceElement('img', ['mobile-only'], false, false, [{src: closeIcon}]);
 		const uid = localStorage.getItem('fb-hash');
 		this.channelList = global.storage.getState().Main.channelList;
 		this.accessLevel = global.storage.getState().Main.accessLevel;
@@ -42,7 +45,7 @@ class Sidebar extends MetaComponent {
 			 <img src="${searchIcon}"></img>
 			`
 		);
-		content.append(profile, search, chnlBox, thBox);
+		content.append(close ,profile, search, chnlBox, thBox);
 		return content;
 	}
 	/**
@@ -71,6 +74,18 @@ class Sidebar extends MetaComponent {
 		.addEventListener('click', () => {
 			global.storage.dispatch({ type: 'OPEN-PROFILE' })
 			document.querySelector('.profile-popup-container-container').classList.remove('hide');
+		});
+		//close btn
+		this.querySelector('.mobile-only').addEventListener('click', () => {
+			const sideBar = document.querySelector('.loby-side-menu');
+			const mainContent = document.querySelector('yak-loby > div');
+			if (sideBar.classList.contains('toggled')) {
+				sideBar.classList.remove('toggled');
+				mainContent.classList.remove('toggled');
+			} else {
+				sideBar.classList.add('toggled');
+				mainContent.classList.add('toggled');
+			}
 		});
 	}
 	/**
@@ -149,19 +164,26 @@ class Sidebar extends MetaComponent {
 		const { oldThreads } = this.storage.getState().Main;
 		thBox.innerHTML = '';
 		Object.keys(msgObject).forEach(uid => {
+			const random = Math.floor(Math.random()*(999-100+1)+100);
 			let isNew = false;
 			if (oldThreads[uid]) {
 				isNew = JSON.stringify(oldThreads[uid]) !== JSON.stringify(msgObject[uid])
 			}
 			const type = msgObject[uid][0] === ''
 				? `
-					New User
-					<span>unknown</span>
+					Visitor
+					<span class="bottom">
+						190.234.15.${random} Pisco - Peru
+						<img class="flag" src="${peruFlag}">
+					</span>
 					<img src="${enevelope}" class="${isNew ? '' : 'hide'}"></img>
 				`
 				: `
 					${msgObject[uid][0].split('-')[0]}
-					<span>${msgObject[uid][0].split('-')[1]}</span>
+					<span class="bottom">
+						${msgObject[uid][0].split('-')[1]}
+						<img class="flag" src="${peruFlag}">
+					</span>
 					<img src="${enevelope}" class="${isNew ? '' : 'hide'}"></img>
 				`
 			const li = instanceElement('li', ['thread-item'], 'id-' + uid, type);

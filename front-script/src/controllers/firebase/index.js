@@ -45,7 +45,8 @@ export function singUpWithEmail (email, name) {
 		getMessages(threadRoute);
 		global.storage.dispatch({type: 'SING-UP-REQ'})
 		return v.data
-	}).catch(() => {
+	}).catch((err) => {
+		console.log(err)
 		return '';
 	})
 }

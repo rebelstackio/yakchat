@@ -113,9 +113,10 @@ function notificationSelect (channel, id) {
 			});
 		}
 		global.storage.dispatch({type: 'CHAT-SELECTED', data: {
-			clientSelected: threadsSelect[0] !== '' ? threadsSelect[0] : 'New User <span>unknown</span>',
+			clientSelected: threadsSelect[0] !== '' ? threadsSelect[0] : 'Visitor',
 			messages: chnlSelected[4][id],
-			visitorId: id
+			visitorId: id,
+			chnlId: channel
 		}})
 	}
 }
@@ -183,7 +184,7 @@ export default {
 				visitorId: state.Main.visitorId,
 				chnlUid: state.Main.accessLevel > 3 ? state.Main.uid : state.Main.chnlUid,
 				message: btoa(action.data)
-			})
+			}, action.msgType);
 			return { newState: state }
 		},
 		'TOGGLE-SOUND': (action, state) => {

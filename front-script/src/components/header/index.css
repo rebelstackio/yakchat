@@ -5,7 +5,7 @@ yak-header{
 .yak-header-items {
 	place-self: center;
 	display: grid;
-	grid-template-columns: 1fr 6em 2em;
+	grid-template-columns: 1fr 6em;
 	width: 100%;
 }
 
@@ -40,9 +40,12 @@ yak-header{
 }
 
 div[class^="user-actions"] {
-	font-size: 20px;
-	place-self: center;
-	cursor: pointer;
+    font-size: 20px;
+    place-self: center;
+    cursor: pointer;
+    grid-column-gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 .user-actions-re {
 	color: #7bce7e;

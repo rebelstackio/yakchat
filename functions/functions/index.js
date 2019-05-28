@@ -155,7 +155,7 @@ function sendEmail(email, urlString, domain, subject, title, subtitle) {
 			`
 		}
 	// 6. Process the sending of this email via nodemailer
-	return transporter.sendMail(mailOptions, function (err, info) {
+	return transporter.sendMail(mailOptions,  (err, info) => {
 		if(err) {
 			console.log(err)
 			return false
@@ -269,8 +269,7 @@ exports.handleVisitor = functions.https.onCall((req) => {
 				});
 				return '/domains/' + key + '/4/' + uid
 		}).catch((err) => {
-			resp.status(500);
-			resp.send('error:' + err);
+			console.error(err);
 			return false
 		});
 });
@@ -289,8 +288,6 @@ exports.sendMessage = functions.https.onCall((data) => {
 		//console.log(res.val());
 		return admin.auth().getUser(uid)
 		.then(function(userRecord) {
-			// See the UserRecord reference doc for the contents of userRecord.
-			//console.log("Successfully fetched user data:", userRecord.toJSON());
 			const displayName = userRecord.toJSON().displayName;
 			if (res.val() === null || !res.val()) {
 				// it has no message
@@ -322,7 +319,7 @@ exports.sendMessage = functions.https.onCall((data) => {
 function setMessage(displayName, next, ts, msg, uid, ref, type) {
 	if (!displayName) {
 		// the user it's a visitor
-		return ref.child(type + base64(next, 8) + ts)
+		return ref.child(base64(next, 8) + ts + type)
 		.set({
 			0: 'VISITOR-' + msg,
 		}).then(() => {
@@ -332,7 +329,7 @@ function setMessage(displayName, next, ts, msg, uid, ref, type) {
 		});
 	} else {
 		// the user it's an operator
-		return ref.child(type + base64(next, 8) + ts)
+		return ref.child(base64(next, 8) + ts + type)
 		.set({
 			0: displayName + '-' + msg,
 			1: uid
@@ -347,8 +344,13 @@ function parsemkey(base64safe) {
 	// NOTE: returns object
 	// TODO: validate base64safe
 	return {
-		tid:  base64( base64safe.slice(0,2) ),
-		thid: base64( base64safe.slice(2,10) ),
-		ts:  base64( base64safe.slice(10,18) )
+		thid: base64( base64safe.slice(0, 8) ),
+		ts:  base64( base64safe.slice(8,16) ),
+		tid:  base64( base64safe.slice(16,18) )
 	};
 }
+
+exports.setChannelItems = functions.https.onCall((data, context) => {
+	console.log(context)
+	return data
+})

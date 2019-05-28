@@ -3,10 +3,12 @@ import { instanceElement, parsemkey } from '../../utils';
 import cogIcon from '../../assets/icons/cog-solid.svg';
 import logoutIcon from '../../assets/icons/sign-out-alt-solid.svg';
 import imageURL from '../../assets/images/logo/yakchat.svg';
-import sendIcon from '../../assets/icons/chevron-right-solid.svg';
+import sendIcon from '../../assets/icons/paper-plane-solid.svg';
+import shoppingIcon from '../../assets/icons/cart-plus-solid.svg';
 import '../patchprofile';
 import '../editchannel';
 import '../verificationpopup';
+import '../shoppingcart';
 import './index.css';
 
 class Loby extends MetaComponent {
@@ -23,6 +25,7 @@ class Loby extends MetaComponent {
 			this.toggleSidebar();
 		});
 		inputButton.addEventListener('click', () => {
+			const input = document.querySelector('.msg-input > input');
 			this.sendMessage(input);
 		});
 		this.querySelector('#logout').addEventListener('click', () => {
@@ -36,12 +39,22 @@ class Loby extends MetaComponent {
 		this.querySelector('#settings').addEventListener('click', () => {
 			this.toggleSetting();
 		});
+		document.querySelector('.shopping-icon').addEventListener('click', () => {
+			document.querySelector('#shopping-popup-container').classList.toggle('hide');
+		});
+		document.querySelector('#close-shopping').addEventListener('click', ()=> {
+			document.querySelector('#shopping-popup-container').classList.toggle('hide');
+		})
 	}
 	// eslint-disable-next-line class-method-use-this
 	render () {
 		const content = document.createElement('div');
 		var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 		const sideBar = instanceElement('yak-sidebar', ['loby-side-menu']);
+		global.TPGstorage.dispatch({
+			type: 'CHANGE-VIEW',
+			viewNumber: 1
+		});
 		if (w <= 400) {
 			content.classList.add('toggled');
 			sideBar.classList.add('toggled');
@@ -95,7 +108,7 @@ class Loby extends MetaComponent {
 		this.channel = instanceElement(
 			'span',
 			not, 'header-channel',
-			`#Loby`
+			`#Lobby`
 		);
 		toggleButton.append(logo, this.channel);
 		box.append(toggleButton, actions);
@@ -117,12 +130,18 @@ class Loby extends MetaComponent {
 			`<img src="${sendIcon}"></img>`,
 			[{type: 'text'}, {placeholder: 'Enter your message'}]
 		);
+		const shopButtom = instanceElement (
+			'div', ['icon', 'shopping-icon'],
+			false,`
+			<img src="${shoppingIcon}"> </img>
+			`
+		)
 		input.addEventListener('keydown', (e) => {
 			if (e.key === 'Enter') {
 				this.sendMessage(input);
 			}
 		});
-		box.append(input, inputButton);
+		box.append(input, inputButton, shopButtom);
 	}
 	/**
 	 * @description dispatch the send message action
@@ -130,7 +149,7 @@ class Loby extends MetaComponent {
 	 */
 	sendMessage (input) {
 		if (input.value !== '') {
-			this.storage.dispatch({ type: 'SEND-MESSAGE', data: input.value })
+			this.storage.dispatch({ type: 'SEND-MESSAGE', data: input.value, msgType: 'AA' })
 			input.value = '';
 		}
 	}
@@ -146,18 +165,12 @@ class Loby extends MetaComponent {
 			Object.keys(msgList).forEach((msg, i) => {
 				if (i !== 0) {
 					const dataKey = parsemkey(msg);
+					const type = dataKey.tid;
 					const date = new Date(dataKey.ts).toDateString();
 					const isYou = msgList[msg][1] === uid;
 					const message = msgList[msg][0].split('-');
 					if (message[0] != "0"){
-						const msgBox = instanceElement(
-							'div',
-							[!isYou ? 'yak-view-item-left' : 'yak-view-item-right'],
-							false,
-							`<span class="msg-text">${atob(message[1])}</span>
-							<span class = "msg-date">${message[0]} - ${date}</spna>
-							`
-						)
+						const msgBox = this.createMessageBody(atob(message[1]), message[0], date, type, isYou);
 						body.appendChild(msgBox);
 					}
 					body.scrollTop = body.scrollHeight;
@@ -167,6 +180,62 @@ class Loby extends MetaComponent {
 			//
 			console.log(e);
 		}
+	}
+	/**
+	 * create the message body by type
+	 */
+	createMessageBody(text, mail, date, type, isYou) {
+		if (type === 1) {
+			const msgData = text.split('-');
+			const qty = parseInt(msgData[5]);
+			const price = parseFloat(msgData[6]);
+			const total = price * qty;
+			global.TPGstorage.dispatch({
+				type: 'ADD-ITINERARY-EXT',
+				data: {
+					time: msgData[3],
+					price: price,
+					icon: msgData[4],
+					title: msgData[1],
+					description: msgData[2],
+					date: msgData[0],
+					qty
+				}
+			});
+			return instanceElement(
+				'div',
+				[!isYou ? 'yak-view-item-left' : 'yak-view-item-right'],
+				false,
+				`<div class="msg-itinerary">
+					<img src="${this.getItineraryLogos(msgData[4])}">
+					<h3>${ msgData[1] }</h3>
+					<span>${ msgData[2] }</span>
+				</div>
+				<div class="msg-price">
+					<span>Qty: ${ qty }</span>
+					<span>Price: $${ price }</span>
+					<span>Total: $${ total }</span>
+				</div>
+				<span class = "msg-date">${mail} added to shopping cart - ${date}</spna>
+				`
+			)
+		} else {
+			return instanceElement(
+				'div',
+				[!isYou ? 'yak-view-item-left' : 'yak-view-item-right'],
+				false,
+				`<span class="msg-text">${text}</span>
+				<span class = "msg-date">${mail} - ${date}</spna>
+				`
+			)
+		}
+	}
+	/**
+	 * get the icon url 
+	 * @param {String} logoName 
+	 */
+	getItineraryLogos(logoName) {
+		return `https://rebelstackio.github.io/tepagopro/src/assets/icons/itinerary/${logoName}.svg`
 	}
 	/**
 	 * handle the toggle sidebar
@@ -179,7 +248,7 @@ class Loby extends MetaComponent {
 			mainContent.classList.remove('toggled');
 		} else {
 			sideBar.classList.add('toggled');
-			setTimeout(() => { mainContent.classList.add('toggled'); }, 400)
+			mainContent.classList.add('toggled');
 		}
 	}
 	/**
@@ -194,6 +263,7 @@ class Loby extends MetaComponent {
 		return {
 			'CHAT-SELECTED': (state) => {
 				const {selectedMessages, clientSelected} = state.newState.Main;
+				global.TPGstorage.dispatch({ type: 'CLEAR-ITINERARY' });
 				document.querySelector('#header-channel').innerHTML = '#' + clientSelected;
 				this.createMessages(selectedMessages);
 			},
