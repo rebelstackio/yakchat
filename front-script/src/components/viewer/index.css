@@ -18,7 +18,7 @@ div[class^="yak-view-item"] {
 	display: grid;
 	grid-template-rows: auto;
 	grid-template-columns: auto;
-	width: 60%;
+	width: 85%;
 	padding: 1em;
 	color: #666;
 	max-width: 15em;
@@ -42,4 +42,16 @@ div[class^="yak-view-item"] {
 }
 .yak-view-msg {
 	word-break: break-word;
+}
+
+.msg-itinerary > img {
+	width: 4em;
+	height: auto;
+	padding: 1em;
+	background: rgba(0, 0, 0, .5);
+	border-radius: 50%;
+}
+
+.msg-price {
+	display: grid;
 }

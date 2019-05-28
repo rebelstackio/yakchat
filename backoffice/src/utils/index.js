@@ -65,9 +65,9 @@ export function parsemkey(base64safe) {
 	// NOTE: returns object
 	// TODO: validate base64safe
 	return {
-		tid:  base64( base64safe.slice(0,2) ),
-		thid: base64( base64safe.slice(2,10) ),
-		ts:  base64( base64safe.slice(10, 18) )
+		thid: base64( base64safe.slice(0, 8) ),
+		ts:  base64( base64safe.slice(8,16) ),
+		tid:  base64( base64safe.slice(16,18) )
 	};
 }
 	export default {

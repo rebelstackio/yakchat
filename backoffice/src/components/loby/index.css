@@ -1,20 +1,23 @@
 yak-loby > div {
 	height: 100%;
 	display: grid;
-	grid-template-columns: 22vw 1fr;
+	grid-template-columns: 1fr;
 }
 
 yak-loby > div.toggled {
-	grid-template-columns: 1px 1fr;
+	grid-template-columns: 1fr;
 }
 
 .loby-side-menu {
 	background-repeat: no-repeat;
 	background-image: linear-gradient(rgb(104, 210, 255), rgb(0, 210, 55));
-	width: 100%;
 	transition: all 0.5s cubic-bezier(0.74, 0.11, 0.06, 0.75);
 	font-size: 1rem;
 	max-height: 100vh;
+	position: fixed;
+	width: 22vw;
+	box-shadow: 1px 0px 5px 0px #d9d9d9;
+	height: -webkit-fill-available;
 }
 
 .loby-side-menu.toggled {
@@ -25,6 +28,13 @@ yak-loby > div.toggled {
 .loby-msg-body {
 	display: grid;
 	grid-template-rows: 60px 1fr 60px;
+	width: 78vw;
+	margin-left: auto;
+	transition: all .5s cubic-bezier(0.65, 0.07, 0.01, 0.99);
+}
+.toggled > .loby-msg-body {
+	width: 100vw;
+	transition: width .5s cubic-bezier(1, 0.08, 0, 1.07);
 }
 .msg-body-container {
 	position: relative;
@@ -43,7 +53,7 @@ yak-loby > div.toggled {
 
 .msg-input {
 	display: grid;
-	grid-template-columns: auto 50px;
+	grid-template-columns: auto 2rem 2rem;
 }
 
 input.bottom-input {
@@ -148,16 +158,28 @@ span.msg-date {
 img {
 	height: 1em;
 }
-.send-message-icon {
+.send-message-icon, .shopping-icon {
 	display: grid;
 	align-items: center;
 	justify-items: center;
 }
-.send-message-icon img {
-	height: 30px;
+.send-message-icon img, .shopping-icon img {
+	height: 23px;
 	cursor: pointer;
 }
 
 #header-channel>img {
 	display: none;
+}
+
+.msg-itinerary > img {
+	width: 4em;
+	height: auto;
+	padding: 1em;
+	background: rgba(0, 0, 0, .5);
+	border-radius: 50%;
+}
+
+.msg-price {
+	display: grid;
 }
