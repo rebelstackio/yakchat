@@ -269,7 +269,6 @@ class Loby extends MetaComponent {
 			},
 			'MSG-ARRIVE': (state) => {
 				const {selectedMessages} = state.newState.Main;
-				console.log('msg Arrive');
 				this.createMessages(selectedMessages);
 			},
 			'LOGIN-SUCCESS': (state) => {
