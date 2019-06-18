@@ -31,7 +31,7 @@ class YakMainContainer extends MetaContainer {
 		let env = '/';
 		const production = process.env.ENVIROMENT === 'PRODUCTION';
 		switch (path) {
-			case (!production ? env : env + 'backoffice'):
+			case (!production ? env : env + 'backoffice.html'):
 				//lobby
 				console.log('loby', this.auth)
 				if (this.auth) {
