@@ -78,7 +78,7 @@ export function signInWithEmail (email, password) {
 	app.auth().signInWithEmailAndPassword(email, password)
 	.then(() => {
 		if (process.env.ENVIROMENT === 'PRODUCTION') {
-			document.location.pathname = '/backoffice';
+			document.location.pathname = '/backoffice.html';
 		} else {
 			document.location.pathname = '/'
 		}
