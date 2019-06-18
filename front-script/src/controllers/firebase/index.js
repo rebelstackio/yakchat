@@ -128,3 +128,13 @@ export function send (msg) {
 		})
 	}
 }
+
+export function setPayments (data) {
+	if (threadRoute !== '') {
+		let setPayment = functions.httpsCallable('setPayment');
+		setPayment({
+			thread: threadRoute, 
+			payment: data
+		});
+	}
+}

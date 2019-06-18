@@ -199,14 +199,7 @@ exports.inviteOperator = functions.https.onCall((param) => {
 })
 
 /**
- * 0 = text
- * 1 = action
- * 2 = url_change
- */
-const _types = ['AA', 'AB', 'AC']
-
-/**
- * 
+ * convert key data into base64
  * @param {String} value 
  * @param {Int32Array} digis 
  */
@@ -238,6 +231,7 @@ base64.getChars = function(num, res) {
  * u is mandatory visitor finger print or email md5 hashed
  * n is non mandatory name of the registrant
  * m non mandatory email of the registrant
+ * d is mandatory Domain name (the front script get this automatic)
  */
 exports.handleVisitor = functions.https.onCall((req) => {
 	// the unique user id or the browser fingerprint
@@ -285,7 +279,6 @@ exports.sendMessage = functions.https.onCall((data) => {
 	// get the last one
 	return ref.limitToLast(1)
 	.once('value').then(res => {
-		//console.log(res.val());
 		return admin.auth().getUser(uid)
 		.then(function(userRecord) {
 			const displayName = userRecord.toJSON().displayName;
@@ -340,6 +333,10 @@ function setMessage(displayName, next, ts, msg, uid, ref, type) {
 		});
 	}
 }
+/**
+ * parse base64 key data retun Object
+ * @param {String} base64safe 
+ */
 function parsemkey(base64safe) {
 	// NOTE: returns object
 	// TODO: validate base64safe
@@ -349,8 +346,40 @@ function parsemkey(base64safe) {
 		tid:  base64( base64safe.slice(16,18) )
 	};
 }
-
-exports.setChannelItems = functions.https.onCall((data, context) => {
-	console.log(context)
-	return data
-})
+/**
+ * thread mandatory, the route for firebase
+ * payment mandatory is the response from Culqi or PayPal
+ */
+exports.setPayment = functions.https.onCall((data) => {
+	try {
+		const { thread , payment } = data;
+		const visitior = thread.split('/')[3];
+		updateItemStatus(thread);
+		admin.database().ref('/payments/' + visitior).push(payment);
+	} catch (err) {
+		return false;
+	}
+	return true;
+});
+/**
+ * update all the messages with the type AB to AC
+ * @param {String} thread 
+ */
+function updateItemStatus (thread) {
+	const ref = admin.database().ref(thread);
+	ref.once('value', (snapshot) => {
+		const val = snapshot.val();
+		let update = {};
+		Object.keys(val).forEach((key, i) => {
+			if (i !== 0) {
+				const keyData = parsemkey(key);
+				if (keyData.tid === 1) {
+					const newKey = (key.slice(0, 16)) + 'AC';
+					update[key] = null;
+					update[newKey] = val[key];
+				}
+			}
+		});
+		return ref.update(update);
+	});
+}

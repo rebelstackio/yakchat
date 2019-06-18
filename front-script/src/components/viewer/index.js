@@ -56,8 +56,11 @@ class Viewer extends MetaComponent {
 			listItem.append(msg, from);
 		} else {
 			const msg = document.createElement('span');
-			listItem.className = !isOperator ? 'yak-view-item-right' : 'yak-view-item-left';
-			const msgObject = this.getItineraryMsgData(atob(msgData[1]));
+			const msgObject = this.getItineraryMsgData(atob(msgData[1]), keyData.tid);
+			listItem.classList.add(
+				!isOperator ? 'yak-view-item-right' : 'yak-view-item-left',
+				keyData.tid === 2 ? 'schedule' : 'pending'
+			);
 			msg.innerHTML = `
 			<div class="msg-itinerary">
 				<img src="${this.getItineraryLogos(msgObject.icon)}">
@@ -94,7 +97,7 @@ class Viewer extends MetaComponent {
 	/**
 	 * get the itinerary msg data
 	 */
-	getItineraryMsgData(raw) {
+	getItineraryMsgData(raw, type) {
 		const splited = raw.split('-');
 		let description = splited[2];
 		description.replace('\\n', '<br/>');
@@ -105,7 +108,8 @@ class Viewer extends MetaComponent {
 			time: splited[3],
 			icon: splited[4],
 			qty: parseInt(splited[5]),
-			price: parseFloat(splited[6])
+			price: parseFloat(splited[6]),
+			status: type === 2 ? 'SCHEDULE' : 'PENDING'
 		}
 		global.TPGstorage.dispatch({
 			type: 'ADD-ITINERARY-EXT',
