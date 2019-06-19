@@ -29,11 +29,9 @@ class YakMainContainer extends MetaContainer {
 		const path = document.location.pathname;
 		let el;
 		let env = '/';
-		if (document.location.pathname.match('yakchat') !== null) {
-			env = '/yakchat/';
-		}
+		const production = process.env.ENVIROMENT === 'PRODUCTION';
 		switch (path) {
-			case (env === '/' ? env : env + 'backoffice'):
+			case (!production ? env : env + 'backoffice.html'):
 				//lobby
 				console.log('loby', this.auth)
 				if (this.auth) {
