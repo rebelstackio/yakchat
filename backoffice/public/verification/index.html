@@ -17,10 +17,10 @@
 				document.querySelector('#welcome > h1').innerHTML = 'Successfuly verified';
 				document.querySelector('#welcome > p').innerHTML = 'DONE';
 				setTimeout(() => {
-					if (window.location.pathname.match('yakchat') === null) {
+					if (procces.env.ENVIROMENT === 'DEVELOP') {
 						window.location.href = '/';
 					} else {
-						window.location.href = '/yakchat/backoffice';
+						window.location.href = '/backoffice.html';
 					}
 				}, 1000);
 			}
