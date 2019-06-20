@@ -9,13 +9,14 @@
     "install:fs": "npm install --prefix ./front-script",
     "test": "echo ----no tests available yet",
     "start": "npm-run-all --parallel start:bo start:fs",
-    "build": "npm-run-all build:fs build:bo build:lan ",
+    "build": "npm-run-all build:fs build:bo build:lan cname ",
     "build:lan": "cp landing/index.html dist/; cp landing/css/* dist/css/; cp landing/images/* dist/images/",
     "build:bo": "npm run build --prefix ./backoffice",
     "build:fs": "npm run build --prefix ./front-script",
     "start:fs": "npm start --prefix ./front-script",
     "start:bo": "npm start --prefix ./backoffice",
-    "deploy": "node_modules/gh-pages/bin/gh-pages.js -t -d dist"
+    "deploy": "node_modules/gh-pages/bin/gh-pages.js -t -d dist",
+    "cname": "cp CNAME dist/"
   },
   "contributors": [
     {
