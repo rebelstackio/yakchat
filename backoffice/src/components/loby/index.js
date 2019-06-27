@@ -185,7 +185,7 @@ class Loby extends MetaComponent {
 	 * create the message body by type
 	 */
 	createMessageBody(text, mail, date, type, isYou) {
-		if (type === 1) {
+		if (type !== 0) {
 			const msgData = text.split('-');
 			const qty = parseInt(msgData[5]);
 			const price = parseFloat(msgData[6]);
@@ -199,12 +199,17 @@ class Loby extends MetaComponent {
 					title: msgData[1],
 					description: msgData[2],
 					date: msgData[0],
-					qty
+					qty,
+					status: type === 2 ? 'SCHEDULE' : 'PENDING'
 				}
 			});
 			return instanceElement(
 				'div',
-				[!isYou ? 'yak-view-item-left' : 'yak-view-item-right'],
+				[!isYou
+					? 'yak-view-item-left'
+					: 'yak-view-item-right',
+					type === 2 ? 'schedule' : 'pending'
+				],
 				false,
 				`<div class="msg-itinerary">
 					<img src="${this.getItineraryLogos(msgData[4])}">
@@ -267,7 +272,11 @@ class Loby extends MetaComponent {
 				document.querySelector('#header-channel').innerHTML = '#' + clientSelected;
 				this.createMessages(selectedMessages);
 			},
-			'MSG-ARRIVE': (state) => {
+			'CHANNEL-ARRIVE': (state) => {
+				const {selectedMessages} = state.newState.Main;
+				this.createMessages(selectedMessages);
+			},
+			'OPERATOR-DATA': (state) => {
 				const {selectedMessages} = state.newState.Main;
 				this.createMessages(selectedMessages);
 			},

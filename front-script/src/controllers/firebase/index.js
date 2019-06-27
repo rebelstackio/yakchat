@@ -128,7 +128,10 @@ export function send (msg) {
 		})
 	}
 }
-
+/**
+ * set paymentAPI response to firebare
+ * @param {*} data
+ */
 export function setPayments (data) {
 	if (threadRoute !== '') {
 		let setPayment = functions.httpsCallable('setPayment');

@@ -123,6 +123,10 @@ class Viewer extends MetaComponent {
 	handleStoreEvents () {
 		return {
 			'MSG-ARRIVE': () => {
+				// clear the itinerary
+				global.TPGstorage.dispatch({
+					type: 'CLEAR-ITINERARY'
+				});
 				this.msgList = this.storage.getState().Main.list;
 				this.createMsgList(this.msgList);
 			},

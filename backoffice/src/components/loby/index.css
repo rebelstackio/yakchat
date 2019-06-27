@@ -183,3 +183,8 @@ img {
 .msg-price {
 	display: grid;
 }
+
+div[class^="yak-view-item"].schedule {
+	background: #5fc15f;
+	color: #fff;
+}

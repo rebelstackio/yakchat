@@ -353,8 +353,8 @@ function parsemkey(base64safe) {
 exports.setPayment = functions.https.onCall((data) => {
 	try {
 		const { thread , payment } = data;
-		const visitior = thread.split('/')[3];
-		updateItemStatus(thread);
+		const visitior = thread.split('/')[4];
+		updateItemStatus(thread, payment.purshace);
 		admin.database().ref('/payments/' + visitior).push(payment);
 	} catch (err) {
 		return false;

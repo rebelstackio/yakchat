@@ -6,6 +6,7 @@ import '../../components/viewer';
 import '../../components/header';
 import '../../components/signup';
 import { setPayments } from '../../controllers/firebase';
+import { clearPending } from '../../utils';
 
 class YakMainContainer extends MetaContainer {
 	// eslint-disable-next-line class-method-use-this
@@ -29,9 +30,13 @@ class YakMainContainer extends MetaContainer {
 		global.storage.on('SING-UP-REQ', this.handleSignEvent.bind(this));
 		global.TPGstorage.on('SALES_APROVED', (action) => {
 			setPayments(action.data);
-			global.TPGstorage.dispatch({
-				type: 'CLEAR-ITINERARY'
-			})
+			//clear the msg list
+			global.storage.dispatch({
+				type: 'FB-CONNECT',
+				msgList: clearPending(
+					global.storage.getState().Main.list
+				)
+			});
 		})
 	}
 	/**

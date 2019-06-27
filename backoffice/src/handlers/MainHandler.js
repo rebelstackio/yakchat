@@ -223,6 +223,9 @@ export default {
 			checkDifferences(state.Main.oldChannelList, {'t':value});
 			state.Main.oldChannelList = {'t':value};
 			state.Main.channelList = [{title: value ? value[2]: ''}];
+			if (state.Main.visitorId) {
+				state.Main.selectedMessages = state.Main.threads[state.Main.visitorId]
+			}
 			return { newState: state } 
 		},
 		'UPDATE-CHANNEL': (action, state) => {
@@ -260,6 +263,12 @@ export default {
 				allThreads = Object.assign(allThreads, value[key][4]);
 			});
 			state.Main.allThreads = allThreads;
+			if (state.Main.visitorId) {
+				state.Main.selectedMessages = 
+					state.Main.threads[state.Main.visitorId]
+					? state.Main.threads[state.Main.visitorId]
+					: state.Main.allThreads[state.Main.visitorId]
+			}
 			return { newState: state }
 		},
 		'THREAD-SELECTED': (action, state) => {
