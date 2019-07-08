@@ -95,6 +95,7 @@ input.bottom-input:focus {
 
 .msg-head-logo > span { 
 	place-self: center start;
+	font-size: 16px;
 }
 
 img.rblstck-logo {

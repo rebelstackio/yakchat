@@ -158,6 +158,7 @@ class Loby extends MetaComponent {
 	 * @param {Object} msgList 
 	 */
 	createMessages (msgList) {
+		this.clearItineratry();
 		const body = document.querySelector('.msg-body');
 		body.innerHTML = '';
 		const uid = this.storage.getState().Main.uid;
@@ -262,6 +263,14 @@ class Loby extends MetaComponent {
 	toggleSetting () {
 		document.querySelector('#setting-box-container.profile-popup-container').classList.toggle('hide');
 		this.storage.dispatch({type: 'OPEN-SETTINGS'});
+	}
+	/**
+	 * clear shopping cart itinerary
+	 */
+	clearItineratry () {
+		global.TPGstorage.dispatch({
+			type: 'CLEAR-ITINERARY'
+		});
 	}
 	
 	handleStoreEvents () {

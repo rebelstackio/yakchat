@@ -282,27 +282,21 @@ exports.sendMessage = functions.https.onCall((data) => {
 		return admin.auth().getUser(uid)
 		.then(function(userRecord) {
 			const displayName = userRecord.toJSON().displayName;
-			if (res.val() === null || !res.val()) {
-				// it has no message
-				return setMessage(displayName, 0, ts, msg, uid, ref, type);
-			} else {
-				const val = res.val();
-				// give the last thread id
-				const next = isNaN(parsemkey(Object.keys(val)[0]).thid) ? 0 : parsemkey(Object.keys(val)[0]).thid
-				return setMessage(displayName, (next + 1), ts, msg, uid, ref, type);
-			}
+			const val = res.val();
+			// give the last thread id
+			const next = isNaN(parsemkey(Object.keys(val)[0]).thid)
+				? 0
+				: (parsemkey(Object.keys(val)[0]).thid + 1);
+			return setMessage(displayName, (next + 1), ts, msg, uid, ref, type);
 		})
 		.catch(function(error) {
 			console.log("must be a visitor or registrant");
-			if (res.val() === null || !res.val()) {
-				// it has no message
-				return setMessage(false, 0, ts, msg, uid, ref, type);
-			} else {
-				const val = res.val();
-				// give the last thread id
-				const next = isNaN(parsemkey(Object.keys(val)[0]).thid) ? 0 : parsemkey(Object.keys(val)[0]).thid
-				return setMessage(false, (next + 1), ts, msg, uid, ref, type);
-			}
+			const val = res.val();
+			// give the last thread id
+			const next = isNaN(parsemkey(Object.keys(val)[0]).thid)
+				? 0
+				: (parsemkey(Object.keys(val)[0]).thid + 1);
+			return setMessage(false, next, ts, msg, uid, ref, type);
 		});
 	});
 });
@@ -339,11 +333,17 @@ function setMessage(displayName, next, ts, msg, uid, ref, type) {
  */
 function parsemkey(base64safe) {
 	// NOTE: returns object
-	// TODO: validate base64safe
+	if (base64safe.length !== 18) {
+		return {
+			thid: NaN,
+			ts: NaN,
+			tid: NaN
+		};
+	}
 	return {
 		thid: base64( base64safe.slice(0, 8) ),
-		ts:  base64( base64safe.slice(8,16) ),
-		tid:  base64( base64safe.slice(16,18) )
+		ts: base64( base64safe.slice(8,16) ),
+		tid: base64( base64safe.slice(16,18) )
 	};
 }
 /**
@@ -354,7 +354,7 @@ exports.setPayment = functions.https.onCall((data) => {
 	try {
 		const { thread , payment } = data;
 		const visitior = thread.split('/')[4];
-		updateItemStatus(thread, payment.purshace);
+		updateItemStatus(thread);
 		admin.database().ref('/payments/' + visitior).push(payment);
 	} catch (err) {
 		return false;
