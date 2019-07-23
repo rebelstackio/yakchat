@@ -17,7 +17,6 @@ class YakMainContainer extends MetaContainer {
 	render () {
 		this.content = document.createElement('div');
 		this.content.id = 'container';
-		this.auth = global.storage.getState().Main.auth;
 		this.handleRoute();
 		this.handleStoreEvents();
 		return this.content;
@@ -33,8 +32,9 @@ class YakMainContainer extends MetaContainer {
 		switch (path) {
 			case (!production ? env : env + 'backoffice.html'):
 				//lobby
-				console.log('loby', this.auth)
-				if (this.auth) {
+				let auth = localStorage.getItem('authorization') !== null;
+				console.log('loby', auth);
+				if (auth) {
 					this.innerHTML = '';
 					// Add to the DOM
 					el = document.createElement('yak-loby');
@@ -103,13 +103,11 @@ class YakMainContainer extends MetaContainer {
 		const { storage, TPGstorage } = global;
 		storage.on('LOGIN-SUCCESS', (state) => {
 			const {accessLevel, admin, auth} = state.newState.Main;
-			this.auth = auth;
 			this.accessLevel = accessLevel;
 			//this.createRoleView(accessLevel, admin);
 		});
 
 		storage.on('LOGOUT', (state) => {
-			this.auth = state.newState.auth;
 			// Clean the current content
 			this.innerHTML = '';
 			// Create the login component
