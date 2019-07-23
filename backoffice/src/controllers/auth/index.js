@@ -13,15 +13,14 @@ export function login (username, password) {
 	)
 	.then((response) => {
 		console.log(response);
-		global.storage.dispatch({
-			type: 'LOGIN-SUCCESS',
+		localStorage.setItem('udata', JSON.stringify({
 			accessLevel: 5,
 			admin: false,
 			uid: '0FxY4aLtrnhRaIzQAbmNNzyarN72',
-			displayName: 'Grupo Paracas',
+			displayName: 'GithubClient',
 			email: 'gh-client-t01@rebeldemo.com',
 			emailVerified: true
-		});
+		}))
 		if (process.env.ENVIROMENT === 'PRODUCTION') {
 			document.location.pathname = '/backoffice.html';
 		} else {

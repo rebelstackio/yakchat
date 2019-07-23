@@ -35,6 +35,10 @@ class YakMainContainer extends MetaContainer {
 				let auth = localStorage.getItem('authorization') !== null;
 				console.log('loby', auth);
 				if (auth) {
+					global.storage.dispatch({
+						type: 'LOGIN-SUCCESS',
+						data: JSON.parse(localStorage.getItem('udata'))
+					});
 					this.innerHTML = '';
 					// Add to the DOM
 					el = document.createElement('yak-loby');
