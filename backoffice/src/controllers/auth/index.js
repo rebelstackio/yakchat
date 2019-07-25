@@ -3,9 +3,9 @@ import axios from 'axios';
 /**
  * Call yakchat auth server
  */
-export function login (username, password) {
-	axios.post('http://localhost:8080/api/api/v1/auth/login', 
-		JSON.stringify({ username, password }), 
+export function login (email, password) {
+	axios.post(process.env.LOGIN_API, 
+		JSON.stringify({ email, password }), 
 		{headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json'
@@ -40,9 +40,11 @@ export function login (username, password) {
 /**
  * Call yakchat auth server
  */
-export function signup (username, password, type, domain, displayName) {
-	axios.post('http://localhost:8080/api/api/v1/auth/signup', 
-		JSON.stringify({ username, password, type, domain, displayName }), 
+export function signup (email, password, webpage, type, displayname) {
+	let obj = { displayname, password, email };
+	if (type === "client") obj.webpage = webpage;
+	axios.post(process.env.SIGNUP_API + '/' + type, 
+		JSON.stringify( obj ), 
 		{headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json'
@@ -53,7 +55,7 @@ export function signup (username, password, type, domain, displayName) {
 		if (process.env.ENVIROMENT === 'PRODUCTION') {
 			document.location.pathname = '/backoffice.html';
 		} else {
-			document.location.pathname = '/'
+			document.location.pathname = '/login/'
 		}
 		localStorage.setItem('authorization', response.headers.authorization);
 	})
