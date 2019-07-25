@@ -30,7 +30,19 @@ module.exports = () => {
 			filename: 'main.js'
 		},
 		devServer: {
-			contentBase: path.resolve(__dirname, 'public')
+			contentBase: path.resolve(__dirname, 'public'),
+			proxy: {
+				'/api': {
+					target: {
+						host: "0.0.0.0",
+						protocol: 'http:',
+						port: 8888
+					},
+					pathRewrite: {
+						'^/api': ''
+					}
+				}
+			}
 		},
 		module: {
 			rules: [

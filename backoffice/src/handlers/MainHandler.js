@@ -2,7 +2,6 @@ import {
 	signInWithEmail,
 	singOut,
 	processInvitation,
-	signUp,
 	uploadProfileImg,
 	patchProfile,
 	getClientChannels,
@@ -15,6 +14,8 @@ import {
 	getOperatorChannels,
 	sendVerification
 } from '../controllers/firebase';
+
+import { login, signup } from '../controllers/auth';
 
 const MainDefaultState = {
 	auth: localStorage.getItem('fb-hash') ? true : false,
@@ -125,19 +126,18 @@ export default {
 	MainDefaultState,
 	MainHandler: {
 		'LOGIN-REQ': (action, state) => {
-			state.email = action.email;
-			state.password = action.password;
-			signInWithEmail(state.email, state.password);
+			login(action.email, action.password);
 			return { newState: state };
 		},
 		'LOGIN-SUCCESS': (action, state) => {
+			const { accessLevel, admin, uid, displayName, email, emailVerified } = action.data
 			state.Main.auth = true;
-			state.Main.accessLevel = action.accessLevel;
-			state.Main.admin = action.admin;
-			state.Main.uid = action.uid;
-			state.Main.displayName = action.displayName;
-			state.Main.email = action.email;
-			state.Main.emailVerified = action.emailVerified;
+			state.Main.accessLevel = accessLevel;
+			state.Main.admin = admin;
+			state.Main.uid = uid;
+			state.Main.displayName = displayName;
+			state.Main.email = email;
+			state.Main.emailVerified = emailVerified;
 			getProfileImg(state.Main.uid);
 			if (action.accessLevel >= 5) {
 				//client
@@ -149,7 +149,9 @@ export default {
 			return { newState: state }
 		},
 		'LOGOUT': (action, state) => {
-			singOut();
+			localStorage.removeItem('authorization');
+			localStorage.removeItem('udata');
+			document.location.pathname = '/login';
 			localStorage.removeItem('fb-hash');
 			state.Main = MainDefaultState;
 			return { newState: state }
@@ -196,7 +198,7 @@ export default {
 		},
 		'SIGNUP': (action, state) => {
 			const {email, displayName, password, type, domain} = action.data
-			signUp(displayName, email, password, domain, type);
+			signup(email, password, domain, type, displayName);
 			return {newState: state}
 		},
 		'ACEPT-INVITATION': (action, state) => {
