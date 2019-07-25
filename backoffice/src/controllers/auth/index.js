@@ -1,15 +1,19 @@
 import axios from 'axios';
 
+let authInstance = axios.create({
+	baseURL: process.env.AUTH_API_URL,
+	headers: {
+		'Content-Type': 'application/json',
+		'Accept': 'application/json'
+	}
+});
+
 /**
  * Call yakchat auth server
  */
 export function login (email, password) {
-	axios.post(process.env.LOGIN_API, 
-		JSON.stringify({ email, password }), 
-		{headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		}}
+	authInstance.post('/login/',
+		JSON.stringify({ email, password })
 	)
 	.then((response) => {
 		console.log(response);
@@ -43,12 +47,8 @@ export function login (email, password) {
 export function signup (email, password, webpage, type, displayname) {
 	let obj = { displayname, password, email };
 	if (type === "client") obj.webpage = webpage;
-	axios.post(process.env.SIGNUP_API + '/' + type, 
-		JSON.stringify( obj ), 
-		{headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		}}
+	authInstance.post('/signup/' + type, 
+		JSON.stringify( obj )
 	)
 	.then((response) => {
 		console.log(response);
