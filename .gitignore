@@ -9,3 +9,7 @@ dist
 build
 
 .vagrant
+
+# For Cloud functions
+
+.runtimeconfig.json
