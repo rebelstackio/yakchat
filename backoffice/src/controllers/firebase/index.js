@@ -16,6 +16,9 @@ const storage = app.storage();
 
 let callback = null;
 let metadataRef = null;
+/**
+ * TODO: Deprecated
+ */
 app.auth().onAuthStateChanged(function(user) {
 	try {
 		if (user) {
@@ -24,25 +27,20 @@ app.auth().onAuthStateChanged(function(user) {
 			// Check if refresh is required.
 			metadataRef = firebase.database().ref('metadata/' + user.uid + '/refreshTime');
 			callback = (snapshot) => {
-			  // Force refresh to pick up the latest custom claims changes.
-			  // Note this is always triggered on first call. Further optimization could be
-			  // added to avoid the initial trigger when the token is issued and already contains
-			  // the latest claims.
 			  user.getIdToken(true);
 			};
 			// Subscribe new listener to changes on that node.
 			metadataRef.on('value', callback);
 			firebase.auth().currentUser.getIdTokenResult()
 			.then((idTokenResult) => {
-				// Confirm the user is an Admin.
 				global.storage.dispatch({
 					type: 'LOGIN-SUCCESS',
-					accessLevel: idTokenResult.claims.accessLevel,
-					admin: idTokenResult.claims.admin,
+					accessLevel: idTokenResult.claims.roles,
+					admin: false,
 					uid: user.uid,
-					displayName: idTokenResult.claims.name,
+					displayName: idTokenResult.claims.displayname,
 					email: idTokenResult.claims.email,
-					emailVerified: idTokenResult.claims.email_verified
+					emailVerified: true
 				});
 			})
 			.catch((error) => {
@@ -69,7 +67,17 @@ export function singOut () {
 		console.log(error);
 	});
 }
+
+export function singInWithToken (token) {
+	app.auth().signInWithCustomToken(token)
+	.then(() => {
+		console.log('urray')
+	}).catch(err => {
+
+	});
+}
 /*
+ * TODO: DEPRECATED
  * @description function that stablish an user email connection with firebase
  * @param {String} email
  * @param {String} password
@@ -225,6 +233,7 @@ export function patchProfile (email, newPassword, currentPassword , displayName)
  * @param {String} uid 
  */
 export function getClientChannels(uid) {
+	console.log(uid, 'yep?')
 	app.database().ref('/domains/' + uid)
 	.on('value', (value) => {
 		global.storage.dispatch({

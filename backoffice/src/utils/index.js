@@ -70,8 +70,19 @@ export function parsemkey(base64safe) {
 		tid:  base64( base64safe.slice(16,18) )
 	};
 }
-	export default {
-		instanceElement: instanceElement,
-		base64: base64,
-		parsemkey: parsemkey
-	}
+/**
+ * decode the token to get the claims
+ * @param {String} t 
+ */
+export function jwtDecode(t) {
+	let token = {};
+	token.claims = JSON.parse(global.atob(t.split('.')[1]));
+	return (token)
+}
+
+export default {
+	instanceElement: instanceElement,
+	base64: base64,
+	parsemkey: parsemkey,
+	jwtDecode: jwtDecode
+}

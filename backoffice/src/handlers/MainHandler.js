@@ -130,7 +130,7 @@ export default {
 			return { newState: state };
 		},
 		'LOGIN-SUCCESS': (action, state) => {
-			const { accessLevel, admin, uid, displayName, email, emailVerified } = action.data
+			const { accessLevel, admin, uid, displayName, email, emailVerified } = action
 			state.Main.auth = true;
 			state.Main.accessLevel = accessLevel;
 			state.Main.admin = admin;
@@ -139,10 +139,10 @@ export default {
 			state.Main.email = email;
 			state.Main.emailVerified = emailVerified;
 			getProfileImg(state.Main.uid);
-			if (action.accessLevel >= 5) {
+			if (accessLevel >= 5) {
 				//client
-				getClientChannels(action.uid);
-			} else if (action.accessLevel === 3) {
+				getClientChannels(uid);
+			} else if (accessLevel === 3) {
 				//operator
 				getOperatorChannels();
 			}
@@ -185,7 +185,8 @@ export default {
 			send({
 				visitorId: state.Main.visitorId,
 				chnlUid: state.Main.accessLevel > 3 ? state.Main.uid : state.Main.chnlUid,
-				message: btoa(action.data)
+				message: btoa(action.data),
+				authorization: localStorage.getItem('authorization')
 			}, action.msgType);
 			return { newState: state }
 		},

@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { jwtDecode } from '../../utils';
+import  { singInWithToken }  from '../firebase';
 
 let authInstance = axios.create({
 	baseURL: process.env.AUTH_API_URL,
@@ -17,20 +19,15 @@ export function login (email, password) {
 	)
 	.then((response) => {
 		console.log(response);
-		localStorage.setItem('udata', JSON.stringify({
-			accessLevel: 5,
-			admin: false,
-			uid: '0FxY4aLtrnhRaIzQAbmNNzyarN72',
-			displayName: 'GithubClient',
-			email: 'gh-client-t01@rebeldemo.com',
-			emailVerified: true
-		}))
+		const t = response.headers.authorization;
+		localStorage.setItem('udata', JSON.stringify(jwtDecode(t)))
 		if (process.env.ENVIROMENT === 'PRODUCTION') {
 			document.location.pathname = '/backoffice.html';
 		} else {
 			document.location.pathname = '/'
 		}
-		localStorage.setItem('authorization', response.headers.authorization);
+		singInWithToken(t);
+		localStorage.setItem('authorization', t);
 	})
 	.catch((error) => {
 		console.log(error);
