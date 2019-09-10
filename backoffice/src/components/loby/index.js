@@ -32,9 +32,10 @@ class Loby extends MetaComponent {
 			this.storage.dispatch({ type: 'LOGOUT' });
 			document.location.pathname = '/login/';
 		});
+		/*
 		this.querySelector('#settings').addEventListener('click', () => {
 			this.toggleSetting();
-		});
+		});*/
 		document.querySelector('.shopping-icon').addEventListener('click', () => {
 			document.querySelector('#shopping-popup-container').classList.toggle('hide');
 		});
@@ -91,7 +92,7 @@ class Loby extends MetaComponent {
 			['msg-head-actions'],
 			not,
 			`
-				<img src="${cogIcon}" id="settings"></img>
+				<!-- <img src="${cogIcon}" id="settings"></img> -->
 				<img src="${logoutIcon}" id="logout"></img>
 			`
 		);
@@ -269,10 +270,10 @@ class Loby extends MetaComponent {
 			},
 			'LOGIN-SUCCESS': (state) => {
 				const { accessLevel, emailVerified } = state.newState.Main;
-				if (accessLevel === 3) {
+				/*if (accessLevel === 3) {
 					// if it's an operator hide the settings
 					this.querySelector('#settings').style.display = 'none';
-				}
+				}*/
 				console.log(emailVerified);
 				if (!emailVerified) {
 					document.querySelector('#verification-popup-container').classList.remove('hide');
