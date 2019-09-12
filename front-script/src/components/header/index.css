@@ -1,6 +1,6 @@
 yak-header{
 	display: grid;
-	color:#666;
+	color: inherit;
 }
 .yak-header-items {
 	place-self: center;
