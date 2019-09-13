@@ -27,8 +27,30 @@ class YakMainContainer extends MetaContainer {
 	 */
 	getParameters () {
 		const base = document.querySelector('#yak-chat-embended');
+		this.aplyStyles(base);
+		const that = this;
+		var observer = new MutationObserver(function(mutations) {
+			mutations.forEach(function(mutation) {
+				if (mutation.type == "attributes") {
+					that.aplyStyles(base);
+				}
+			});
+		});
+		observer.observe(base, {
+			attributes: true 
+		});
+	}
+	/**
+	 * aply the styles from the custom attributes
+	 * @param {HTMLElement} base 
+	 */
+	aplyStyles(base) {
 		if (base.getAttribute('bg-color') !== null) {
-			this.content.style.background = base.getAttribute('bg-color');
+			const bgColors = base.getAttribute('bg-color').split(',');
+			// container background color
+			this.content.style.background = bgColors[0];
+			// msg container background  
+			this.viewer.style.background = bgColors[1];
 		}
 		if (base.getAttribute('color')) {
 			this.content.style.color = base.getAttribute('color');
