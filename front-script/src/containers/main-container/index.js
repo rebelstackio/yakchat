@@ -51,7 +51,7 @@ class YakMainContainer extends MetaContainer {
 			// msg container background  
 			this.viewer.style.background = bgColors[1];
 		}
-		if (base.getAttribute('color')) {
+		if (base.getAttribute('color') !== null) {
 			this.content.style.color = base.getAttribute('color');
 		}
 	}
