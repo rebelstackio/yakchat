@@ -54,6 +54,13 @@ class YakMainContainer extends MetaContainer {
 		if (base.getAttribute('color') !== null) {
 			this.content.style.color = base.getAttribute('color');
 		}
+		if (base.getAttribute('is-popup') !== null) {
+			console.log(base.getAttribute('is-popup'));
+			const bubble = document.createElement('div');
+			bubble.innerHTML = ` <i class="fa fa-comment"></i> `;
+			bubble.id = 'yak-toggler';
+			document.body.appendChild(bubble);
+		}
 	}
 	/**
 	 * @description create the sigup form by default has the class .hide

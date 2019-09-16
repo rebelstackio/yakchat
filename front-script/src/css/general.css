@@ -96,3 +96,41 @@ yak-main-container #container {
 	right: 0;
 	bottom: 0;
 }
+
+div#yak-toggler {
+	position: fixed;
+	width: 70px;
+	height: 70px;
+	bottom: 10px;
+	right: 10px;
+	border-radius: 50%;
+	background-color: #407afc;
+	color: #f9f8f8;
+	display: grid;
+	z-index: 3;
+	cursor: pointer;
+	box-shadow: 0 4px 10px 0 rgba(0,0,0,.04);
+}
+
+div#yak-toggler > * {
+	place-self: center;
+	font-size: 28px;
+}
+
+div#yak-chat-embended[is-popup] {
+	position: fixed;
+	right: 1em;
+	bottom: 1.6em;
+	width: 35% !important;
+	height: 90vh !important;
+	background: #fff;
+	z-index: 1001;
+	border-radius: 4px;
+	box-shadow: 0 12px 20px 0 rgba(0,0,0,.15);
+	transition: opacity .5s ease-in;
+}
+
+div#yak-chat-embended.hidden {
+	opacity: 0;
+	visibility: hidden;
+}
