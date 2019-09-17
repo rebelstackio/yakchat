@@ -38,6 +38,9 @@ class YakMainContainer extends MetaContainer {
 		observer.observe(base, {
 			attributes: true 
 		});
+		if (base.getAttribute('is-popup') !== null) {
+			base.classList.add('hidden');
+		}
 	}
 	/**
 	 * aply the styles from the custom attributes
@@ -56,17 +59,22 @@ class YakMainContainer extends MetaContainer {
 			this.content.style.color = base.getAttribute('color');
 		}
 		if (base.getAttribute('is-popup') !== null) {
-			this.createBubble();
+			this.createBubble(base);
 		}
 	}
 	/**
 	 * create a bubble toggler
 	 */
-	createBubble () {
-		const bubble = document.createElement('div');
+	createBubble (base) {
+		const bubble = document.querySelector('#yak-toggler') !== null 
+			? document.querySelector('#yak-toggler')
+			: document.createElement('div');
 		bubble.innerHTML = ` <i class="fa fa-comment"></i> `;
 		bubble.id = 'yak-toggler';
 		document.body.appendChild(bubble);
+		bubble.addEventListener('click', () => {
+			base.classList.remove('hidden');
+		});
 	}
 	/**
 	 * @description create the sigup form by default has the class .hide

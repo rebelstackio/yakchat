@@ -130,7 +130,18 @@ div#yak-chat-embended[is-popup] {
 	transition: opacity .5s ease-in;
 }
 
-div#yak-chat-embended.hidden {
+div#yak-chat-embended[is-popup].hidden {
 	opacity: 0;
 	visibility: hidden;
 }
+
+@media only screen and (max-device-width: 800px) and (min-device-width: 300px) 
+	and (orientation: portrait) {
+		div#yak-chat-embended[is-popup] {
+			width: unset !important;
+			left: 10px;
+			top: 30px;
+			bottom: 30px;
+			height: unset !important;
+		}
+	}
