@@ -1,8 +1,5 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import { instanceElement, parsemkey } from '../../utils';
-import cogIcon from '../../assets/icons/cog-solid.svg';
-import logoutIcon from '../../assets/icons/sign-out-alt-solid.svg';
-import imageURL from '../../assets/images/logo/yakchat.svg';
 import sendIcon from '../../assets/icons/paper-plane-solid.svg';
 import shoppingIcon from '../../assets/icons/cart-plus-solid.svg';
 import '../patchprofile';
@@ -11,6 +8,7 @@ import '../verificationpopup';
 import '../shoppingcart';
 import './index.css';
 import './msgarea';
+import './msgheader';
 
 class Loby extends MetaComponent {
 	/**
@@ -20,18 +18,10 @@ class Loby extends MetaComponent {
 		super(global.storage);
 	}
 	addListeners() {
-		const toggleButton = this.querySelector('.msg-head-logo');
 		const inputButton = this.querySelector('#input-button');
-		toggleButton.addEventListener('click', () => {
-			this.toggleSidebar();
-		});
 		inputButton.addEventListener('click', () => {
 			const input = document.querySelector('.msg-input > input');
 			this.sendMessage(input);
-		});
-		this.querySelector('#logout').addEventListener('click', () => {
-			this.storage.dispatch({ type: 'LOGOUT' });
-			document.location.pathname = '/login/';
 		});
 		/*
 		this.querySelector('#settings').addEventListener('click', () => {
@@ -72,42 +62,11 @@ class Loby extends MetaComponent {
 	 * @param {HTMLElement} box 
 	 */
 	createMsgArea (box) {
-		const msgHeader = instanceElement('div', ['msg-head']);
+		const msgHeader = instanceElement('msg-header');
 		const msgBodyContainer = instanceElement('msg-area');
 		const msgInput = instanceElement('div', ['msg-input']);
-		this.createMsgHeader(msgHeader);
 		this.createInputs(msgInput);
 		box.append(msgHeader, msgBodyContainer, msgInput);
-	}
-	/**
-	 * @description create the header
-	 * @param {HTMLElement} box 
-	 */
-	createMsgHeader (box) {
-		const not = undefined;
-		const toggleButton = instanceElement('div', ['msg-head-logo']);
-		const actions = instanceElement(
-			'div',
-			['msg-head-actions'],
-			not,
-			`
-				<!-- <img src="${cogIcon}" id="settings"></img> -->
-				<img src="${logoutIcon}" id="logout"></img>
-			`
-		);
-		const logo = instanceElement(
-			'img',
-			['rblstck-logo'],
-			not, not,
-			[{src: imageURL}, {width: '30'}, {height: '30'}]
-		);
-		this.channel = instanceElement(
-			'span',
-			not, 'header-channel',
-			`#Lobby`
-		);
-		toggleButton.append(logo, this.channel);
-		box.append(toggleButton, actions);
 	}
 	/**
 	 * @description create the inputs for the msg area
@@ -148,27 +107,6 @@ class Loby extends MetaComponent {
 			this.storage.dispatch({ type: 'SEND-MESSAGE', data: input.value, msgType: 'AA' })
 			input.value = '';
 		}
-	}
-	/**
-	 * handle the toggle sidebar
-	 */
-	toggleSidebar () {
-		const sideBar = document.querySelector('.loby-side-menu');
-		const mainContent = document.querySelector('yak-loby > div');
-		if (sideBar.classList.contains('toggled')) {
-			sideBar.classList.remove('toggled');
-			mainContent.classList.remove('toggled');
-		} else {
-			sideBar.classList.add('toggled');
-			mainContent.classList.add('toggled');
-		}
-	}
-	/**
-	 * handle the toggle pop up settings
-	 */
-	toggleSetting () {
-		document.querySelector('#setting-box-container.profile-popup-container').classList.toggle('hide');
-		this.storage.dispatch({type: 'OPEN-SETTINGS'});
 	}
 	
 	handleStoreEvents () {
