@@ -40,12 +40,12 @@ yak-header{
 }
 
 div[class^="user-actions"] {
-    font-size: 20px;
-    place-self: center;
-    cursor: pointer;
-    grid-column-gap: 10px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+	font-size: 20px;
+	place-self: center;
+	cursor: pointer;
+	grid-column-gap: 10px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
 }
 .user-actions-re {
 	color: #7bce7e;
