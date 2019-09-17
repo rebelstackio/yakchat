@@ -37,44 +37,6 @@ yak-loby > div.toggled {
 	transition: width .5s cubic-bezier(1, 0.08, 0, 1.07);
 }
 
-.msg-input {
-	display: grid;
-	grid-template-columns: auto 2rem 2rem;
-}
-
-input.bottom-input {
-	outline: none;
-	border: none;
-	height: 40px;
-	width: calc(100% - 10px);
-	align-self: center;
-	justify-self: center;
-	background: transparent;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-	font-size: 1rem;
-	color: rgba(0, 0, 0, 0.5);
-}
-
-input.bottom-input:focus { 
-	border-bottom: 2px solid rgba(0, 0, 0, 0.5);
-}
-
-.btn.icon {
-	place-self: center;
-	font-size: 2rem;
-	color: #7d7d7d;
-}
-
 img {
 	height: 1em;
 }
-.send-message-icon, .shopping-icon {
-	display: grid;
-	align-items: center;
-	justify-items: center;
-}
-.send-message-icon img, .shopping-icon img {
-	height: 23px;
-	cursor: pointer;
-}
-
