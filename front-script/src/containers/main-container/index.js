@@ -14,10 +14,10 @@ class YakMainContainer extends MetaContainer {
 		this.content.className = 'simple-chatbox';
 		this.input = document.createElement('yak-input');
 		this.viewer = document.createElement('yak-viewer');
-		const header = document.createElement('yak-header');
+		this.header = document.createElement('yak-header');
 		global.storage.on('TOGGLE-CHAT', this.handleMinEvent.bind(this));
 		global.storage.on('SING-UP-REQ', this.handleSignEvent.bind(this));
-		this.content.append(header, this.input, this.viewer);
+		this.content.append(this.header, this.input, this.viewer);
 		this.createSignUpForm();
 		this.getParameters();
 		return this.content;
@@ -52,15 +52,21 @@ class YakMainContainer extends MetaContainer {
 			this.viewer.style.background = bgColors[1];
 		}
 		if (base.getAttribute('color') !== null) {
+			//font color
 			this.content.style.color = base.getAttribute('color');
 		}
 		if (base.getAttribute('is-popup') !== null) {
-			console.log(base.getAttribute('is-popup'));
-			const bubble = document.createElement('div');
-			bubble.innerHTML = ` <i class="fa fa-comment"></i> `;
-			bubble.id = 'yak-toggler';
-			document.body.appendChild(bubble);
+			this.createBubble();
 		}
+	}
+	/**
+	 * create a bubble toggler
+	 */
+	createBubble () {
+		const bubble = document.createElement('div');
+		bubble.innerHTML = ` <i class="fa fa-comment"></i> `;
+		bubble.id = 'yak-toggler';
+		document.body.appendChild(bubble);
 	}
 	/**
 	 * @description create the sigup form by default has the class .hide
