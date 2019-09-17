@@ -15,9 +15,7 @@ class MsgArea extends MetaComponent {
 	// eslint-disable-next-line class-method-use-this
 	render () {
 		const content = document.createElement('div');
-		const msgBody = instanceElement('div', ['loby-msg-body']);
-		this.createMsgArea(msgBody);
-		content.append(msgBody);
+		this.createMsgArea(content);
 		return content;
 	}
 	/**
@@ -136,6 +134,7 @@ class MsgArea extends MetaComponent {
 			},
 			'MSG-ARRIVE': (state) => {
 				const {selectedMessages} = state.newState.Main;
+				console.log(selectedMessages);
 				this.createMessages(selectedMessages);
 			}
 		};

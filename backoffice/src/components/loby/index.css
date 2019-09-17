@@ -36,20 +36,6 @@ yak-loby > div.toggled {
 	width: 100vw;
 	transition: width .5s cubic-bezier(1, 0.08, 0, 1.07);
 }
-.msg-body-container {
-	position: relative;
-}
-.msg-body {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	display: grid;
-	padding: 0 50px 0 50px;
-	overflow-y: auto;
-	grid-row-gap: 15px;
-}
 
 .msg-input {
 	display: grid;
@@ -128,32 +114,6 @@ img.rblstck-logo {
 	color: rgba(0,0,0,.7);
 }
 
-div[class^="yak-view-item"] {
-	display: grid;
-	grid-template-rows: auto;
-	grid-template-columns: auto;
-	width: 60%;
-	padding: 1em;
-	color: #666;
-}
-.yak-view-item-right{
-	background-color: rgba(24,144,255,0.7);
-	place-self: center end;
-	color: #fff !important;
-	border-radius: 1em 0em 1em 1em;
-}
-
-.yak-view-item-left{
-	background-color: rgba(0,0,0,.1);
-	place-self: center start;
-	border-radius: 0em 1em 1em 1em;
-}
-
-span.msg-date {
-	font-size: 14px;
-	padding-top: 10px;
-	font-style: italic;
-}
 
 img {
 	height: 1em;
@@ -170,16 +130,4 @@ img {
 
 #header-channel>img {
 	display: none;
-}
-
-.msg-itinerary > img {
-	width: 4em;
-	height: auto;
-	padding: 1em;
-	background: rgba(0, 0, 0, .5);
-	border-radius: 50%;
-}
-
-.msg-price {
-	display: grid;
 }
