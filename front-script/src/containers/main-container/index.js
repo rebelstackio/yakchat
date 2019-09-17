@@ -19,7 +19,41 @@ class YakMainContainer extends MetaContainer {
 		global.storage.on('SING-UP-REQ', this.handleSignEvent.bind(this));
 		this.content.append(header, this.input, this.viewer);
 		this.createSignUpForm();
+		this.getParameters();
 		return this.content;
+	}
+	/**
+	 * API get client parameters
+	 */
+	getParameters () {
+		const base = document.querySelector('#yak-chat-embended');
+		this.applyStyles(base);
+		var observer = new MutationObserver((mutations) => {
+			mutations.forEach((mutation) => {
+				if (mutation.type == "attributes") {
+					this.applyStyles(base);
+				}
+			});
+		});
+		observer.observe(base, {
+			attributes: true 
+		});
+	}
+	/**
+	 * aply the styles from the custom attributes
+	 * @param {HTMLElement} base 
+	 */
+	applyStyles(base) {
+		if (base.getAttribute('bg-color') !== null) {
+			const bgColors = base.getAttribute('bg-color').split(',');
+			// container background color
+			this.content.style.background = bgColors[0];
+			// msg container background  
+			this.viewer.style.background = bgColors[1];
+		}
+		if (base.getAttribute('color') !== null) {
+			this.content.style.color = base.getAttribute('color');
+		}
 	}
 	/**
 	 * @description create the sigup form by default has the class .hide
