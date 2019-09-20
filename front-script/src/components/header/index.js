@@ -53,8 +53,10 @@ class Header extends MetaComponent {
 		const box = document.createElement('div');
 		const icon = document.createElement('i');
 		const shoppingIcon = document.createElement('i');
+		const closeBtn = document.createElement('i');
 		shoppingIcon.className = 'fa fa-shopping-cart'
 		icon.className = 'fa fa-user';
+		closeBtn.className = 'fa fa-times'
 		if (type === 0) {
 			box.className = 'user-actions-an'
 		} else {
@@ -67,8 +69,18 @@ class Header extends MetaComponent {
 		shoppingIcon.addEventListener('click', () => {
 			this.openShoppingCart();
 		})
-		box.append(icon, shoppingIcon);
+		closeBtn.addEventListener('click', () => {
+			this.toggleChat();
+		})
+		box.append(icon, shoppingIcon, closeBtn);
 		return box;
+	}
+	/**
+	 * toggle chat in popup mode
+	 */
+	toggleChat() {
+		document.querySelector('div#yak-chat-embended')
+		.classList.toggle('hidden');
 	}
 
 	/**
