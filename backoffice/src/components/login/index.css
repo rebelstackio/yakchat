@@ -64,7 +64,7 @@
 	justify-content: center;
 	align-content: center;
 	background-repeat: no-repeat;
-	background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+	background: linear-gradient(360deg, #56CCF2 -2.87%, rgba(255, 255, 255, 0) 78.88%), #2F80ED;
 	margin: 0;
 	padding: 2rem;
 	color: #1890ff;
@@ -96,7 +96,8 @@
 .login__form input {
 	font-size: 1rem;
   color: #384047;
-  background-color: #e8eeef;
+  background: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.2) !important;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
   border: none;
   border-radius: 4px;
