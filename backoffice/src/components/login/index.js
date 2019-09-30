@@ -180,7 +180,7 @@ class Login extends MetaComponent {
 							<input id="password" name="password" placeholder="Password" type="password" required minlength="5"/>
 							<span class="login__error login__error--hide">Must contains at leats 5 characters</span>
 						</div>
-						<div class="login__inputbox">
+						<div class="login__inputbox sm">
 							<a id="loginbtn" class="login__btn login__btn--lightblue" href="#form-body">
 								Log In
 							</a>

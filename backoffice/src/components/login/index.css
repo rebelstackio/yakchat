@@ -30,12 +30,17 @@
 }
 
 .login__btn--lightblue {
-	background-color: #1890ff;;
-	color: #fff;
+	background-color: #FFF;
+	color: #2694FC;
+}
+
+.login__inputbox.sm{
+	display: grid;
+	justify-content: center;
 }
 
 .login__btn--lightblue::after {
-	background-color: #1890ff;;
+	background-color: #FFF;;
 }
 
 .login__btn::after {
