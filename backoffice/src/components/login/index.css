@@ -193,3 +193,26 @@ input:-webkit-autofill:active {
 }
 
 
+.validator {
+	position: absolute;
+	padding: 10px 5px;
+	border-radius: 3px;
+	background: rgba(255,255,255,.2);
+	color: #fff;
+	top: 10px;
+	opacity: 1;
+	visibility: visible;
+	transition: all .5s ease;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-column-gap: 10px;
+}
+
+.validator > * {
+	place-self: center;
+}
+
+.validator.hidden {
+	opacity: 0;
+	visibility: hidden;
+}

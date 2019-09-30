@@ -1,5 +1,6 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import imageURL from '../../assets/images/logo/yakchat.svg';
+import warnIcon from '../../assets/icons/exclamation-circle-solid.svg';
 import './index.css';
 
 const DEFAULT_EMAIL_ERROR_MESSAGE = 'Use a valid email account';
@@ -84,9 +85,10 @@ class Login extends MetaComponent {
 	 * @param {string} code firebase error code
 	 */
 	getServerErrorMessage(code) {
+		console.log(code);
 		switch(code) {
-			case 'auth/user-not-found':
-				return 'User not found. Please check the email';
+			case 'Unauthorized':
+				return 'You have entered an invalid username or password';
 			default:
 				return UNHANDLE_ERROR_MESSAGE;
 		}
@@ -101,9 +103,9 @@ class Login extends MetaComponent {
 		// Enable the login btn again
 		this.querySelector('#loginbtn').classList.remove('login__btn--disabled');
 		// Set a custom error message that comes from the server
-		this.setErrorMessage('email', this.getServerErrorMessage(error.code));
-		// Show the custom error message
-		this.showErrors('email');
+		this.setErrorMessage('invalid-auth', this.getServerErrorMessage(error.response.statusText));
+		// display error
+		this.querySelector('.validator').classList.remove('hidden');
 	}
 
 	/**
@@ -189,6 +191,12 @@ class Login extends MetaComponent {
 						<a href="#">Forgot your password</a>
 					</div>
 				</form>
+				<div class="validator hidden"> 
+					<div id="invalid-auth">
+						<img src="../${warnIcon}" alt="warn" class="warning__logo">
+					</div>
+					<span>  </span>
+				</div>
 			</div>
 		`;
 	}
