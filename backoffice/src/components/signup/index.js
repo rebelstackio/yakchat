@@ -64,11 +64,6 @@ class Signup extends MetaComponent {
 					<div class="login__logo-box">
 						<img src="${imageURL}" alt="Logo" class="login__logo">
 					</div>
-
-					<h1 class="login__title">
-						Sign up
-					</h1>
-					
 					<div class="signup__formcontent">
 						<div class="account-type">
 							<span class="selected" id="operator-opt">Operator</span>
@@ -76,9 +71,9 @@ class Signup extends MetaComponent {
 						</div>
 						<input id="display-name" type="text" placeholder="Display name"/>
 						<input id="email" name="email" placeholder="Email" type="text" />
-						<input id="password" name="password" placeholder="Password" type="password" /><br />
+						<input id="password" name="password" placeholder="Password" type="password" />
 						<input id="domain" class="hide" type="text" placeholder="www.example.com"/>
-						<input id="signup-btn" type="submit" value="Sign">
+						<input id="signup-btn" type="submit" value="Sign up">
 						<br />
 					</div>
 				</form>

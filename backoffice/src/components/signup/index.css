@@ -64,8 +64,9 @@
 
 .account-type > span{
 	line-height: 40px;
-	cursor: pointer;
 	text-align: center;
+	user-select: none;
+	cursor: default;
 }
 
 .account-type > span.selected:first-child {
@@ -92,6 +93,7 @@
 	color: #2694FC;
 	width: 50%;
 	justify-self: center;
+	text-transform: uppercase;
 }
 
 .signup__formcontent {
@@ -99,4 +101,12 @@
 	display: grid;
 	background: rgba(0,0,0,.2);
 	border-radius: 3px;
+}
+
+form.signup__form > .login__logo-box {
+	margin-bottom: 1em;
+}
+.account-type > span:not(.selected):hover {
+	color: #fff;
+	cursor: pointer;
 }
