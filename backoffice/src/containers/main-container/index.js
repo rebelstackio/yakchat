@@ -119,13 +119,16 @@ class YakMainContainer extends MetaContainer {
 			// Add to the DOM
 			this.appendChild(login);
 		});
-
-		global.TPGstorage.on('ADD-ITINERARY', (state) => {
-			const data = state.newState.Main.lastItinerary;
-			console.log(data);
-			const msg = [data.date, data.title, data.description, data.time, data.icon, data.qty, data.price].join('-')
-			global.storage.dispatch({type: 'SEND-MESSAGE', data: msg, msgType: 'AB'});
-		})
+		try {
+			global.TPGstorage.on('ADD-ITINERARY', (state) => {
+				const data = state.newState.Main.lastItinerary;
+				console.log(data);
+				const msg = [data.date, data.title, data.description, data.time, data.icon, data.qty, data.price].join('-')
+				global.storage.dispatch({type: 'SEND-MESSAGE', data: msg, msgType: 'AB'});
+			})
+		} catch (err) {
+			console.warn(err);
+		}
 	}
 
 }

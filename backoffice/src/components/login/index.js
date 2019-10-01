@@ -1,5 +1,6 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import imageURL from '../../assets/images/logo/yakchat.svg';
+import warnIcon from '../../assets/icons/exclamation-circle-solid.svg';
 import './index.css';
 
 const DEFAULT_EMAIL_ERROR_MESSAGE = 'Use a valid email account';
@@ -84,9 +85,10 @@ class Login extends MetaComponent {
 	 * @param {string} code firebase error code
 	 */
 	getServerErrorMessage(code) {
+		console.log(code);
 		switch(code) {
-			case 'auth/user-not-found':
-				return 'User not found. Please check the email';
+			case 'Unauthorized':
+				return 'You have entered an invalid username or password';
 			default:
 				return UNHANDLE_ERROR_MESSAGE;
 		}
@@ -101,9 +103,9 @@ class Login extends MetaComponent {
 		// Enable the login btn again
 		this.querySelector('#loginbtn').classList.remove('login__btn--disabled');
 		// Set a custom error message that comes from the server
-		this.setErrorMessage('email', this.getServerErrorMessage(error.code));
-		// Show the custom error message
-		this.showErrors('email');
+		this.setErrorMessage('invalid-auth', this.getServerErrorMessage(error.response.statusText));
+		// display error
+		this.querySelector('.validator').classList.remove('hidden');
 	}
 
 	/**
@@ -162,7 +164,7 @@ class Login extends MetaComponent {
 			<div class="login__container">
 				<form id="loginform" class="login__form">
 					<div class="login__logo-box">
-						<img src="${imageURL}" alt="Logo" class="login__logo">
+						<img src="../${imageURL}" alt="Logo" class="login__logo">
 					</div>
 
 					<h1 class="login__title">
@@ -178,7 +180,7 @@ class Login extends MetaComponent {
 							<input id="password" name="password" placeholder="Password" type="password" required minlength="5"/>
 							<span class="login__error login__error--hide">Must contains at leats 5 characters</span>
 						</div>
-						<div class="login__inputbox">
+						<div class="login__inputbox sm">
 							<a id="loginbtn" class="login__btn login__btn--lightblue" href="#form-body">
 								Log In
 							</a>
@@ -189,6 +191,12 @@ class Login extends MetaComponent {
 						<a href="#">Forgot your password</a>
 					</div>
 				</form>
+				<div class="validator hidden"> 
+					<div id="invalid-auth">
+						<img src="../${warnIcon}" alt="warn" class="warning__logo">
+					</div>
+					<span>  </span>
+				</div>
 			</div>
 		`;
 	}
