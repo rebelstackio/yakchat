@@ -76,3 +76,18 @@
 .signup__form .hide {
 	display: none;
 }
+
+#signup-btn {
+	background-color: #FFF;
+	color: #2694FC;
+	width: 50%;
+	justify-self: center;
+}
+
+.signup__formcontent {
+	width: 350px;
+	display: grid;
+	background: rgba(0,0,0,.2);
+	padding: 0 .5em;
+	border-radius: 3px;
+}

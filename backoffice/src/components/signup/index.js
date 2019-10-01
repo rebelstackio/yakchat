@@ -69,7 +69,7 @@ class Signup extends MetaComponent {
 						Sign up
 					</h1>
 					
-					<div class="login__formcontent">
+					<div class="signup__formcontent">
 						<div class="account-type">
 							<span class="selected" id="operator-opt">Operator</span>
 							<span id="client-opt">Client</span>

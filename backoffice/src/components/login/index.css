@@ -136,17 +136,6 @@ input:-webkit-autofill:active {
 	color: var(--error-validation-color);
 }
 
-.login__formcontent  input[type="submit"] {
-  background-color: #1890ff;
-  color: #eee;
-  font-weight: bold;
-	text-transform: uppercase;
-	cursor: pointer;
-}
-
-.login__formcontent input[type="submit"]:focus, .login__formcontent input[type="submit"]:hover {
-  background-color: #065eaf;
-}
 
 .login__inputbox {
 	margin-bottom: 1rem;
