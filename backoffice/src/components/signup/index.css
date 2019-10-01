@@ -44,6 +44,10 @@
 	padding: 1em;
 	margin-bottom: 1.2em;
 	width: 100%;
+	outline: none;
+	margin-left: 10px;
+	margin-right: 10px;
+	width: -webkit-fill-available;
 }
 
 .signup__form input::placeholder {
@@ -65,16 +69,18 @@
 }
 
 .account-type > span.selected:first-child {
-	box-shadow: 4px 0px 5px -5px rgba(0,0,0,0.75)
+	box-shadow: 7px -5px 5px -5px rgba(0,0,0,0.2)
 }
 
 .account-type > span.selected:nth-child(2) {
-	box-shadow: -4px 0px 5px -5px rgba(0,0,0,0.75);
+	box-shadow: -6px -5px 5px -5px rgba(0,0,0,0.2);
 }
 
 .account-type > span.selected {
-	color: black;
+	color: #fff;
+	border-top: 1px solid rgba(255,255,255,.2);
 	background-color: transparent;
+	border-radius: 3px;
 }
 
 .signup__form .hide {
@@ -92,6 +98,5 @@
 	width: 350px;
 	display: grid;
 	background: rgba(0,0,0,.2);
-	padding: 0 .5em;
 	border-radius: 3px;
 }
