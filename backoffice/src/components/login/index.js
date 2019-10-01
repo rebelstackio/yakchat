@@ -164,7 +164,7 @@ class Login extends MetaComponent {
 			<div class="login__container">
 				<form id="loginform" class="login__form">
 					<div class="login__logo-box">
-						<img src="${imageURL}" alt="Logo" class="login__logo">
+						<img src="../${imageURL}" alt="Logo" class="login__logo">
 					</div>
 
 					<h1 class="login__title">
