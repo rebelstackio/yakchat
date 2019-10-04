@@ -42,7 +42,6 @@
 	border: none;
 	border-radius: 4px;
 	padding: 1em;
-	margin-bottom: 1.2em;
 	width: 100%;
 	outline: none;
 	margin-left: 10px;
@@ -109,4 +108,12 @@ form.signup__form > .login__logo-box {
 .account-type > span:not(.selected):hover {
 	color: #fff;
 	cursor: pointer;
+}
+
+.signup__formcontent > span {
+	padding-left: 20px;
+}
+
+input#domain {
+	margin-bottom: 1em;
 }
