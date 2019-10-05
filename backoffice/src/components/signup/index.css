@@ -36,14 +36,21 @@
 
 .signup__form input, .signup__form select {
 	font-size: 1rem;
-	color: #384047;
-	background-color: #e8eeef;
+	color: #FFF;
+	background-color: rgba(255,255,255,.2);
 	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
 	border: none;
 	border-radius: 4px;
 	padding: 1em;
-	margin-bottom: 1.2em;
 	width: 100%;
+	outline: none;
+	margin-left: 10px;
+	margin-right: 10px;
+	width: -webkit-fill-available;
+}
+
+.signup__form input::placeholder {
+	color: #fff;
 }
 
 .account-type {
@@ -56,23 +63,57 @@
 
 .account-type > span{
 	line-height: 40px;
-	cursor: pointer;
 	text-align: center;
+	user-select: none;
+	cursor: default;
 }
 
 .account-type > span.selected:first-child {
-	box-shadow: 4px 0px 5px -5px rgba(0,0,0,0.75)
+	box-shadow: 7px -5px 5px -5px rgba(0,0,0,0.2)
 }
 
 .account-type > span.selected:nth-child(2) {
-	box-shadow: -4px 0px 5px -5px rgba(0,0,0,0.75);
+	box-shadow: -6px -5px 5px -5px rgba(0,0,0,0.2);
 }
 
 .account-type > span.selected {
-	color: black;
+	color: #fff;
+	border-top: 1px solid rgba(255,255,255,.2);
 	background-color: transparent;
+	border-radius: 3px;
 }
 
 .signup__form .hide {
 	display: none;
+}
+
+#signup-btn {
+	background-color: #FFF;
+	color: #2694FC;
+	width: 50%;
+	justify-self: center;
+	text-transform: uppercase;
+}
+
+.signup__formcontent {
+	width: 350px;
+	display: grid;
+	background: rgba(0,0,0,.2);
+	border-radius: 3px;
+}
+
+form.signup__form > .login__logo-box {
+	margin-bottom: 1em;
+}
+.account-type > span:not(.selected):hover {
+	color: #fff;
+	cursor: pointer;
+}
+
+.signup__formcontent > span {
+	padding-left: 20px;
+}
+
+input#domain {
+	margin-bottom: 1em;
 }
