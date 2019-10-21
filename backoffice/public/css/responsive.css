@@ -30,4 +30,7 @@
 	.loby-side-menu {
 		width: 44vh;
 	}
+	.msg-body > img.empty-state-img {
+		height: 180px !important;
+	}
 }

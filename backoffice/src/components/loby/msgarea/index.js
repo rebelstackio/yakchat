@@ -1,5 +1,6 @@
 import { MetaComponent } from '@rebelstack-io/metaflux';
 import { instanceElement, parsemkey } from '../../../utils';
+import emptyState from '../../../assets/images/empty-state.svg';
 import './index.css';
 
 class MsgArea extends MetaComponent {
@@ -24,7 +25,10 @@ class MsgArea extends MetaComponent {
 	 */
 	createMsgArea (box) {
 		const msgBodyContainer = instanceElement('div', ['msg-body-container']);
-		const msgBody = instanceElement('div', ['msg-body']);
+		const msgBody = instanceElement('div', ['msg-body'],false,`
+			<img class="empty-state-img" src="${emptyState}">
+			<span class="empty-state-text"> Select a thread </span>
+		`);
 		msgBodyContainer.appendChild(msgBody);
 		box.append(msgBodyContainer);
 	}
@@ -38,6 +42,9 @@ class MsgArea extends MetaComponent {
 		body.innerHTML = '';
 		const uid = this.storage.getState().Main.uid;
 		try {
+			global.TPGstorage.dispatch({
+				type: 'CLEAR-ITINERARY'
+			});
 			Object.keys(msgList).forEach((msg, i) => {
 				if (i !== 0) {
 					const dataKey = parsemkey(msg);

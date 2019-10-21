@@ -9,14 +9,12 @@ yak-loby > div.toggled {
 }
 
 .loby-side-menu {
-	background-repeat: no-repeat;
-	background-image: linear-gradient(rgb(104, 210, 255), rgb(0, 210, 55));
+	background: #2F80ED;
 	transition: all 0.5s cubic-bezier(0.74, 0.11, 0.06, 0.75);
 	font-size: 1rem;
 	max-height: 100vh;
 	position: fixed;
 	width: 22vw;
-	box-shadow: 1px 0px 5px 0px #d9d9d9;
 	height: -webkit-fill-available;
 }
 

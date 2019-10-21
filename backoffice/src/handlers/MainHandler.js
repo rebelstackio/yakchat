@@ -12,7 +12,8 @@ import {
 	removeListener,
 	getProfileImg,
 	getOperatorChannels,
-	sendVerification
+	sendVerification,
+	signUp
 } from '../controllers/firebase';
 
 import { login, signup } from '../controllers/auth';
@@ -126,11 +127,11 @@ export default {
 	MainDefaultState,
 	MainHandler: {
 		'LOGIN-REQ': (action, state) => {
-			login(action.email, action.password);
+			signInWithEmail(action.email, action.password);
 			return { newState: state };
 		},
 		'LOGIN-SUCCESS': (action, state) => {
-			const { accessLevel, admin, uid, displayName, email, emailVerified } = action.data
+			const { accessLevel, admin, uid, displayName, email, emailVerified } = action
 			state.Main.auth = true;
 			state.Main.accessLevel = accessLevel;
 			state.Main.admin = admin;
@@ -154,6 +155,7 @@ export default {
 			document.location.pathname = '/login';
 			localStorage.removeItem('fb-hash');
 			state.Main = MainDefaultState;
+			singOut();
 			return { newState: state }
 		},
 		'CHAT-SELECTED': (action, state) => {
@@ -198,7 +200,7 @@ export default {
 		},
 		'SIGNUP': (action, state) => {
 			const {email, displayName, password, type, domain} = action.data
-			signup(email, password, domain, type, displayName);
+			signUp(displayName, email, password, domain, type);
 			return {newState: state}
 		},
 		'ACEPT-INVITATION': (action, state) => {

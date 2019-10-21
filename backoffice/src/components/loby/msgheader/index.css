@@ -1,15 +1,18 @@
 .msg-head {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 2fr 1fr;
 	font-size: 2rem;
+	background: linear-gradient(270deg, #56CCF2 27.97%, rgba(255, 255, 255, 0) 83.44%), #2F80ED;
+	color: #ffffff;
+	height: 100%;
 }
 
 .msg-head-logo {
 	display: grid;
 	grid-template-columns: .1fr 1fr;
 	cursor: pointer;
-	padding-left: 1em;
 	grid-column-gap: .3em;
+	padding-left: 10px;
 }
 
 .msg-head-logo > span { 
