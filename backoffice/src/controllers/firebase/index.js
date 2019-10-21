@@ -35,6 +35,7 @@ app.auth().onAuthStateChanged(function(user) {
 			firebase.auth().currentUser.getIdTokenResult()
 			.then((idTokenResult) => {
 				// Confirm the user is an Admin.
+				console.log(idTokenResult.claims);
 				global.storage.dispatch({
 					type: 'LOGIN-SUCCESS',
 					accessLevel: idTokenResult.claims.accessLevel,

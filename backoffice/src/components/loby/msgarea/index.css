@@ -60,3 +60,20 @@ span.msg-date {
 .msg-price {
 	display: grid;
 }
+
+.msg-body > img.empty-state-img {
+	height: 350px;
+	width: auto;
+	place-self: center;
+}
+
+.msg-body > .empty-state-text {
+	justify-self: center;
+	text-decoration: italic;
+}
+
+.msg-body > .empty-state-text {
+	justify-self: center;
+	font-style: italic;
+	color: #666;
+}

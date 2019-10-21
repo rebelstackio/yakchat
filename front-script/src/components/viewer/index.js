@@ -28,6 +28,9 @@ class Viewer extends MetaComponent {
 		this.listContent.innerHTML = '';
 		this.listContent.className = 'yak-viewer-list';
 		try {
+			global.TPGstorage.dispatch({
+				type: 'CLEAR-ITINERARY'
+			});
 			Object.keys(list).map((l, i) => {
 				if (i !== 0) {
 					const msgData = list[l][0].split('-');

@@ -5,6 +5,7 @@ import './index.css';
 
 const DEFAULT_EMAIL_ERROR_MESSAGE = 'Use a valid email account';
 const UNHANDLE_ERROR_MESSAGE = 'There was a problem in your last action';
+const BAD_CREDENTIALS_MESSAGE = 'You have entered an invalid username or password'
 
 class Login extends MetaComponent {
 	
@@ -88,7 +89,11 @@ class Login extends MetaComponent {
 		console.log(code);
 		switch(code) {
 			case 'Unauthorized':
-				return 'You have entered an invalid username or password';
+				return BAD_CREDENTIALS_MESSAGE;
+			case 'auth/user-not-found':
+				return BAD_CREDENTIALS_MESSAGE;
+			case 'auth/wrong-password':
+				return BAD_CREDENTIALS_MESSAGE;
 			default:
 				return UNHANDLE_ERROR_MESSAGE;
 		}
@@ -100,10 +105,11 @@ class Login extends MetaComponent {
 	 */
 	handleInvalidLogin(state) {
 		const { error } = state;
+		console.log(error, state)
 		// Enable the login btn again
 		this.querySelector('#loginbtn').classList.remove('login__btn--disabled');
 		// Set a custom error message that comes from the server
-		this.setErrorMessage('invalid-auth', this.getServerErrorMessage(error.response.statusText));
+		this.setErrorMessage('invalid-auth', this.getServerErrorMessage(error.code));
 		// display error
 		this.querySelector('.validator').classList.remove('hidden');
 	}
