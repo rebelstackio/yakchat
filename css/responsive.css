@@ -1,0 +1,36 @@
+@media only screen and (max-width: 600px) {
+	.profile-popup-container > div {
+		width: 95vw !important;
+	}
+	yak-sidebar.loby-side-menu {
+		width: 83vw;
+		z-index: 2;
+	}
+	img.mobile-only {
+		opacity: 1 !important;
+	}
+	.msg-head-actions {
+		place-self: center !important;
+	}
+	.msg-head {
+		font-size: 1.5em !important;
+	}
+	.login__form {
+		padding: 0 !important;
+	}
+	input.bottom-input {
+		font-size: 1rem !important;
+	}
+	span#header-channel {
+		font-size: 14px;
+	}
+	div[class^="yak-view-item"] {
+		width: 80% !important;
+	}
+	.loby-side-menu {
+		width: 44vh;
+	}
+	.msg-body > img.empty-state-img {
+		height: 180px !important;
+	}
+}
