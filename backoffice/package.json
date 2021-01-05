@@ -50,7 +50,7 @@
 	},
 	"dependencies": {
 		"@rebelstack-io/metaflux": "^1.1.2",
-		"axios": "^0.19.0",
+		"axios": "^0.21.1",
 		"md5": "^2.2.1"
 	}
 }
